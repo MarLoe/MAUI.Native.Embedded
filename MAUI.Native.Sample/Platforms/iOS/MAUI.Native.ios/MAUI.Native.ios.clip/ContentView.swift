@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  MAUI.Native.ios
+//  MAUI.Native.ios.clip
 //
 //  Created by Martin Løbger on 24/07/2025.
 //
@@ -13,7 +13,7 @@ struct ContentView: View {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, MAUI.Native!")
+            Text("Hello, MAUI.Native AppClip!")
         }
         .padding()
     }
