@@ -1,0 +1,9 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <!-- We need to set this here, despite it should be a part of the build -->
+    <!-- system. See https://github.com/dotnet/macios/issues/22238          -->
+    <TargetPlatformIdentifier Condition="'$(TargetPlatformIdentifier)' == ''">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+  </PropertyGroup>
+
+</Project>
