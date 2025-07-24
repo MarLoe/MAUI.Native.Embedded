@@ -56,8 +56,6 @@
 
   <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
     <ItemGroup Condition="'@(AppClips)' != ''">
-      <None Include="%(AppClips.ArchivePath)/**" />
-
       <AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
       <AppClipsFiles>
@@ -66,6 +64,8 @@
 
       <MauiAsset Include="@(AppClipsFiles)" LogicalName="AppClips/%(AppClipsFiles.TargetPath)%(Filename)%(Extension)" />
     </ItemGroup>
+
+    <Error Condition="'@(AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
   </Target>
 
 </Project>
