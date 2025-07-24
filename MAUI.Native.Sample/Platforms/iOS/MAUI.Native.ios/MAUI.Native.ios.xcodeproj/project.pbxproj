@@ -6,9 +6,48 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		27AEEC222E32DE3C00C8888B /* MAUI.Native.ios.clip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = 27AEEC162E32DE3800C8888B /* MAUI.Native.ios.clip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		27AEEC202E32DE3C00C8888B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27AEEBCC2E32D63500C8888B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27AEEC152E32DE3800C8888B;
+			remoteInfo = MAUI.Native.ios.clip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		27AEEC232E32DE3C00C8888B /* Embed App Clips */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
+			dstSubfolderSpec = 16;
+			files = (
+				27AEEC222E32DE3C00C8888B /* MAUI.Native.ios.clip.app in Embed App Clips */,
+			);
+			name = "Embed App Clips";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		27AEEBD42E32D63500C8888B /* MAUI.Native.ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27AEEC162E32DE3800C8888B /* MAUI.Native.ios.clip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.ios.clip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		27AEEC262E32DE3C00C8888B /* Exceptions for "MAUI.Native.ios.clip" folder in "MAUI.Native.ios.clip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 27AEEC152E32DE3800C8888B /* MAUI.Native.ios.clip */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		27AEEBD62E32D63500C8888B /* MAUI.Native.ios */ = {
@@ -16,10 +55,25 @@
 			path = MAUI.Native.ios;
 			sourceTree = "<group>";
 		};
+		27AEEC172E32DE3800C8888B /* MAUI.Native.ios.clip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				27AEEC262E32DE3C00C8888B /* Exceptions for "MAUI.Native.ios.clip" folder in "MAUI.Native.ios.clip" target */,
+			);
+			path = MAUI.Native.ios.clip;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		27AEEBD12E32D63500C8888B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27AEEC132E32DE3800C8888B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				27AEEBD62E32D63500C8888B /* MAUI.Native.ios */,
+				27AEEC172E32DE3800C8888B /* MAUI.Native.ios.clip */,
 				27AEEBD52E32D63500C8888B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				27AEEBD42E32D63500C8888B /* MAUI.Native.ios.app */,
+				27AEEC162E32DE3800C8888B /* MAUI.Native.ios.clip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +111,12 @@
 				27AEEBD02E32D63500C8888B /* Sources */,
 				27AEEBD12E32D63500C8888B /* Frameworks */,
 				27AEEBD22E32D63500C8888B /* Resources */,
+				27AEEC232E32DE3C00C8888B /* Embed App Clips */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				27AEEC212E32DE3C00C8888B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				27AEEBD62E32D63500C8888B /* MAUI.Native.ios */,
@@ -69,6 +127,28 @@
 			productName = MAUI.Native.ios;
 			productReference = 27AEEBD42E32D63500C8888B /* MAUI.Native.ios.app */;
 			productType = "com.apple.product-type.application";
+		};
+		27AEEC152E32DE3800C8888B /* MAUI.Native.ios.clip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27AEEC272E32DE3C00C8888B /* Build configuration list for PBXNativeTarget "MAUI.Native.ios.clip" */;
+			buildPhases = (
+				27AEEC122E32DE3800C8888B /* Sources */,
+				27AEEC132E32DE3800C8888B /* Frameworks */,
+				27AEEC142E32DE3800C8888B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				27AEEC172E32DE3800C8888B /* MAUI.Native.ios.clip */,
+			);
+			name = MAUI.Native.ios.clip;
+			packageProductDependencies = (
+			);
+			productName = MAUI.Native.ios.clip;
+			productReference = 27AEEC162E32DE3800C8888B /* MAUI.Native.ios.clip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +161,9 @@
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					27AEEBD32E32D63500C8888B = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					27AEEC152E32DE3800C8888B = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
@@ -100,12 +183,20 @@
 			projectRoot = "";
 			targets = (
 				27AEEBD32E32D63500C8888B /* MAUI.Native.ios */,
+				27AEEC152E32DE3800C8888B /* MAUI.Native.ios.clip */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		27AEEBD22E32D63500C8888B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27AEEC142E32DE3800C8888B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +213,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		27AEEC122E32DE3800C8888B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		27AEEC212E32DE3C00C8888B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27AEEC152E32DE3800C8888B /* MAUI.Native.ios.clip */;
+			targetProxy = 27AEEC202E32DE3C00C8888B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		27AEEBDD2E32D63900C8888B /* Debug */ = {
@@ -300,6 +406,68 @@
 			};
 			name = Release;
 		};
+		27AEEC242E32DE3C00C8888B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MAUI.Native.ios.clip/MAUI_Native_ios_clip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 38G5P3YVC2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MAUI.Native.ios.clip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MAUI.Native.ios;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lobger.MAUI-Native-ios.Clip";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		27AEEC252E32DE3C00C8888B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MAUI.Native.ios.clip/MAUI_Native_ios_clip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 38G5P3YVC2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MAUI.Native.ios.clip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MAUI.Native.ios;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lobger.MAUI-Native-ios.Clip";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -317,6 +485,15 @@
 			buildConfigurations = (
 				27AEEBE02E32D63900C8888B /* Debug */,
 				27AEEBE12E32D63900C8888B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27AEEC272E32DE3C00C8888B /* Build configuration list for PBXNativeTarget "MAUI.Native.ios.clip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27AEEC242E32DE3C00C8888B /* Debug */,
+				27AEEC252E32DE3C00C8888B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
