@@ -27,10 +27,12 @@
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/"/>
     <None Include="build/MAUI.Native.props" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.ios.appclips.targets" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
   <Target Name="DeleteLocalCache" BeforeTargets="Pack">
+    <!-- Remove previous build before packing again -->
     <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
   </Target>
 
