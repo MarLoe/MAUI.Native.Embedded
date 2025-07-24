@@ -37,6 +37,9 @@
 	</Target>
 
 	<ItemGroup>
+		<!-- AppClips embedding -->
+		<AppClips Include="./Platforms/iOS/MAUI.Native.ios/MAUI.Native.ios.xcodeproj" />
+
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
