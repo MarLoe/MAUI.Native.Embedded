@@ -19,7 +19,7 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Label
-                Text="Welcome to &#10;MAUI.NAtive embedding"
+                Text="Welcome to &#10;MAUI.Native embedding"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to MAUI.NAtive embedding" />
