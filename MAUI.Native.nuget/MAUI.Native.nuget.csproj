@@ -14,7 +14,7 @@
     <Version>0.1.3</Version>
     <Authors>Martin Løbger</Authors>
     <Owner>Martin Løbger</Owner>
-    <Description>Embed native components such as iOS Widgets or iOS AppClips into you MAUI app</Description>
+    <Description>Embed native components iOS AppClips into you MAUI app</Description>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
     <Copyright>Copyright 2025 - Martin Løbger</Copyright>
     <Tags>MSBuild dotnet maui native ios android appclip widget watchapp</Tags>
