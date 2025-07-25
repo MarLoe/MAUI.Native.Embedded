@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>MAUI.Native.Embedded</AssemblyName>
+    <OutputType>Library</OutputType>
+    <Nullable>enable</Nullable>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>MAUI.Native.Embedded</PackageId>
+    <Version>0.1.3</Version>
+    <Authors>Martin Løbger</Authors>
+    <Owner>Martin Løbger</Owner>
+    <Description>Embed native components iOS AppClips into you MAUI app</Description>
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+    <Copyright>Copyright 2025 - Martin Løbger</Copyright>
+    <Tags>MSBuild dotnet maui native embedded ios android appclip widget watchapp</Tags>
+    <License>MIT License</License>
+    <LicenseUrl>https://github.com/MarLoe/MAUI.Native.Embedded/raw/refs/heads/master/LICENSE</LicenseUrl>
+    <ProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</ProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/"/>
+    <None Include="build/MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
+  </ItemGroup>
+
+  <Target Name="DeleteLocalCache" BeforeTargets="Pack">
+    <!-- Remove previous build before packing again -->
+    <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
+  </Target>
+
+</Project>
