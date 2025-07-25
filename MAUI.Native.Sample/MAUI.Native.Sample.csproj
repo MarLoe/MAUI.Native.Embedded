@@ -14,7 +14,7 @@
 		<ApplicationTitle>MAUI.Native.Sample</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.lobger.maui.native.sample</ApplicationId>
+		<ApplicationId>com.lobger.MAUI-Native</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
