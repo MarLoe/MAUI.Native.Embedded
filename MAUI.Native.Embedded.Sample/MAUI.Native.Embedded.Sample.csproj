@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MAUI.Native.Embedded" Version="*" />
+		<PackageReference Include="MarLoe.MAUI.Native.Embedded" Version="*" />
 		<!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
 	</ItemGroup>
 

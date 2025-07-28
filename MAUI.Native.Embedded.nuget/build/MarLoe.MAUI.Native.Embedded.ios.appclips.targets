@@ -68,4 +68,8 @@
     <Error Condition="'@(AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
   </Target>
 
+  <Target Name="VerifyAppClips" AfterTargets="CreateIpa" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+    <Message Importance="high" Text="AppClips archive created at: $(_AppClipsArchivePath)" />
+  </Target>
+
 </Project>
