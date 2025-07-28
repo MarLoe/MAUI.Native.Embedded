@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<Import Project="MAUI.Native.Embedded.ios.appclips.targets" />
+	<Import Project="MarLoe.MAUI.Native.Embedded.ios.appclips.targets" />
 
 </Project>
