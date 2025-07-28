@@ -58,14 +58,14 @@
     <ItemGroup Condition="'@(AppClips)' != ''">
       <AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
-      <AppClipsFiles>
-        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(AppClipsFiles.RecursiveDir)', '^.*?AppClips[\\/]', ''))</TargetPath>
-      </AppClipsFiles>
+      <_AppClipsFiles>
+        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_AppClipsFiles.RecursiveDir)', '^.*?AppClips[\\/]', ''))</TargetPath>
+      </_AppClipsFiles>
 
-      <MauiAsset Include="@(AppClipsFiles)" LogicalName="AppClips/%(AppClipsFiles.TargetPath)%(Filename)%(Extension)" />
+      <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)%(Filename)%(Extension)" />
     </ItemGroup>
 
-    <Error Condition="'@(AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
+    <Error Condition="'@(_AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
   </Target>
 
   <Target Name="VerifyAppClips" AfterTargets="CreateIpa" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
