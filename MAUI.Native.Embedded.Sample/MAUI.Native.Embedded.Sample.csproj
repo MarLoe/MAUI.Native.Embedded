@@ -37,7 +37,7 @@
 	</Target>
 
 	<ItemGroup>
-		<!-- AppClips embedding -->
+		<!-- AppClips embedding - See README.md for information on optional attributes: Scheme, Configuration, SkipValidation -->
 		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
 
 		<!-- App Icon -->
