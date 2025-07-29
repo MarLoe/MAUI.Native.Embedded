@@ -42,6 +42,19 @@ You can override this by using `Configuraion`:
 </ItemGroup>
 ```
 
+### SkipValidation (optional)
+For AppClips the application identifier and the com.apple.developer.parent-application-identifiers in the AppClips entitlement must match the ApplicationId of the MAUI app.
+
+After the MAUI app has been build, it is verified that there is a match. If not the build will fail with an error 1013.
+The validation process relies on a couple of command line tools to be present on the build system. If not, the build will fail.
+
+You can skip validation by providing `SkipValidation`:
+```
+<ItemGroup>
+  <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" SkipValidation="true" />
+</ItemGroup>
+```
+
 ## Hints
 Here are a few hints that might make your life easier.
 
