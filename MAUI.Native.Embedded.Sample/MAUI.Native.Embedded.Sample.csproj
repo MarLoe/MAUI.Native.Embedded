@@ -39,7 +39,7 @@
 
 	<ItemGroup>
 		<!-- AppClips embedding - See README.md for information on optional attributes: Scheme, Configuration, SkipValidation -->
-		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
+		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true"/>
 
 		<!-- App Icon -->
 		<MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#512BD4" />

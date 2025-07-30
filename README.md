@@ -62,6 +62,16 @@ You can skip validation by providing `SkipValidation`:
 </ItemGroup>
 ```
 
+### NoSigning (optional)
+Especially for CI builds, it can be difficult to get provisionings working.
+
+You can skip signing by providing `NoSigning`:
+```
+<ItemGroup>
+  <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" NoSigning="true" />
+</ItemGroup>
+```
+
 ## Hints
 Here are a few hints that might make your life easier.
 
