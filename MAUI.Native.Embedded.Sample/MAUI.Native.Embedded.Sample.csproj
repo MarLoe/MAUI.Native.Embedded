@@ -11,6 +11,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
+		<MtouchLink>SDKOnly</MtouchLink>
+
 		<!-- Display name -->
 		<ApplicationTitle>MAUI.Native.Embedded.Sample</ApplicationTitle>
 

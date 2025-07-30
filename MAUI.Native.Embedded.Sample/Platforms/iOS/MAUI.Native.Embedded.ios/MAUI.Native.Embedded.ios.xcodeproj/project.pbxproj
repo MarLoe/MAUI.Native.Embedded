@@ -3,11 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		27AEEC222E32DE3C00C8888B /* MAUI.Native.Embedded.ios.clip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = 27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		27B1EBEE2E3AC72D009D57C7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1EBEB2E3AC72D009D57C7 /* ContentView.swift */; };
+		27B1EBEF2E3AC72D009D57C7 /* MAUI_Native_Embedded_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1EBEC2E3AC72D009D57C7 /* MAUI_Native_Embedded_iosApp.swift */; };
+		27B1EBF02E3AC72D009D57C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B1EBEA2E3AC72D009D57C7 /* Assets.xcassets */; };
+		27B1EBF72E3AC732009D57C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B1EBF12E3AC732009D57C7 /* Assets.xcassets */; };
+		27B1EBF92E3AC732009D57C7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1EBF22E3AC732009D57C7 /* ContentView.swift */; };
+		27B1EBFA2E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1EBF52E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clipApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,22 +43,15 @@
 /* Begin PBXFileReference section */
 		27AEEBD42E32D63500C8888B /* MAUI.Native.Embedded.ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.Embedded.ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.Embedded.ios.clip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27B1EBEA2E3AC72D009D57C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		27B1EBEB2E3AC72D009D57C7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		27B1EBEC2E3AC72D009D57C7 /* MAUI_Native_Embedded_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAUI_Native_Embedded_iosApp.swift; sourceTree = "<group>"; };
+		27B1EBF12E3AC732009D57C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		27B1EBF22E3AC732009D57C7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		27B1EBF32E3AC732009D57C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27B1EBF42E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MAUI_Native_Embedded_ios_clip.entitlements; sourceTree = "<group>"; };
+		27B1EBF52E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAUI_Native_Embedded_ios_clipApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		27AEEC262E32DE3C00C8888B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 27AEEC152E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		27AEEBD62E32D63500C8888B /* MAUI.Native.Embedded.ios */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MAUI.Native.Embedded.ios; sourceTree = "<group>"; };
-		27AEEC172E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (27AEEC262E32DE3C00C8888B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MAUI.Native.Embedded.ios.clip; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		27AEEBD12E32D63500C8888B /* Frameworks */ = {
@@ -75,8 +74,8 @@
 		27AEEBCB2E32D63500C8888B = {
 			isa = PBXGroup;
 			children = (
-				27AEEBD62E32D63500C8888B /* MAUI.Native.Embedded.ios */,
-				27AEEC172E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */,
+				27B1EBED2E3AC72D009D57C7 /* MAUI.Native.Embedded.ios */,
+				27B1EBF62E3AC732009D57C7 /* MAUI.Native.Embedded.ios.clip */,
 				27AEEBD52E32D63500C8888B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +87,28 @@
 				27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		27B1EBED2E3AC72D009D57C7 /* MAUI.Native.Embedded.ios */ = {
+			isa = PBXGroup;
+			children = (
+				27B1EBEA2E3AC72D009D57C7 /* Assets.xcassets */,
+				27B1EBEB2E3AC72D009D57C7 /* ContentView.swift */,
+				27B1EBEC2E3AC72D009D57C7 /* MAUI_Native_Embedded_iosApp.swift */,
+			);
+			path = MAUI.Native.Embedded.ios;
+			sourceTree = "<group>";
+		};
+		27B1EBF62E3AC732009D57C7 /* MAUI.Native.Embedded.ios.clip */ = {
+			isa = PBXGroup;
+			children = (
+				27B1EBF12E3AC732009D57C7 /* Assets.xcassets */,
+				27B1EBF22E3AC732009D57C7 /* ContentView.swift */,
+				27B1EBF32E3AC732009D57C7 /* Info.plist */,
+				27B1EBF42E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clip.entitlements */,
+				27B1EBF52E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clipApp.swift */,
+			);
+			path = MAUI.Native.Embedded.ios.clip;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,9 +128,6 @@
 			dependencies = (
 				27AEEC212E32DE3C00C8888B /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				27AEEBD62E32D63500C8888B /* MAUI.Native.Embedded.ios */,
-			);
 			name = MAUI.Native.Embedded.ios;
 			packageProductDependencies = (
 			);
@@ -128,9 +146,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				27AEEC172E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */,
 			);
 			name = MAUI.Native.Embedded.ios.clip;
 			packageProductDependencies = (
@@ -158,7 +173,7 @@
 				};
 			};
 			buildConfigurationList = 27AEEBCF2E32D63500C8888B /* Build configuration list for PBXProject "MAUI.Native.Embedded.ios" */;
-			compatibilityVersion = "Xcode 15.0";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -182,6 +197,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B1EBF02E3AC72D009D57C7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B1EBF72E3AC732009D57C7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,6 +216,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B1EBEE2E3AC72D009D57C7 /* ContentView.swift in Sources */,
+				27B1EBEF2E3AC72D009D57C7 /* MAUI_Native_Embedded_iosApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +225,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B1EBF92E3AC732009D57C7 /* ContentView.swift in Sources */,
+				27B1EBFA2E3AC732009D57C7 /* MAUI_Native_Embedded_ios_clipApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +375,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -382,6 +404,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -414,6 +437,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,6 +470,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -22,14 +22,14 @@ jobs:
             7.0.x
             6.0.x
 
-        # Using "dotnet workload restore" does not work running on 9.0.300 workloads
-        # So we install them manually and hard coded
+      # Using "dotnet workload restore" does not work running on 9.0.300 workloads
+      # So we install them manually and hard coded
       - name: Install MAUI workloads
         run: dotnet workload install maui-ios maui-android
 
-      - name: Xcode Version
-        run: xcrun xcodebuild -version
-
+      - name: Select Xcode version
+        run: sudo xcode-select -s '/Applications/Xcode_16.2.app'
+    
       - name: Update Xcode Project provisioning
         uses: ./.github/actions/update-provisioning
         with:
