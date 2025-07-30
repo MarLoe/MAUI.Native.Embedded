@@ -32,7 +32,7 @@
 		<!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
 	</ItemGroup>
 
-	<Target Name="PackBuildInfoBeforeBuild" BeforeTargets="Restore">
+	<Target Name="_PackNugetBeforeRestore" BeforeTargets="Restore">
 		<Exec Command="dotnet pack ../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" />
 	</Target>
 

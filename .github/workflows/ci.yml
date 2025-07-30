@@ -28,4 +28,4 @@ jobs:
         run: dotnet workload install maui-ios maui-android
 
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release ./MAUI.Native.Embedded.Sample/
