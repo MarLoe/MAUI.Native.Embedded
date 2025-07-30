@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -40,7 +40,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		27AEEC262E32DE3C00C8888B /* Exceptions for "MAUI.Native.Embedded.ios.clip" folder in "MAUI.Native.Embedded.ios.clip" target */ = {
+		27AEEC262E32DE3C00C8888B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -50,19 +50,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		27AEEBD62E32D63500C8888B /* MAUI.Native.Embedded.ios */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MAUI.Native.Embedded.ios;
-			sourceTree = "<group>";
-		};
-		27AEEC172E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				27AEEC262E32DE3C00C8888B /* Exceptions for "MAUI.Native.Embedded.ios.clip" folder in "MAUI.Native.Embedded.ios.clip" target */,
-			);
-			path = MAUI.Native.Embedded.ios.clip;
-			sourceTree = "<group>";
-		};
+		27AEEBD62E32D63500C8888B /* MAUI.Native.Embedded.ios */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MAUI.Native.Embedded.ios; sourceTree = "<group>"; };
+		27AEEC172E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (27AEEC262E32DE3C00C8888B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MAUI.Native.Embedded.ios.clip; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +158,7 @@
 				};
 			};
 			buildConfigurationList = 27AEEBCF2E32D63500C8888B /* Build configuration list for PBXProject "MAUI.Native.Embedded.ios" */;
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -177,7 +167,6 @@
 			);
 			mainGroup = 27AEEBCB2E32D63500C8888B;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 27AEEBD52E32D63500C8888B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

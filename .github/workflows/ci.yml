@@ -27,5 +27,14 @@ jobs:
       - name: Install MAUI workloads
         run: dotnet workload install maui-ios maui-android
 
+      - name: Xcode Version
+        run: xcrun xcodebuild -version
+
+      - name: Update Xcode Project provisioning
+        uses: ./.github/actions/update-provisioning
+        with:
+          team: '${{ secrets.XCODE_DEVELOPMENT_TEAM }}'
+          project: 'MAUI.Native.Embedded.Sample/Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj'
+
       - name: Build
-        run: dotnet build --configuration Release ./MAUI.Native.Embedded.Sample/
+        run: dotnet build --configuration Release -p:DotnetTarget=8.0 ./MAUI.Native.Embedded.Sample/
