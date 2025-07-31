@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            9.0.x
+            8.0.x
+            7.0.x
+            6.0.x
+
+      # Using "dotnet workload restore" does not work running on 9.0.300 workloads
+      # So we install them manually and hard coded
+      - name: Install MAUI workloads
+        run: dotnet workload install maui-ios maui-android
+
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Get Xcode Version
+        id: xcode
+        uses: ./.github/actions/xcode-version
+        with:
+          min_version: '16.4'
+
+      - name: Build
+        env:
+          dotnet-target: "${{ steps.xcode.outputs.xcode_min_version != 'true' && '-p:DotNetTarget=8.0' || '' }}"
+        run: dotnet build --configuration Release ${{ env.dotnet-target }} ./MAUI.Native.Embedded.Sample/

@@ -1,0 +1,41 @@
+name: Xcode Version
+description: Get the Xcode version installed on the runner
+
+inputs:
+  min_version:
+    description: Minimum required Xcode version
+    required: false
+    type: string
+
+outputs:
+  xcode_version:
+    description: "The installed Xcode version"
+    value: ${{ steps.get_version.outputs.xcode_version }}
+  xcode_min_version:
+    description: "Whether the installed Xcode version meets the minimum requirement"
+    value: ${{ steps.check_min_version.outputs.xcode_min_version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Get Xcode Version
+      id: get_version
+      shell: bash
+      run: |
+          version=$(xcodebuild -version | grep Xcode | awk '{print $2}')
+          echo "Xcode version: $version"
+          echo "xcode_version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Check Minimum Xcode Version
+      id: check_min_version
+      if: ${{ inputs.min_version }}
+      shell: bash
+      run: |
+          required_version="${{ inputs.min_version }}"
+          current_version="${{ steps.get_version.outputs.xcode_version }}"
+          
+          if [[ $(printf "%s\n" "$required_version" "$current_version" | sort -V | head -n1) == "$required_version" ]]; then
+            echo "xcode_min_version=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "xcode_min_version=false" >> "$GITHUB_OUTPUT"
+          fi          

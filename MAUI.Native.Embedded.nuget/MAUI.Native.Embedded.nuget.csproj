@@ -30,10 +30,11 @@
     <None Include="../README.md" Pack="true" PackagePath="/"/>
     <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
-    <None Include="build/MarLoe.MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
-  <Target Name="DeleteLocalCache" BeforeTargets="Pack">
+  <Target Name="_DeleteLocalCache" BeforeTargets="Pack">
     <!-- Remove previous build before packing again -->
     <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
   </Target>

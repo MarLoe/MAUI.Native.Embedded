@@ -1,65 +1,82 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
 
-		<OutputType>Exe</OutputType>
-		<RootNamespace>MAUI.Native.Embedded.Sample</RootNamespace>
-		<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MAUI.Native.Embedded.Sample</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
 
-		<!-- Display name -->
-		<ApplicationTitle>MAUI.Native.Embedded.Sample</ApplicationTitle>
+    <!-- Display name -->
+    <ApplicationTitle>MAUI.Native.Embedded.Sample</ApplicationTitle>
 
-		<!-- App Identifier -->
-		<ApplicationId>com.lobger.MAUI-Native-Embedded</ApplicationId>
+    <!-- App Identifier -->
+    <ApplicationId>com.lobger.MAUI-Native-Embedded</ApplicationId>
 
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>0.1.4</ApplicationDisplayVersion>
+    <ApplicationVersion>19</ApplicationVersion>
 
-		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
-		<WindowsPackageType>None</WindowsPackageType>
+    <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+    <WindowsPackageType>None</WindowsPackageType>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-	</PropertyGroup>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="MarLoe.MAUI.Native.Embedded" Version="*" />
-		<!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
-	</ItemGroup>
+  <PropertyGroup Condition="'$(DotNetTarget)' != ''">
+    <!-- Settings used for CI build -->
+    <TargetFrameworks>net$(DotNetTarget)-android;net$(DotNetTarget)-ios</TargetFrameworks>
+    <MtouchLink>SDKOnly</MtouchLink>
+  </PropertyGroup>
 
-	<Target Name="PackBuildInfoBeforeBuild" BeforeTargets="Restore">
-		<Exec Command="dotnet pack ../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" />
-	</Target>
+  <ItemGroup>
+    <!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
+  </ItemGroup>
 
-	<ItemGroup>
-		<!-- AppClips embedding - See README.md for information on optional attributes: Scheme, Configuration, SkipValidation -->
-		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
+  <Target Name="_PackNugetBeforeRestore" BeforeTargets="Restore">
+    <Exec Command="dotnet pack ../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" />
+  </Target>
 
-		<!-- App Icon -->
-		<MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#512BD4" />
+  <!-- If your Xcode project uses a custom way of storing versions,   -->
+  <!-- you can make an custom update here. This is optional!          -->
+  <Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+    <!-- Do your custom version update here -->
+  </Target>
 
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources/Splash/splash.svg" Color="#512BD4" BaseSize="128,128" />
+  <ItemGroup>
+    <!-- AppClips embedding                                           -->
+    <!--   See README.md for information on optional attributes:      -->
+    <!--     Scheme, Configuration, SkipValidation, NoSigning         -->
+    <!-- NOTE: NoSigning is set to true here to make the sample       -->
+    <!--       compile straight out the box. You should not include   -->
+    <!--       this in your own project.                              -->
+    <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
 
-		<!-- Images -->
-		<MauiImage Include="Resources/Images/*" />
-		<MauiImage Update="Resources/Images/dotnet_bot.png" Resize="True" BaseSize="300,185" />
+    <!-- App Icon -->
+    <MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#512BD4" />
 
-		<!-- Custom Fonts -->
-		<MauiFont Include="Resources/Fonts/*" />
+    <!-- Splash Screen -->
+    <MauiSplashScreen Include="Resources/Splash/splash.svg" Color="#512BD4" BaseSize="128,128" />
 
-		<!-- Raw Assets (also remove the "Resources/Raw" prefix) -->
-		<MauiAsset Include="Resources/Raw/**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
+    <!-- Images -->
+    <MauiImage Include="Resources/Images/*" />
+    <MauiImage Update="Resources/Images/dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-	</ItemGroup>
+    <!-- Custom Fonts -->
+    <MauiFont Include="Resources/Fonts/*" />
+
+    <!-- Raw Assets (also remove the "Resources/Raw" prefix) -->
+    <MauiAsset Include="Resources/Raw/**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MarLoe.MAUI.Native.Embedded" Version="*" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+  </ItemGroup>
 
 </Project>
