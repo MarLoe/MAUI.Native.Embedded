@@ -32,6 +32,7 @@
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.ios.widgets.targets" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
   <Target Name="_DeleteLocalCache" BeforeTargets="Restore;Pack">
