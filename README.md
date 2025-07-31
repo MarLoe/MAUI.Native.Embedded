@@ -83,6 +83,16 @@ When e.g. adding AppClips, you might want to only build and embed the native pro
 </ItemGroup>
 ```
 
+### Hint: Custom Xcode project version
+If your Xcode project uses a custom way of storing versions, you can make an custom update here.
+
+All you need to do is to add this target to your project (.csproj)
+```
+<Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+  <!-- Do your custom version update here -->
+</Target>
+```
+
 ## TLDR;
 Support AppClipp in your MAUI project by adding this to your project (.csproj) file:
 ```

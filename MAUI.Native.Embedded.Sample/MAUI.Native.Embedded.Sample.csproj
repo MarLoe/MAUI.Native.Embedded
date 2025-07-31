@@ -43,19 +43,17 @@
 
   <!-- If your Xcode project uses a custom way of storing versions,   -->
   <!-- you can make an custom update here. This is optional!          -->
-  <Target Name="UpdateVersionTest" AfterTargets="_UpdateXcodeProjectVersion">
-    <Error
-      Code="1010"
-      Text="Custom Update Version" />
+  <Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+    <!-- Do your custom version update here -->
   </Target>
 
   <ItemGroup>
-    <!-- AppClips embedding                                         -->
-    <!--   See README.md for information on optional attributes:    -->
-    <!--     Scheme, Configuration, SkipValidation, NoSigning       -->
-    <!-- NOTE: NoSigning is set to true here to make the sample     -->
-    <!--       compile straight out the box. You should not include -->
-    <!--       this in your own project.                            -->
+    <!-- AppClips embedding                                           -->
+    <!--   See README.md for information on optional attributes:      -->
+    <!--     Scheme, Configuration, SkipValidation, NoSigning         -->
+    <!-- NOTE: NoSigning is set to true here to make the sample       -->
+    <!--       compile straight out the box. You should not include   -->
+    <!--       this in your own project.                              -->
     <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
 
     <!-- App Icon -->
