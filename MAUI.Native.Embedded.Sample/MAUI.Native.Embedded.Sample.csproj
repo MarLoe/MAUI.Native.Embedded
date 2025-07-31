@@ -17,7 +17,7 @@
     <ApplicationId>com.lobger.MAUI-Native-Embedded</ApplicationId>
 
     <!-- Versions -->
-    <ApplicationDisplayVersion>0.1.5</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>0.1.6</ApplicationDisplayVersion>
     <ApplicationVersion>19</ApplicationVersion>
 
     <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
