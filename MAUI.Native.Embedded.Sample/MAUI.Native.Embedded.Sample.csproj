@@ -2,8 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
-		<TargetFrameworks Conodition="'$(DotNetTarget)' != ''">net$(DotNetTarget)-android;net$(DotNetTarget)-ios</TargetFrameworks>
-
 
 		<OutputType>Exe</OutputType>
 		<RootNamespace>MAUI.Native.Embedded.Sample</RootNamespace>
@@ -11,8 +9,6 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
-		<MtouchLink>SDKOnly</MtouchLink>
 
 		<!-- Display name -->
 		<ApplicationTitle>MAUI.Native.Embedded.Sample</ApplicationTitle>
@@ -31,6 +27,12 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(DotNetTarget)' != ''">
+		<!-- Settings used for CI build -->
+		<TargetFrameworks>net$(DotNetTarget)-android;net$(DotNetTarget)-ios</TargetFrameworks>
+		<MtouchLink>SDKOnly</MtouchLink>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="MarLoe.MAUI.Native.Embedded" Version="*" />
 		<!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
@@ -41,7 +43,12 @@
 	</Target>
 
 	<ItemGroup>
-		<!-- AppClips embedding - See README.md for information on optional attributes: Scheme, Configuration, SkipValidation -->
+		<!-- AppClips embedding 										-->
+		<!--   See README.md for information on optional attributes: 	-->
+		<!--     Scheme, Configuration, SkipValidation, NoSigning		-->
+		<!-- NOTE: NoSigning is set to true here to make the sample		-->
+		<!--       compile straight out the box. You should not include -->
+		<!--       this in your own project.							-->
 		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
 
 		<!-- App Icon -->

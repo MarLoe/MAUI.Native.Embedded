@@ -28,16 +28,17 @@ jobs:
         run: dotnet workload install maui-ios maui-android
 
       - name: Select Xcode version
-        # run: sudo xcode-select -s '/Applications/Xcode_16.2.app'
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
 
-      - name: Update Xcode Project provisioning
-        uses: ./.github/actions/update-provisioning
+      - name: Get Xcode Version
+        id: xcode
+        uses: ./.github/actions/xcode-version
         with:
-          team: '${{ secrets.XCODE_DEVELOPMENT_TEAM }}'
-          project: 'MAUI.Native.Embedded.Sample/Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj'
+          min_version: '16.4'
 
       - name: Build
-        run: dotnet build --configuration Release -p:DotnetTarget=8.0 ./MAUI.Native.Embedded.Sample/
+        env:
+          dotnet-target: "${{ steps.xcode.outputs.xcode_min_version != 'true' && '-p:DotNetTarget=8.0' || '' }}"
+        run: dotnet build --configuration Release ${{ env.dotnet-target }} ./MAUI.Native.Embedded.Sample/
