@@ -34,8 +34,9 @@
     <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
-  <Target Name="_DeleteLocalCache" BeforeTargets="Pack">
-    <!-- Remove previous build before packing again -->
+  <Target Name="_DeleteLocalCache" BeforeTargets="Restore;Pack">
+    <!-- Remove previous build before restore and packing again -->
+    <Delete Files="$(PackageOutputPath)/**" />
     <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
   </Target>
 
