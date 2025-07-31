@@ -1,6 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="_UpdateXcodeProjectVersion" Condition="'@(XcodeProjects)' != ''">
+  <Target
+    Name="_UpdateXcodeProjectVersion"
+    Inputs="%(XcodeProjects.Identity)"
+    Outputs="%(XcodeProjects.Identity)"
+    Condition="'@(XcodeProjects)' != ''">
     <!-- The Xcode projects must have the same version as our app - so we must update it -->
     <Exec
       Condition="'$(ApplicationVersion)' != ''"
