@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<DotnetTarget Condition="'$(DotnetTarget)' == ''">9.0</DotnetTarget>
-		<TargetFrameworks>net$(DotnetTarget)-android;net$(DotnetTarget)-ios</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+		<TargetFrameworks Conodition="'$(DotNetTarget)' != ''">net$(DotNetTarget)-android;net$(DotNetTarget)-ios</TargetFrameworks>
+
 
 		<OutputType>Exe</OutputType>
 		<RootNamespace>MAUI.Native.Embedded.Sample</RootNamespace>
@@ -41,7 +42,7 @@
 
 	<ItemGroup>
 		<!-- AppClips embedding - See README.md for information on optional attributes: Scheme, Configuration, SkipValidation -->
-		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true"/>
+		<AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
 
 		<!-- App Icon -->
 		<MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#512BD4" />
