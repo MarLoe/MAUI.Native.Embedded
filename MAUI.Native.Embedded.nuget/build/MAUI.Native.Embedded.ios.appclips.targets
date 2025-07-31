@@ -43,8 +43,8 @@
   </Target>
 
 
-  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
-    <ItemGroup Condition="'@(AppClips)' != ''">
+  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
+    <ItemGroup>
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
       <_AppClipsFiles>
@@ -58,7 +58,7 @@
   </Target>
 
 
-  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
     </ItemGroup>
