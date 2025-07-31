@@ -23,11 +23,15 @@
       <AppClips>
         <Scheme Condition="'%(AppClips.Scheme)' == ''">%(AppClips.Filename)</Scheme>
         <Configuration Condition="'%(AppClips.Configuration)' == ''">$(Configuration)</Configuration>
-        <XcodeParams Condition="'%(AppClips.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <UnsignedName></UnsignedName>
+      </AppClips>
+      <AppClips Condition="'%(AppClips.NoSigning)' == 'true'">
+        <UnsignedName>-unsigned</UnsignedName>
+        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
       </AppClips>
       <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
       <AppClips>
-        <ArchivePath>$(_AppClipsArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration).xcarchive</ArchivePath>
+        <ArchivePath>$(_AppClipsArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
       </AppClips>
 
       <!-- Consolidate all included Xcode projects -->
@@ -43,8 +47,8 @@
   </Target>
 
 
-  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
-    <ItemGroup Condition="'@(AppClips)' != ''">
+  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
+    <ItemGroup>
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
       <_AppClipsFiles>
@@ -58,7 +62,7 @@
   </Target>
 
 
-  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
     </ItemGroup>
