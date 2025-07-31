@@ -1,0 +1,23 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="_UpdateXcodeProjectVersion" Condition="'@(XcodeProjects)' != ''">
+    <!-- The Xcode projects must have the same version as our app - so we must update it -->
+    <Exec
+      Condition="'$(ApplicationVersion)' != ''"
+      Command="xcrun agvtool new-version -all '$(ApplicationVersion)'"
+      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+
+    <Exec
+      Condition="'$(ApplicationDisplayVersion)' != ''"
+      Command="xcrun agvtool new-marketing-version '$(ApplicationDisplayVersion)'"
+      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+
+    <!-- The agvtool new-marketing-version might not work if plist is auto generated -->
+    <!-- So we will manually make sure it is updated -->
+    <Exec
+      Condition="'$(ApplicationDisplayVersion)' != ''"
+      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
+      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+  </Target>
+
+</Project>

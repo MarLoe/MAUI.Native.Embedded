@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ProcessAppClipsDependsOn>
       _ResolveAppClips;
+      _UpdateXcodeProjectVersion;
       _BuildAppClips;
     </ProcessAppClipsDependsOn>
   </PropertyGroup>
@@ -28,30 +29,14 @@
       <AppClips>
         <ArchivePath>$(_AppClipsArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration).xcarchive</ArchivePath>
       </AppClips>
+
+      <!-- Consolidate all included Xcode projects -->
+      <XcodeProjects Include="%(AppClips.FullPath)" />
     </ItemGroup>
   </Target>
 
 
   <Target Name="_BuildAppClips" Condition="'@(AppClips)' != ''">
-
-    <!-- The AppClips must have the same version as our app - so we must update it -->
-    <Exec
-      Condition="'$(ApplicationVersion)' != ''"
-      Command="xcrun agvtool new-version -all '$(ApplicationVersion)'"
-      WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
-
-    <Exec
-      Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="xcrun agvtool new-marketing-version '$(ApplicationDisplayVersion)'"
-      WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
-
-    <!-- The agvtool new-marketing-version might not work if plist is auto generated -->
-    <!-- So we will manually make sure it is updated -->
-    <Exec
-      Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(AppClips.FullPath)/project.pbxproj'"
-      WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
-
     <Exec
       Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=iOS' -archivePath '%(AppClips.ArchivePath)' %(AppClips.NoSigning)"
       Outputs="%(AppClips.ArchivePath)" />
