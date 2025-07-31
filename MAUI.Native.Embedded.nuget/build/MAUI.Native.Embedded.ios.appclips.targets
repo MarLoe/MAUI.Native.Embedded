@@ -23,7 +23,7 @@
       <AppClips>
         <Scheme Condition="'%(AppClips.Scheme)' == ''">%(AppClips.Filename)</Scheme>
         <Configuration Condition="'%(AppClips.Configuration)' == ''">$(Configuration)</Configuration>
-        <NoSigning Condition="'%(AppClips.NoSigning)' == 'true'">CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</NoSigning>
+        <XcodeParams Condition="'%(AppClips.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
       </AppClips>
       <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
       <AppClips>
@@ -38,7 +38,7 @@
 
   <Target Name="_BuildAppClips" Condition="'@(AppClips)' != ''">
     <Exec
-      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=iOS' -archivePath '%(AppClips.ArchivePath)' %(AppClips.NoSigning)"
+      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=iOS' -archivePath '%(AppClips.ArchivePath)' %(AppClips.XcodeParams)"
       Outputs="%(AppClips.ArchivePath)" />
   </Target>
 
