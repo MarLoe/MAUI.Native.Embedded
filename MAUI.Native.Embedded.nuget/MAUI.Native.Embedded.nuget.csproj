@@ -36,7 +36,6 @@
 
   <Target Name="_DeleteLocalCache" BeforeTargets="Restore;Pack">
     <!-- Remove previous build before restore and packing again -->
-    <Delete Files="$(PackageOutputPath)/**" />
     <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
   </Target>
 
