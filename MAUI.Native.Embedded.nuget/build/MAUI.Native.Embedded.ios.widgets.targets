@@ -48,14 +48,22 @@
 
 
   <Target Name="ProcessWidgets" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(Widgets)' != ''">
-    <ItemGroup Condition="'@(Widgets)' != ''">
-      <_WidgetsFiles Include="%(Widgets.ArchivePath)/**/*.app/Plugins/*.appex" />
+    <ItemGroup>
+      <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" />
+      <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" />
+    </ItemGroup>
 
+    <!-- Make sure each .appex is actually a widget -->
+    <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep com.apple.widgetkit-extension &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
+
+    <ItemGroup>
+      <_WidgetsFiles Include="%(_AppexBundles.FullPath)/**" Condition="Exists('%(_AppexBundles.FullPath).widget')"/>
       <_WidgetsFiles>
-        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_WidgetsFiles.RecursiveDir)', '^.*?Plugins[\\/]', ''))</TargetPath>
+        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_WidgetsFiles.FullPath)', '^.*[\\/]PlugIns[\\/]', ''))</TargetPath>
       </_WidgetsFiles>
 
-      <MauiAsset Include="@(_WidgetsFiles)" LogicalName="Widgets/%(_WidgetsFiles.TargetPath)%(Filename)%(Extension)" />
+      <!-- Include the found Widgets in the MAUI app -->
+      <MauiAsset Include="@(_WidgetsFiles)" LogicalName="PlugIns/%(_WidgetsFiles.TargetPath)" />
     </ItemGroup>
 
     <Error Condition="'@(_WidgetsFiles)' == ''" Code="404" Text="No Widgets found in Xcode project: '%(Widgets.Identity)'" />
