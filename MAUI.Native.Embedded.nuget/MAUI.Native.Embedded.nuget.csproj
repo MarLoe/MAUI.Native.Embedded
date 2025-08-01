@@ -14,7 +14,7 @@
     <Version>0.1.6</Version>
     <Authors>Martin Løbger</Authors>
     <Owner>Martin Løbger</Owner>
-    <Description>Embed native components iOS AppClips into you MAUI app</Description>
+    <Description>Embed native iOS AppClips and Widgets into you MAUI app</Description>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
     <Copyright>Copyright 2025 - Martin Løbger</Copyright>
     <License>MIT License</License>
@@ -23,7 +23,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MarLoe/MAUI.Native.Embedded</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>MSBuild dotnet maui native embedded ios android appclip widget watchapp</PackageTags>
+    <PackageTags>MSBuild dotnet maui native embedded ios appclip widget</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,31 +2,33 @@
 
 [![NuGet version (MarLoe.MAUI.Native.Embedded)](https://img.shields.io/nuget/v/MarLoe.MAUI.Native.Embedded.svg?style=flat-square)](https://www.nuget.org/packages/MarLoe.MAUI.Native.Embedded/)
 
-Embed native iOS AppClips into you MAUI app
+Embed native iOS AppClips and Widgets into you MAUI app
 
 MAUI currently does not support AppClips for iOS. This NuGet will allow you to embed a natively build AppClips into you MAUI app.
 
 This NuGet will build you native added projects for you. You do not need to do anything but adding it.
 
-## iOS AppClips
-In you main MAUI project (.csproj) file you must add the following line(s);
+## iOS AppClips & Widgets
+In you main MAUI project (`.csproj`) file you can add one or more of the following line(s);
 ```
 <ItemGroup>
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" />
+  <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" />
 </ItemGroup>
 ```
 
-The `Native.xcodeproj` can be named anything and placed anywhere as long as it can be referenced from you MAUI project. But I suggest putting it under `Platforms/iOS`.
+The `Native.xcodeproj` can be named anything and placed anywhere as long as it can be referenced from you MAUI project. *But I suggest putting it under `Platforms/iOS`*.
 
 ### Scheme (optional)
-Normally in Xcode projects, the main scheme is named the same as the Xcode project (.xcodeproj) file. Should this not be the case, it is possible to specify the exact scheme to use.
+Normally in Xcode projects, the main scheme is named the same as the Xcode project file (`.xcodeproj`) file. Should this not be the case, it is possible to specify the exact scheme to use.
 
-When building your embedded Xcode project the scheme used will be the same name as the Xcode project (.xcodeproj) file. In the example above, the scheme used if not specified will be `Native`
+When building your embedded Xcode project the scheme used will be the same name as the Xcode project (`.xcodeproj`) filename. In the example above, the scheme used if not specified will be `Native`
 
-You can override schme using `Scheme`:
+You can override scheme like this:
 ```
 <ItemGroup>
-  <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" Scheme="AnotherNative" />
+  <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" Scheme="AnotherScheme" />
+  <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" Scheme="ThirdScheme" />
 </ItemGroup>
 ```
 
@@ -35,27 +37,36 @@ Normally in Xcode projects, the configurations are called `Debug` and `Release`.
 
 When building your embedded Xcode project the configuration names from your MAUI project will be used.
 
-You can override this by using `Configuraion`:
+You can override configuration like this:
 ```
 <ItemGroup>
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" Configuration="AnotherConfiguration" />
+  <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" Configuration="AnotherConfiguration" />
 </ItemGroup>
 ```
-If the configuration names does not match, you e.g. do this
+
+If the configuration names does not match, you can e.g. do this (works for both `<AppClips>` and `<Widgets>`)
 ```
 <ItemGroup>
-  <AppClips Condition="'$(Configuration)' == 'Debug'" Include="./Platforms/iOS/Native/Native.xcodeproj" Configuration="NativeDebug" />
-  <AppClips Condition="'$(Configuration)' == 'Release'" Include="./Platforms/iOS/Native/Native.xcodeproj" Configuration="NativeRelease" />
+  <AppClips 
+    Condition="'$(Configuration)' == 'Debug'"
+    Include="./Platforms/iOS/Native/Native.xcodeproj"
+    Configuration="NativeDebug" />
+
+  <AppClips 
+    Condition="'$(Configuration)' == 'Release'"
+    Include="./Platforms/iOS/Native/Native.xcodeproj"
+    Configuration="NativeRelease" />
 </ItemGroup>
 ```
 
 ### SkipValidation (optional)
 For AppClips the application identifier and the com.apple.developer.parent-application-identifiers in the AppClips entitlement must match the `ApplicationId` of the MAUI app.
 
-After the MAUI app has been build, it is verified that there is a match. If not the build will fail with an error 1013 ( I had to chose a number ;).
+After the MAUI app has been build, it is verified that there is a match. If not the build will fail with an error 1013 (I had to chose a number ;).
 The validation process relies on a couple of command line tools to be present on the build system. If not, the validation and thus the build will fail.
 
-You can skip validation by providing `SkipValidation`:
+You can skip validation like this:
 ```
 <ItemGroup>
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" SkipValidation="true" />
@@ -63,12 +74,13 @@ You can skip validation by providing `SkipValidation`:
 ```
 
 ### NoSigning (optional)
-Especially for CI builds, it can be difficult to get provisionings working.
+Especially for CI builds, it can be difficult to get provisionings working. In order to mitigate this, you can skip signing of the xcode project. I also am skipping signing in the sample app in order for it to build straight out of the box.
 
-You can skip signing by providing `NoSigning`:
+You can skip signing like this:
 ```
 <ItemGroup>
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" NoSigning="true" />
+  <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" NoSigning="true" />
 </ItemGroup>
 ```
 
