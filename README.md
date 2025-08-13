@@ -106,9 +106,10 @@ All you need to do is to add this target to your project (.csproj)
 ```
 
 ## TLDR;
-Support AppClipp in your MAUI project by adding this to your project (.csproj) file:
+Support AppClip or Widget for iOS in your MAUI project by adding this to your project (.csproj) file:
 ```
 <ItemGroup>
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" />
+  <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" />
 </ItemGroup>
 ```
