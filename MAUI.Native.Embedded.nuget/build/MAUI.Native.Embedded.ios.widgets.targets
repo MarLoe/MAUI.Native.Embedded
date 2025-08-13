@@ -12,7 +12,7 @@
   <Target Name="_ResolveWidgets" Condition="'@(Widgets)' != ''">
     <PropertyGroup>
       <WidgetsArchiveBase Condition="'$(WidgetsArchiveBase)' == ''">$(IntermediateOutputPath)</WidgetsArchiveBase>
-      <WidgetsArchiveDir Condition="'$(WidgetsArchiveDir)' == ''">xcodebuild/</WidgetsArchiveDir>
+      <WidgetsArchiveDir Condition="'$(WidgetsArchiveDir)' == ''">xcode/</WidgetsArchiveDir>
       <!-- We will always overwrite _WidgetsArchivePath to avoid mismatch with WidgetsArchiveBase and WidgetsArchiveDir -->
       <_WidgetsArchivePath>$(WidgetsArchiveBase)$(WidgetsArchiveDir)</_WidgetsArchivePath>
     </PropertyGroup>
@@ -41,13 +41,17 @@
 
 
   <Target Name="_BuildWidgets" Condition="'@(Widgets)' != ''">
+    <PropertyGroup>
+      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+    </PropertyGroup>
     <Exec
-      Command="xcrun xcodebuild archive -project '%(Widgets.FullPath)' -scheme '%(Widgets.Scheme)' -configuration '%(Widgets.Configuration)' -destination 'generic/platform=iOS' -archivePath '%(Widgets.ArchivePath)' %(Widgets.XcodeParams)"
+      Command="xcrun xcodebuild archive -project '%(Widgets.FullPath)' -scheme '%(Widgets.Scheme)' -configuration '%(Widgets.Configuration)' -destination 'generic/platform=$(_XcodeDestination)' -archivePath '%(Widgets.ArchivePath)' %(Widgets.XcodeParams)"
       Outputs="%(Widgets.ArchivePath)" />
   </Target>
 
 
-  <Target Name="ProcessWidgets" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(Widgets)' != ''">
+  <Target Name="ProcessWidgets" BeforeTargets="MaciOSPrepareForBuild" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(Widgets)' != ''">
     <ItemGroup>
       <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" />
       <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" />
@@ -57,16 +61,10 @@
     <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep com.apple.widgetkit-extension &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
 
     <ItemGroup>
-      <_WidgetsFiles Include="%(_AppexBundles.FullPath)/**" Condition="Exists('%(_AppexBundles.FullPath).widget')"/>
-      <_WidgetsFiles>
-        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_WidgetsFiles.FullPath)', '^.*[\\/]PlugIns[\\/]', ''))</TargetPath>
-      </_WidgetsFiles>
-
-      <!-- Include the found Widgets in the MAUI app -->
-      <MauiAsset Include="@(_WidgetsFiles)" LogicalName="PlugIns/%(_WidgetsFiles.TargetPath)" />
+      <AdditionalAppExtensions Include="%(_AppexBundles.FullPath)/.." Condition="Exists('%(_AppexBundles.FullPath).widget')">
+        <Name>%(_AppexBundles.Filename)</Name>
+      </AdditionalAppExtensions>
     </ItemGroup>
-
-    <Error Condition="'@(_WidgetsFiles)' == ''" Code="404" Text="No Widgets found in Xcode project: '%(Widgets.Identity)'" />
   </Target>
 
 
