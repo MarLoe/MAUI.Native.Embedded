@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <ProcessWidgetsDependsOn>
+      _InitXcodeProjects;
       _ResolveWidgets;
       _UpdateXcodeProjectVersion;
       _BuildWidgets;
@@ -10,13 +11,6 @@
 
 
   <Target Name="_ResolveWidgets" Condition="'@(Widgets)' != ''">
-    <PropertyGroup>
-      <WidgetsArchiveBase Condition="'$(WidgetsArchiveBase)' == ''">$(IntermediateOutputPath)</WidgetsArchiveBase>
-      <WidgetsArchiveDir Condition="'$(WidgetsArchiveDir)' == ''">xcode/</WidgetsArchiveDir>
-      <!-- We will always overwrite _WidgetsArchivePath to avoid mismatch with WidgetsArchiveBase and WidgetsArchiveDir -->
-      <_WidgetsArchivePath>$(WidgetsArchiveBase)$(WidgetsArchiveDir)</_WidgetsArchivePath>
-    </PropertyGroup>
-
     <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="404" Text="Widgets project not found: '%(Widgets.Identity)'" />
 
     <ItemGroup>
@@ -31,7 +25,7 @@
       </Widgets>
       <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
       <Widgets>
-        <ArchivePath>$(_WidgetsArchivePath)/%(Widgets.Scheme)-%(Widgets.Configuration)%(Widgets.UnsignedName).xcarchive</ArchivePath>
+        <ArchivePath>$(_XcodeArchivePath)/%(Widgets.Scheme)-%(Widgets.Configuration)%(Widgets.UnsignedName).xcarchive</ArchivePath>
       </Widgets>
 
       <!-- Consolidate all included Xcode projects -->
