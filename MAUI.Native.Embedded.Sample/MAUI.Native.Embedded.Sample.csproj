@@ -55,6 +55,7 @@
     <!--       compile straight out the box. You should not include   -->
     <!--       this in your own project.                              -->
     <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
+    <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" NoSigning="true" />
 
     <!-- App Icon -->
     <MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#512BD4" />

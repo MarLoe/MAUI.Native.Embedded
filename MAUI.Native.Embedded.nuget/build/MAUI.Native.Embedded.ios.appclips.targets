@@ -52,10 +52,11 @@
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
       <_AppClipsFiles>
-        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_AppClipsFiles.RecursiveDir)', '^.*?AppClips[\\/]', ''))</TargetPath>
+        <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_AppClipsFiles.FullPath)', '^.*[\\/]AppClips[\\/]', ''))</TargetPath>
       </_AppClipsFiles>
 
-      <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)%(Filename)%(Extension)" />
+      <!-- Include the found AppClips in the MAUI app -->
+      <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)" />
     </ItemGroup>
 
     <Error Condition="'@(_AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />

@@ -2,5 +2,6 @@
 
   <Import Project="MAUI.Native.Embedded.ios.common.targets" />
   <Import Project="MAUI.Native.Embedded.ios.appclips.targets" />
+  <Import Project="MAUI.Native.Embedded.ios.widgets.targets" />
 
 </Project>
