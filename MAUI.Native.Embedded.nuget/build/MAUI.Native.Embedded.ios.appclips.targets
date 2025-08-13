@@ -35,8 +35,12 @@
 
 
   <Target Name="_BuildAppClips" Condition="'@(AppClips)' != ''">
+    <PropertyGroup>
+      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+    </PropertyGroup>
     <Exec
-      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=iOS' -archivePath '%(AppClips.ArchivePath)' %(AppClips.XcodeParams)"
+      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=$(_XcodeDestination)' -archivePath '%(AppClips.ArchivePath)' %(AppClips.XcodeParams)"
       Outputs="%(AppClips.ArchivePath)" />
   </Target>
 
