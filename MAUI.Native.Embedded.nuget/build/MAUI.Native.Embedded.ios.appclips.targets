@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <ProcessAppClipsDependsOn>
+      _InitXcodeProjects;
       _ResolveAppClips;
       _UpdateXcodeProjectVersion;
       _BuildAppClips;
@@ -10,13 +11,6 @@
 
 
   <Target Name="_ResolveAppClips" Condition="'@(AppClips)' != ''">
-    <PropertyGroup>
-      <AppClipsArchiveBase Condition="'$(AppClipsArchiveBase)' == ''">$(IntermediateOutputPath)</AppClipsArchiveBase>
-      <AppClipsArchiveDir Condition="'$(AppClipsArchiveDir)' == ''">xcodebuild/</AppClipsArchiveDir>
-      <!-- We will always overwrite _AppClipsArchivePath to avoid mismatch with AppClipsArchiveBase and AppClipsArchiveDir -->
-      <_AppClipsArchivePath>$(AppClipsArchiveBase)$(AppClipsArchiveDir)</_AppClipsArchivePath>
-    </PropertyGroup>
-
     <Error Condition="Exists('%(AppClips.FullPath)') == 'false'" Code="404" Text="AppClips project not found: '%(AppClips.Identity)'" />
 
     <ItemGroup>
@@ -31,7 +25,7 @@
       </AppClips>
       <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
       <AppClips>
-        <ArchivePath>$(_AppClipsArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
+        <ArchivePath>$(_XcodeArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
       </AppClips>
 
       <!-- Consolidate all included Xcode projects -->
