@@ -1,6 +1,6 @@
 //
-//  MAUI_Native_Embedded_WidgetControl.swift
-//  MAUI.Native.Embedded.Widget
+//  MAUI_Native_Embedded_ios_WidgetControl.swift
+//  MAUI.Native.Embedded.ios.Widget
 //
 //  Created by Martin Løbger on 31/07/2025.
 //
@@ -9,8 +9,8 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-struct MAUI_Native_Embedded_WidgetControl: ControlWidget {
-    static let kind: String = "com.lobger.MAUI-Native-Embedded.MAUI.Native.Embedded.Widget"
+struct MAUI_Native_Embedded_ios_WidgetControl: ControlWidget {
+    static let kind: String = "com.lobger.MAUI-Native-Embedded.MAUI.Native.Embedded.ios.Widget"
 
     var body: some ControlWidgetConfiguration {
         AppIntentControlConfiguration(
@@ -30,7 +30,7 @@ struct MAUI_Native_Embedded_WidgetControl: ControlWidget {
     }
 }
 
-extension MAUI_Native_Embedded_WidgetControl {
+extension MAUI_Native_Embedded_ios_WidgetControl {
     struct Value {
         var isRunning: Bool
         var name: String
@@ -38,12 +38,12 @@ extension MAUI_Native_Embedded_WidgetControl {
 
     struct Provider: AppIntentControlValueProvider {
         func previewValue(configuration: TimerConfiguration) -> Value {
-            MAUI_Native_Embedded_WidgetControl.Value(isRunning: false, name: configuration.timerName)
+            MAUI_Native_Embedded_ios_WidgetControl.Value(isRunning: false, name: configuration.timerName)
         }
 
         func currentValue(configuration: TimerConfiguration) async throws -> Value {
             let isRunning = true // Check if the timer is running
-            return MAUI_Native_Embedded_WidgetControl.Value(isRunning: isRunning, name: configuration.timerName)
+            return MAUI_Native_Embedded_ios_WidgetControl.Value(isRunning: isRunning, name: configuration.timerName)
         }
     }
 }

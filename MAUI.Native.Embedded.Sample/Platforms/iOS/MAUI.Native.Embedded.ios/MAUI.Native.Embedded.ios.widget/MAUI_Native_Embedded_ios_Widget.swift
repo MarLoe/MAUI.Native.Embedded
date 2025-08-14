@@ -1,6 +1,6 @@
 //
-//  MAUI_Native_Embedded_Widget.swift
-//  MAUI.Native.Embedded.Widget
+//  MAUI_Native_Embedded_ios_Widget.swift
+//  MAUI.Native.Embedded.ios.widget
 //
 //  Created by Martin Løbger on 31/07/2025.
 //
@@ -41,7 +41,7 @@ struct SimpleEntry: TimelineEntry {
     let configuration: ConfigurationAppIntent
 }
 
-struct MAUI_Native_Embedded_WidgetEntryView : View {
+struct MAUI_Native_Embedded_ios_WidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
@@ -55,12 +55,12 @@ struct MAUI_Native_Embedded_WidgetEntryView : View {
     }
 }
 
-struct MAUI_Native_Embedded_Widget: Widget {
-    let kind: String = "MAUI_Native_Embedded_Widget"
+struct MAUI_Native_Embedded_ios_Widget: Widget {
+    let kind: String = "MAUI_Native_Embedded_ios_Widget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-            MAUI_Native_Embedded_WidgetEntryView(entry: entry)
+            MAUI_Native_Embedded_ios_WidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
     }
@@ -81,7 +81,7 @@ extension ConfigurationAppIntent {
 }
 
 #Preview(as: .systemSmall) {
-    MAUI_Native_Embedded_Widget()
+    MAUI_Native_Embedded_ios_Widget()
 } timeline: {
     SimpleEntry(date: .now, configuration: .smiley)
     SimpleEntry(date: .now, configuration: .starEyes)

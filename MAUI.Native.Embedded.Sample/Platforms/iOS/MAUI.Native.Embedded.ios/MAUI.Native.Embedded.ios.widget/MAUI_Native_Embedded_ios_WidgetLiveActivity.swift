@@ -1,6 +1,6 @@
 //
-//  MAUI_Native_Embedded_WidgetLiveActivity.swift
-//  MAUI.Native.Embedded.Widget
+//  MAUI_Native_Embedded_ios_WidgetLiveActivity.swift
+//  MAUI.Native.Embedded.ios.Widget
 //
 //  Created by Martin Løbger on 31/07/2025.
 //
@@ -9,7 +9,7 @@ import ActivityKit
 import WidgetKit
 import SwiftUI
 
-struct MAUI_Native_Embedded_WidgetAttributes: ActivityAttributes {
+struct MAUI_Native_Embedded_ios_WidgetAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         // Dynamic stateful properties about your activity go here!
         var emoji: String
@@ -19,9 +19,9 @@ struct MAUI_Native_Embedded_WidgetAttributes: ActivityAttributes {
     var name: String
 }
 
-struct MAUI_Native_Embedded_WidgetLiveActivity: Widget {
+struct MAUI_Native_Embedded_ios_WidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: MAUI_Native_Embedded_WidgetAttributes.self) { context in
+        ActivityConfiguration(for: MAUI_Native_Embedded_ios_WidgetAttributes.self) { context in
             // Lock screen/banner UI goes here
             VStack {
                 Text("Hello \(context.state.emoji)")
@@ -56,25 +56,25 @@ struct MAUI_Native_Embedded_WidgetLiveActivity: Widget {
     }
 }
 
-extension MAUI_Native_Embedded_WidgetAttributes {
-    fileprivate static var preview: MAUI_Native_Embedded_WidgetAttributes {
-        MAUI_Native_Embedded_WidgetAttributes(name: "World")
+extension MAUI_Native_Embedded_ios_WidgetAttributes {
+    fileprivate static var preview: MAUI_Native_Embedded_ios_WidgetAttributes {
+        MAUI_Native_Embedded_ios_WidgetAttributes(name: "World")
     }
 }
 
-extension MAUI_Native_Embedded_WidgetAttributes.ContentState {
-    fileprivate static var smiley: MAUI_Native_Embedded_WidgetAttributes.ContentState {
-        MAUI_Native_Embedded_WidgetAttributes.ContentState(emoji: "😀")
+extension MAUI_Native_Embedded_ios_WidgetAttributes.ContentState {
+    fileprivate static var smiley: MAUI_Native_Embedded_ios_WidgetAttributes.ContentState {
+        MAUI_Native_Embedded_ios_WidgetAttributes.ContentState(emoji: "😀")
      }
      
-     fileprivate static var starEyes: MAUI_Native_Embedded_WidgetAttributes.ContentState {
-         MAUI_Native_Embedded_WidgetAttributes.ContentState(emoji: "🤩")
+     fileprivate static var starEyes: MAUI_Native_Embedded_ios_WidgetAttributes.ContentState {
+         MAUI_Native_Embedded_ios_WidgetAttributes.ContentState(emoji: "🤩")
      }
 }
 
-#Preview("Notification", as: .content, using: MAUI_Native_Embedded_WidgetAttributes.preview) {
-   MAUI_Native_Embedded_WidgetLiveActivity()
+#Preview("Notification", as: .content, using: MAUI_Native_Embedded_ios_WidgetAttributes.preview) {
+   MAUI_Native_Embedded_ios_WidgetLiveActivity()
 } contentStates: {
-    MAUI_Native_Embedded_WidgetAttributes.ContentState.smiley
-    MAUI_Native_Embedded_WidgetAttributes.ContentState.starEyes
+    MAUI_Native_Embedded_ios_WidgetAttributes.ContentState.smiley
+    MAUI_Native_Embedded_ios_WidgetAttributes.ContentState.starEyes
 }
