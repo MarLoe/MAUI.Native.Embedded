@@ -34,14 +34,18 @@
   </Target>
 
 
-  <Target Name="_BuildWidgets" Condition="'@(Widgets)' != ''">
+  <Target Name="_BuildWidgets" Condition="'@(Widgets)' != ''" Outputs="%(Widgets.ArchivePath)">
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
       <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
     </PropertyGroup>
-    <Exec
-      Command="xcrun xcodebuild archive -project '%(Widgets.FullPath)' -scheme '%(Widgets.Scheme)' -configuration '%(Widgets.Configuration)' -destination 'generic/platform=$(_XcodeDestination)' -archivePath '%(Widgets.ArchivePath)' %(Widgets.XcodeParams)"
-      Outputs="%(Widgets.ArchivePath)" />
+    <CreateXcArchive
+      ProjectPath="%(Widgets.FullPath)"
+      SchemeName="%(Widgets.Scheme)"
+      Configuration="%(Widgets.Configuration)"
+      ArchivePlatform="generic/platform=$(_XcodeDestination)"
+      OutputPath="%(Widgets.ArchivePath)"
+      WorkingDirectory="%(Widgets.RootDir)%(Widgets.Directory)" />
   </Target>
 
 
