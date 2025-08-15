@@ -113,3 +113,8 @@ Support AppClip or Widget for iOS in your MAUI project by adding this to your pr
   <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" />
 </ItemGroup>
 ```
+
+## Disclaimer
+Embedding native elements into MAUI might look easy with this nuget.
+But please note that this nuget only puts the native part in the MAUI app.
+Making C# talk to SwiftUI or Objective-C is not that easy. 
