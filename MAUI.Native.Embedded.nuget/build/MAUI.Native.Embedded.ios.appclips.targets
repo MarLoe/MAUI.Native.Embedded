@@ -39,6 +39,10 @@
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
       <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
     </PropertyGroup>
+    <Exec
+      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -destination 'generic/platform=$(_XcodeDestination)' -archivePath '%(AppClips.ArchivePath)' %(AppClips.XcodeParams)"
+      Outputs="%(AppClips.ArchivePath)" />
+    <!-- This built in task add parameters to the xcodebuild that cannot be manged, and might lead to compiler issues
     <CreateXcArchive
       ProjectPath="%(AppClips.FullPath)"
       SchemeName="%(AppClips.Scheme)"
@@ -46,6 +50,7 @@
       ArchivePlatform="generic/platform=$(_XcodeDestination)"
       OutputPath="%(AppClips.ArchivePath)"
       WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
+    -->
   </Target>
 
 
