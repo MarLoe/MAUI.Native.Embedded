@@ -2,7 +2,7 @@
 
   <Target Name="_InitXcodeProjects">
     <PropertyGroup>
-      <XcodeArchiveBase Condition="'$(XcodeArchiveBase)' == ''">$(IntermediateOutputPath)</XcodeArchiveBase>
+      <XcodeArchiveBase Condition="'$(XcodeArchiveBase)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)</XcodeArchiveBase>
       <XcodeArchiveDir Condition="'$(XcodeArchiveDir)' == ''">xcode/</XcodeArchiveDir>
       <!-- We will always overwrite _XcodeArchivePath to avoid mismatch with XcodeArchiveBase and XcodeArchiveDir -->
       <_XcodeArchivePath>$(XcodeArchiveBase)$(XcodeArchiveDir)</_XcodeArchivePath>
