@@ -105,6 +105,12 @@ All you need to do is to add this target to your project (.csproj)
 </Target>
 ```
 
+### Hint: Parse command line parameters to Xcodebuild
+If you need to parse extra command line parameters to the `xcrun xcodebuild archive ...` you can use the `XcodeParams` attribute.
+```
+  <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" XcodeParams="ENABLE_BITCODE=NO SKIP_INSTALL=NO"/>
+```
+
 ## TLDR;
 Support AppClip or Widget for iOS in your MAUI project by adding this to your project (.csproj) file:
 ```
@@ -113,3 +119,8 @@ Support AppClip or Widget for iOS in your MAUI project by adding this to your pr
   <Widgets Include="./Platforms/iOS/Native/Native.xcodeproj" />
 </ItemGroup>
 ```
+
+## Disclaimer
+Embedding native elements into MAUI might look easy with this nuget.
+But please note that this nuget only puts the native part in the MAUI app.
+Making C# talk to SwiftUI or Objective-C is not that easy. 
