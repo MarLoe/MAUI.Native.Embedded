@@ -25,7 +25,7 @@
       </AppClips>
       <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
       <AppClips>
-        <ArchivePath>$(_XcodeArchivePath)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
+        <ArchivePath>$(XcodeOutputPathRoot)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
       </AppClips>
 
       <!-- Consolidate all included Xcode projects -->
