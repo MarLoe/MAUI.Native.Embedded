@@ -1,13 +1,19 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup>
+    <BuildNativeEmbedded>AppClips;Widgets</BuildNativeEmbedded>
+  </PropertyGroup>
+
+
   <Target Name="_InitXcodeProjects">
     <PropertyGroup>
       <!-- Use the build system default output root, if it is available -->
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
-      <XCodeCommonParams Condition="'$(XCodeCommonParams)' == ''">-derivedDataPath "$(XcodeOutputPathRoot)DerivedData" -packageCachePath "$(XcodeOutputPathRoot)Cache"</XCodeCommonParams>
+      <XCodeCommonParams Condition="'$(XCodeCommonParams)' == ''">-derivedDataPath '$(XcodeOutputPathRoot)DerivedData' -packageCachePath '$(XcodeOutputPathRoot)Cache'</XCodeCommonParams>
     </PropertyGroup>
   </Target>
+
 
   <Target
     Name="_UpdateXcodeProjectVersion"
@@ -32,5 +38,27 @@
       Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
       WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
   </Target>
+
+
+  <PropertyGroup>
+    <_ResolveNativeEmbeddedDependsOn />
+
+    <_ProcessNativeEmbeddedDependsOn>
+      _InitXcodeProjects;
+      _ResolveNativeEmbedded;
+      _UpdateXcodeProjectVersion;
+    </_ProcessNativeEmbeddedDependsOn>
+
+    <_VerifyNativeEmbeddedDependsOn />
+  </PropertyGroup>
+
+
+  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
+
+
+  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
+
+
+  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(_VerifyNativeEmbeddedDependsOn)" />
 
 </Project>

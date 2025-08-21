@@ -1,16 +1,28 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup>
-    <ProcessAppClipsDependsOn>
-      _InitXcodeProjects;
+  <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('AppClips'))">
+    <_ResolveNativeEmbeddedDependsOn>
+      $(_ResolveNativeEmbeddedDependsOn);
       _ResolveAppClips;
-      _UpdateXcodeProjectVersion;
+    </_ResolveNativeEmbeddedDependsOn>
+
+    <_ProcessNativeEmbeddedDependsOn>
+      $(_ProcessNativeEmbeddedDependsOn);
+      ProcessAppClips;
+    </_ProcessNativeEmbeddedDependsOn>
+
+    <ProcessAppClipsDependsOn>
       _BuildAppClips;
     </ProcessAppClipsDependsOn>
+
+    <_VerifyNativeEmbeddedDependsOn>
+      $(_VerifyNativeEmbeddedDependsOn);
+      VerifyAppClips;
+    </_VerifyNativeEmbeddedDependsOn>
   </PropertyGroup>
 
 
-  <Target Name="_ResolveAppClips" Condition="'@(AppClips)' != ''">
+  <Target Name="_ResolveAppClips">
     <Error Condition="Exists('%(AppClips.FullPath)') == 'false'" Code="404" Text="AppClips project not found: '%(AppClips.Identity)'" />
 
     <ItemGroup>
@@ -34,7 +46,7 @@
   </Target>
 
 
-  <Target Name="_BuildAppClips" Condition="'@(AppClips)' != ''" Outputs="%(AppClips.ArchivePath)">
+  <Target Name="_BuildAppClips" Outputs="%(AppClips.ArchivePath)">
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
       <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
@@ -59,7 +71,7 @@
   </Target>
 
 
-  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
+  <Target Name="ProcessAppClips" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
@@ -75,7 +87,7 @@
   </Target>
 
 
-  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
+  <Target Name="VerifyAppClips" Condition="'@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
     </ItemGroup>
@@ -89,6 +101,7 @@
 
     <Error Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'" Code="1013" Text="AppClips application identifier does not mathc this 'ApplicationId': $(ApplicationId)" />
   </Target>
+
 
   <Target Name="BuildAppClips" DependsOnTargets="ProcessAppClips" />
 
