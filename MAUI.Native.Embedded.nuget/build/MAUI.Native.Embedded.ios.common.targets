@@ -5,6 +5,7 @@
       <!-- Use the build system default output root, if it is available -->
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
+      <XCodeCommonParams Condition="'$(XCodeCommonParams)' == ''">-derivedDataPath "$(XcodeOutputPathRoot)DerivedData" -packageCachePath "$(XcodeOutputPathRoot)Cache"</XCodeCommonParams>
     </PropertyGroup>
   </Target>
 
