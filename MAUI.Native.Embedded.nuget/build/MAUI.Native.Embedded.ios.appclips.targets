@@ -85,4 +85,6 @@
     <Error Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'" Code="1013" Text="AppClips application identifier does not mathc this 'ApplicationId': $(ApplicationId)" />
   </Target>
 
+  <Target Name="BuildAppClips" DependsOnTargets="ProcessAppClips" />
+
 </Project>

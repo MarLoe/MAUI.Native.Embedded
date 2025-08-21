@@ -88,4 +88,6 @@
   </Target>
   -->
 
+  <Target Name="BuildWidgets" DependsOnTargets="ProcessWidgets" />
+
 </Project>
