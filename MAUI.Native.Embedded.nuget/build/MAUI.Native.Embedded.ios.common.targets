@@ -15,19 +15,13 @@
     Inputs="%(XcodeProjects.Identity)"
     Outputs="%(XcodeProjects.Identity)"
     Condition="'@(XcodeProjects)' != ''">
-    <!-- The Xcode projects must have the same version as our app - so we must update it -->
+    <!-- The Xcode projects must have the same version as our app - so we must update it. -->
+    <!-- Do not use agvtool as it cannot work on indicidual projects. Roll our own :)     -->
     <Exec
       Condition="'$(ApplicationVersion)' != ''"
-      Command="xcrun agvtool new-version -all '$(ApplicationVersion)'"
+      Command="sed -i '' 's/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $(ApplicationVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
       WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
 
-    <Exec
-      Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="xcrun agvtool new-marketing-version '$(ApplicationDisplayVersion)'"
-      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
-
-    <!-- The agvtool new-marketing-version might not work if plist is auto generated -->
-    <!-- So we will manually make sure it is updated -->
     <Exec
       Condition="'$(ApplicationDisplayVersion)' != ''"
       Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
