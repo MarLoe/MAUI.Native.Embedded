@@ -10,22 +10,44 @@
   </Target>
 
 
-  <Target
-    Name="_UpdateXcodeProjectVersion"
-    Inputs="%(XcodeProjects.Identity)"
-    Outputs="%(XcodeProjects.Identity)"
-    Condition="'@(XcodeProjects)' != ''">
+  <Target Name="_UpdateXcodeProjectsVersion" Condition="'@(XcodeProjects)' != ''">
     <!-- The Xcode projects must have the same version as our app - so we must update it. -->
     <!-- Do not use agvtool as it cannot work on indicidual projects. Roll our own :)     -->
     <Exec
       Condition="'$(ApplicationVersion)' != ''"
-      Command="sed -i '' 's/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $(ApplicationVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
-      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+      Command="sed -i '' 's/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $(ApplicationVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
 
     <Exec
       Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
+      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
+  </Target>
+
+
+  <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
+    <Message Importance="High" Text="***xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)" />
+    <!-- <Error Text="BREAK"/> -->
+    <PropertyGroup>
+      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
+    </PropertyGroup>
+
+    <Exec
+      Command="xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)"
+      Outputs="%(XcodeProjects.ArchivePath)" />
+    <!-- 
+      This built in task adds parameters to the xcodebuild that cannot be controlled,
+      and might lead to compiler issues. Thus it is not feasable to use.
+    <CreateXcArchive
+      ProjectPath="%(XcodeProjects.FullPath)"
+      SchemeName="%(XcodeProjects.Scheme)"
+      Configuration="%(XcodeProjects.Configuration)"
+      ArchivePlatform="generic/platform=$(_XcodeDestination)"
+      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
+      PackageCachePath="$(XcodeOutputPathRoot)Cache"
+      OutputPath="%(XcodeProjects.ArchivePath)"
       WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+    -->
   </Target>
 
 
@@ -37,7 +59,8 @@
     <_ProcessNativeEmbeddedDependsOn>
       _InitXcodeProjects;
       _ResolveNativeEmbedded;
-      _UpdateXcodeProjectVersion;
+      _UpdateXcodeProjectsVersion;
+      _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 
     <ProcessNativeEmbeddedDependsOn>
@@ -48,17 +71,14 @@
     <VerifyNativeEmbeddedDependsOn />
   </PropertyGroup>
 
-  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
 
+  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
 
   <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
 
-
   <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
 
-
   <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
-
 
   <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
 

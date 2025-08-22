@@ -22,7 +22,7 @@
       </_ProcessNativeEmbeddedDependsOn>
 
       <ProcessWidgetsDependsOn>
-        _BuildWidgets;
+        $(ProcessWidgetsDependsOn);
       </ProcessWidgetsDependsOn>
 
       <VerifyNativeEmbeddedDependsOn>
@@ -47,7 +47,10 @@
         <UnsignedName>-unsigned</UnsignedName>
         <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
       </Widgets>
-      <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
+
+      <!-- We cannot add the ArchivePath in one go,         -->
+      <!-- so we have to do it separately once we have      -->
+      <!-- all the metadata like Scheme, Configuration etc. -->
       <Widgets>
         <ArchivePath>$(XcodeOutputPathRoot)/%(Widgets.Scheme)-%(Widgets.Configuration)%(Widgets.UnsignedName).xcarchive</ArchivePath>
       </Widgets>
@@ -55,31 +58,6 @@
       <!-- Consolidate all included Xcode projects -->
       <XcodeProjects Include="@(Widgets)" />
     </ItemGroup>
-  </Target>
-
-
-  <Target Name="_BuildWidgets" Outputs="%(Widgets.ArchivePath)">
-    <PropertyGroup>
-      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
-      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
-    </PropertyGroup>
-    <Exec
-      Command="xcrun xcodebuild archive -project '%(Widgets.FullPath)' -scheme '%(Widgets.Scheme)' -configuration '%(Widgets.Configuration)' -archivePath '%(Widgets.ArchivePath)' $(XCodeCommonParams) %(Widgets.XcodeParams)"
-      Outputs="%(Widgets.ArchivePath)" />
-    <!-- 
-      This built in task adds parameters to the xcodebuild that cannot be controlled,
-      and might lead to compiler issues. Thus it is not feasable to use.
-    <CreateXcArchive
-      ProjectPath="%(Widgets.FullPath)"
-      SchemeName="%(Widgets.Scheme)"
-      Configuration="%(Widgets.Configuration)"
-      ArchivePlatform="generic/platform=$(_XcodeDestination)"
-      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
-      PackageCachePath="$(XcodeOutputPathRoot)Cache"
-      OutputPath="%(Widgets.ArchivePath)"
-      WorkingDirectory="%(Widgets.RootDir)%(Widgets.Directory)" />
-    -->
   </Target>
 
 

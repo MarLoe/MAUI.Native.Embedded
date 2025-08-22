@@ -22,7 +22,7 @@
       </_ProcessNativeEmbeddedDependsOn>
 
       <ProcessAppClipsDependsOn>
-        _BuildAppClips;
+        $(ProcessAppClipsDependsOn);
       </ProcessAppClipsDependsOn>
 
       <VerifyNativeEmbeddedDependsOn>
@@ -47,7 +47,10 @@
         <UnsignedName>-unsigned</UnsignedName>
         <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
       </AppClips>
-      <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
+
+      <!-- We cannot add the ArchivePath in one go,         -->
+      <!-- so we have to do it separately once we have      -->
+      <!-- all the metadata like Scheme, Configuration etc. -->
       <AppClips>
         <ArchivePath>$(XcodeOutputPathRoot)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
       </AppClips>
@@ -55,31 +58,6 @@
       <!-- Consolidate all included Xcode projects -->
       <XcodeProjects Include="@(AppClips)" />
     </ItemGroup>
-  </Target>
-
-
-  <Target Name="_BuildAppClips" Outputs="%(AppClips.ArchivePath)">
-    <PropertyGroup>
-      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
-      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
-    </PropertyGroup>
-    <Exec
-      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -archivePath '%(AppClips.ArchivePath)' $(XCodeCommonParams) %(AppClips.XcodeParams)"
-      Outputs="%(AppClips.ArchivePath)" />
-    <!-- 
-      This built in task adds parameters to the xcodebuild that cannot be controlled,
-      and might lead to compiler issues. Thus it is not feasable to use.
-    <CreateXcArchive
-      ProjectPath="%(AppClips.FullPath)"
-      SchemeName="%(AppClips.Scheme)"
-      Configuration="%(AppClips.Configuration)"
-      ArchivePlatform="generic/platform=$(_XcodeDestination)"
-      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
-      PackageCachePath="$(XcodeOutputPathRoot)Cache"
-      OutputPath="%(AppClips.ArchivePath)"
-      WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
-    -->
   </Target>
 
 
