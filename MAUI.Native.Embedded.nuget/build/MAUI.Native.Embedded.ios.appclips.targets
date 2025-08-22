@@ -40,6 +40,7 @@
       <AppClips>
         <Scheme Condition="'%(AppClips.Scheme)' == ''">%(AppClips.Filename)</Scheme>
         <Configuration Condition="'%(AppClips.Configuration)' == ''">$(Configuration)</Configuration>
+        <NoSigning Condition="'%(AppClips.NoSigning)' == ''">false</NoSigning>
         <UnsignedName></UnsignedName>
       </AppClips>
       <AppClips Condition="'%(AppClips.NoSigning)' == 'true'">
@@ -52,7 +53,7 @@
       </AppClips>
 
       <!-- Consolidate all included Xcode projects -->
-      <XcodeProjects Include="%(AppClips.FullPath)" />
+      <XcodeProjects Include="@(AppClips)" />
     </ItemGroup>
   </Target>
 

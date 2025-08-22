@@ -40,6 +40,7 @@
       <Widgets>
         <Scheme Condition="'%(Widgets.Scheme)' == ''">%(Widgets.Filename)</Scheme>
         <Configuration Condition="'%(Widgets.Configuration)' == ''">$(Configuration)</Configuration>
+        <NoSigning Condition="'%(Widgets.NoSigning)' == ''">false</NoSigning>
         <UnsignedName></UnsignedName>
       </Widgets>
       <Widgets Condition="'%(Widgets.NoSigning)' == 'true'">
@@ -52,7 +53,7 @@
       </Widgets>
 
       <!-- Consolidate all included Xcode projects -->
-      <XcodeProjects Include="%(Widgets.FullPath)" />
+      <XcodeProjects Include="@(Widgets)" />
     </ItemGroup>
   </Target>
 
