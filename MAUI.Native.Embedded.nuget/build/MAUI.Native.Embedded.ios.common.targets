@@ -1,10 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup>
-    <BuildNativeEmbedded>AppClips;Widgets</BuildNativeEmbedded>
-  </PropertyGroup>
-
-
   <Target Name="_InitXcodeProjects">
     <PropertyGroup>
       <!-- Use the build system default output root, if it is available -->
@@ -41,6 +36,8 @@
 
 
   <PropertyGroup>
+    <_InitNativeEmbeddedDependsOn />
+
     <_ResolveNativeEmbeddedDependsOn />
 
     <_ProcessNativeEmbeddedDependsOn>
@@ -49,16 +46,26 @@
       _UpdateXcodeProjectVersion;
     </_ProcessNativeEmbeddedDependsOn>
 
-    <_VerifyNativeEmbeddedDependsOn />
+    <ProcessNativeEmbeddedDependsOn>
+      _InitNativeEmbedded;
+      _ProcessNativeEmbedded;
+    </ProcessNativeEmbeddedDependsOn>
+
+    <VerifyNativeEmbeddedDependsOn />
   </PropertyGroup>
+
+  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
 
 
   <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
 
 
-  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
+  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
 
 
-  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(_VerifyNativeEmbeddedDependsOn)" />
+  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
+
+
+  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
 
 </Project>

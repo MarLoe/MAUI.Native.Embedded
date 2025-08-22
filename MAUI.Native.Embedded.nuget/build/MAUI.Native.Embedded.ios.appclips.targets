@@ -1,25 +1,36 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('AppClips'))">
-    <_ResolveNativeEmbeddedDependsOn>
-      $(_ResolveNativeEmbeddedDependsOn);
-      _ResolveAppClips;
-    </_ResolveNativeEmbeddedDependsOn>
-
-    <_ProcessNativeEmbeddedDependsOn>
-      $(_ProcessNativeEmbeddedDependsOn);
-      ProcessAppClips;
-    </_ProcessNativeEmbeddedDependsOn>
-
-    <ProcessAppClipsDependsOn>
-      _BuildAppClips;
-    </ProcessAppClipsDependsOn>
-
-    <_VerifyNativeEmbeddedDependsOn>
-      $(_VerifyNativeEmbeddedDependsOn);
-      VerifyAppClips;
-    </_VerifyNativeEmbeddedDependsOn>
+  <PropertyGroup>
+    <BuildNativeEmbedded>$(BuildNativeEmbedded);AppClips</BuildNativeEmbedded>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn);
+      _InitAppClips;
+    </_InitNativeEmbeddedDependsOn>
   </PropertyGroup>
+
+
+  <Target Name="_InitAppClips" Condition="'@(AppClips)' != ''">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('AppClips'))">
+      <_ResolveNativeEmbeddedDependsOn>
+        $(_ResolveNativeEmbeddedDependsOn);
+        _ResolveAppClips;
+      </_ResolveNativeEmbeddedDependsOn>
+
+      <_ProcessNativeEmbeddedDependsOn>
+        $(_ProcessNativeEmbeddedDependsOn);
+        ProcessAppClips;
+      </_ProcessNativeEmbeddedDependsOn>
+
+      <ProcessAppClipsDependsOn>
+        _BuildAppClips;
+      </ProcessAppClipsDependsOn>
+
+      <VerifyNativeEmbeddedDependsOn>
+        $(VerifyNativeEmbeddedDependsOn);
+        VerifyAppClips;
+      </VerifyNativeEmbeddedDependsOn>
+    </PropertyGroup>
+  </Target>
 
 
   <Target Name="_ResolveAppClips">
@@ -103,6 +114,11 @@
   </Target>
 
 
-  <Target Name="BuildAppClips" DependsOnTargets="ProcessAppClips" />
+  <Target Name="BuildAppClips">
+    <PropertyGroup>
+      <BuildNativeEmbedded>AppClips</BuildNativeEmbedded>
+    </PropertyGroup>
+    <CallTarget Targets="_InitAppClips;_ProcessNativeEmbedded" />
+  </Target>
 
 </Project>

@@ -1,25 +1,36 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('Widgets'))">
-    <_ResolveNativeEmbeddedDependsOn>
-      $(_ResolveNativeEmbeddedDependsOn);
-      _ResolveWidgets;
-    </_ResolveNativeEmbeddedDependsOn>
-
-    <_ProcessNativeEmbeddedDependsOn>
-      $(_ProcessNativeEmbeddedDependsOn);
-      ProcessWidgets;
-    </_ProcessNativeEmbeddedDependsOn>
-
-    <ProcessWidgetsDependsOn>
-      _BuildWidgets;
-    </ProcessWidgetsDependsOn>
-
-    <_VerifyNativeEmbeddedDependsOn>
-      $(_VerifyNativeEmbeddedDependsOn);
-      VerifyWidgets;
-    </_VerifyNativeEmbeddedDependsOn>
+  <PropertyGroup>
+    <BuildNativeEmbedded>$(BuildNativeEmbedded);Widgets</BuildNativeEmbedded>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn);
+      _InitWidgets;
+    </_InitNativeEmbeddedDependsOn>
   </PropertyGroup>
+
+
+  <Target Name="_InitWidgets" Condition="'@(Widgets)' != ''">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('Widgets'))">
+      <_ResolveNativeEmbeddedDependsOn>
+        $(_ResolveNativeEmbeddedDependsOn);
+        _ResolveWidgets;
+      </_ResolveNativeEmbeddedDependsOn>
+
+      <_ProcessNativeEmbeddedDependsOn>
+        $(_ProcessNativeEmbeddedDependsOn);
+        ProcessWidgets;
+      </_ProcessNativeEmbeddedDependsOn>
+
+      <ProcessWidgetsDependsOn>
+        _BuildWidgets;
+      </ProcessWidgetsDependsOn>
+
+      <VerifyNativeEmbeddedDependsOn>
+        $(VerifyNativeEmbeddedDependsOn);
+        VerifyWidgets;
+      </VerifyNativeEmbeddedDependsOn>
+    </PropertyGroup>
+  </Target>
 
 
   <Target Name="_ResolveWidgets">
@@ -93,6 +104,11 @@
   </Target>
 
 
-  <Target Name="BuildWidgets" DependsOnTargets="ProcessWidgets" />
+  <Target Name="BuildWidgets">
+    <PropertyGroup>
+      <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
+    </PropertyGroup>
+    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded" />
+  </Target>
 
 </Project>
