@@ -38,24 +38,12 @@
 
     <ItemGroup>
       <Widgets>
-        <Scheme Condition="'%(Widgets.Scheme)' == ''">%(Widgets.Filename)</Scheme>
-        <Configuration Condition="'%(Widgets.Configuration)' == ''">$(Configuration)</Configuration>
-        <NoSigning Condition="'%(Widgets.NoSigning)' == ''">false</NoSigning>
-        <UnsignedName></UnsignedName>
-      </Widgets>
-      <Widgets Condition="'%(Widgets.NoSigning)' == 'true'">
-        <UnsignedName>-unsigned</UnsignedName>
-        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <!-- Mark this as a Widgets project so we can   -->
+        <!-- identify it from XcodeProjects later on.   -->
+        <IsWidgets>true</IsWidgets>
       </Widgets>
 
-      <!-- We cannot add the ArchivePath in one go,         -->
-      <!-- so we have to do it separately once we have      -->
-      <!-- all the metadata like Scheme, Configuration etc. -->
-      <Widgets>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(Widgets.Scheme)-%(Widgets.Configuration)%(Widgets.UnsignedName).xcarchive</ArchivePath>
-      </Widgets>
-
-      <!-- Consolidate all included Xcode projects -->
+      <!-- Consolidate all included Xcode projects      -->
       <XcodeProjects Include="@(Widgets)" />
     </ItemGroup>
   </Target>
@@ -63,13 +51,18 @@
 
   <Target Name="ProcessWidgets" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'@(Widgets)' != ''">
     <ItemGroup>
+      <Widgets Remove="@(Widgets)" />
+      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsWidgets)' == 'true'" />
+    </ItemGroup>
+
+    <ItemGroup>
       <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" />
       <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" />
     </ItemGroup>
 
     <!-- Make sure each .appex is actually a widget -->
     <Delete Condition="Exists('%(_AppexBundles.FullPath).widget')" Files="%(_AppexBundles.FullPath).widget" />
-    
+
     <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep -q '_com.apple.widgetkit-extension' &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
 
     <ItemGroup>

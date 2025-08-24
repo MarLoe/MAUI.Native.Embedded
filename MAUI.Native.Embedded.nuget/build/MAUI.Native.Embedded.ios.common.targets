@@ -9,6 +9,29 @@
     </PropertyGroup>
   </Target>
 
+  <!-- Using _XcodeProjects for temporary place holder -->
+  <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
+    <ItemGroup>
+      <XcodeProjects>
+        <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
+        <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
+        <NoSigning Condition="'%(XcodeProjects.NoSigning)' == ''">false</NoSigning>
+        <UnsignedName></UnsignedName>
+      </XcodeProjects>
+
+      <XcodeProjects Condition="'%(XcodeProjects.NoSigning)' == 'true'">
+        <UnsignedName>-unsigned</UnsignedName>
+        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+      </XcodeProjects>
+
+      <!-- We cannot add the ArchivePath in one go,         -->
+      <!-- so we have to do it separately once we have      -->
+      <!-- all the metadata like Scheme, Configuration etc. -->
+      <XcodeProjects>
+        <ArchivePath>$(XcodeOutputPathRoot)/%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)%(XcodeProjects.UnsignedName).xcarchive</ArchivePath>
+      </XcodeProjects>
+    </ItemGroup>
+  </Target>
 
   <Target Name="_UpdateXcodeProjectsVersion" Condition="'@(XcodeProjects)' != ''">
     <!-- The Xcode projects must have the same version as our app - so we must update it. -->
@@ -58,6 +81,7 @@
       _InitXcodeProjects;
       _ResolveNativeEmbedded;
       _UpdateXcodeProjectsVersion;
+      _ResolveXcodeProjects;
       _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 

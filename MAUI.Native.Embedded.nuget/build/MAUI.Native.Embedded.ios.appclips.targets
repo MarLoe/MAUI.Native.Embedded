@@ -38,30 +38,23 @@
 
     <ItemGroup>
       <AppClips>
-        <Scheme Condition="'%(AppClips.Scheme)' == ''">%(AppClips.Filename)</Scheme>
-        <Configuration Condition="'%(AppClips.Configuration)' == ''">$(Configuration)</Configuration>
-        <NoSigning Condition="'%(AppClips.NoSigning)' == ''">false</NoSigning>
-        <UnsignedName></UnsignedName>
-      </AppClips>
-      <AppClips Condition="'%(AppClips.NoSigning)' == 'true'">
-        <UnsignedName>-unsigned</UnsignedName>
-        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <!-- Mark this as an AppClips project so we can -->
+        <!-- identify it from XcodeProjects later on.   -->
+        <IsAppClips>true</IsAppClips>
       </AppClips>
 
-      <!-- We cannot add the ArchivePath in one go,         -->
-      <!-- so we have to do it separately once we have      -->
-      <!-- all the metadata like Scheme, Configuration etc. -->
-      <AppClips>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
-      </AppClips>
-
-      <!-- Consolidate all included Xcode projects -->
+      <!-- Consolidate all included Xcode projects      -->
       <XcodeProjects Include="@(AppClips)" />
     </ItemGroup>
   </Target>
 
 
   <Target Name="ProcessAppClips" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'@(AppClips)' != ''">
+    <ItemGroup>
+      <AppClips Remove="@(AppClips)" />
+      <AppClips Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsAppClips)' == 'true'" />
+    </ItemGroup>
+
     <ItemGroup>
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
