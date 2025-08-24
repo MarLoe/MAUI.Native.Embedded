@@ -24,8 +24,6 @@
 
 
   <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
-    <Message Importance="High" Text="***xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)" />
-    <!-- <Error Text="BREAK"/> -->
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
       <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
