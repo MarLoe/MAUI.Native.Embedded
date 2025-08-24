@@ -68,6 +68,8 @@
     </ItemGroup>
 
     <!-- Make sure each .appex is actually a widget -->
+    <Delete Condition="Exists('%(_AppexBundles.FullPath).widget')" Files="%(_AppexBundles.FullPath).widget" />
+    
     <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep -q '_com.apple.widgetkit-extension' &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
 
     <ItemGroup>
