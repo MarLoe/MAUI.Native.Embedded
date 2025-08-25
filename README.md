@@ -112,7 +112,7 @@ If you need to parse extra command line parameters to the `xcrun xcodebuild arch
 ```
 
 ### Hint: Testing the Xcodebuild
-If you need to test and verify that the Xcode build part works, you can build these targets: `BuildAppClips`, `BuildWidgets`.
+If you need to test and verify that the Xcode build part works, you can build these targets: `BuildAppClips`, `BuildWidgets` or `BuildNativeEmbedded` (to build all).
 This targets only the Xcode build step and avoids waiting for the entire MAUI project to build.
 ```
 dotnet build -f:net9.0-ios -t:BuildAppClips,BuildWidgets MAUI.Native.Embedded.Sample/MAUI.Native.Embedded.Sample.csproj

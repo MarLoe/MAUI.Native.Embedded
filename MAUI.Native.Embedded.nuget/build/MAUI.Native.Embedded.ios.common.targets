@@ -27,7 +27,7 @@
     <ItemGroup>
       <XcodeProjects>
         <!-- If unset, we need to set NoSigning to false          -->
-         <!-- so that msbuild  to itterates correctly.            -->
+        <!-- so that msbuild  to itterates correctly.             -->
         <NoSigning Condition="'%(XcodeProjects.NoSigning)' == ''">false</NoSigning>
       </XcodeProjects>
 
@@ -110,5 +110,10 @@
   <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
 
   <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
+
+  <!-- This target is for debug purposes. See README.md for information -->
+  <Target Name="BuildNativeEmbedded">
+    <CallTarget Name="ProcessNativeEmbedded" />
+  </Target>
 
 </Project>
