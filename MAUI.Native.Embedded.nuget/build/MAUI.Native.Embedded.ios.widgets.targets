@@ -1,72 +1,69 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <ProcessWidgetsDependsOn>
-      _InitXcodeProjects;
-      _ResolveWidgets;
-      _UpdateXcodeProjectVersion;
-      _BuildWidgets;
-    </ProcessWidgetsDependsOn>
+    <BuildNativeEmbedded>$(BuildNativeEmbedded);Widgets</BuildNativeEmbedded>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn);
+      _InitWidgets;
+    </_InitNativeEmbeddedDependsOn>
   </PropertyGroup>
 
 
-  <Target Name="_ResolveWidgets" Condition="'@(Widgets)' != ''">
+  <Target Name="_InitWidgets" Condition="'@(Widgets)' != ''">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('Widgets'))">
+      <_ResolveNativeEmbeddedDependsOn>
+        $(_ResolveNativeEmbeddedDependsOn);
+        _ResolveWidgets;
+      </_ResolveNativeEmbeddedDependsOn>
+
+      <_ProcessNativeEmbeddedDependsOn>
+        $(_ProcessNativeEmbeddedDependsOn);
+        ProcessWidgets;
+      </_ProcessNativeEmbeddedDependsOn>
+
+      <ProcessWidgetsDependsOn>
+        $(ProcessWidgetsDependsOn);
+      </ProcessWidgetsDependsOn>
+
+      <VerifyNativeEmbeddedDependsOn>
+        $(VerifyNativeEmbeddedDependsOn);
+        VerifyWidgets;
+      </VerifyNativeEmbeddedDependsOn>
+    </PropertyGroup>
+  </Target>
+
+
+  <Target Name="_ResolveWidgets">
     <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="404" Text="Widgets project not found: '%(Widgets.Identity)'" />
 
     <ItemGroup>
       <Widgets>
-        <Scheme Condition="'%(Widgets.Scheme)' == ''">%(Widgets.Filename)</Scheme>
-        <Configuration Condition="'%(Widgets.Configuration)' == ''">$(Configuration)</Configuration>
-        <UnsignedName></UnsignedName>
-      </Widgets>
-      <Widgets Condition="'%(Widgets.NoSigning)' == 'true'">
-        <UnsignedName>-unsigned</UnsignedName>
-        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
-      </Widgets>
-      <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
-      <Widgets>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(Widgets.Scheme)-%(Widgets.Configuration)%(Widgets.UnsignedName).xcarchive</ArchivePath>
+        <!-- Mark this as a Widgets project so we can   -->
+        <!-- identify it from XcodeProjects later on.   -->
+        <IsWidgets>true</IsWidgets>
       </Widgets>
 
-      <!-- Consolidate all included Xcode projects -->
-      <XcodeProjects Include="%(Widgets.FullPath)" />
+      <!-- Consolidate all included Xcode projects      -->
+      <XcodeProjects Include="@(Widgets)" />
     </ItemGroup>
   </Target>
 
 
-  <Target Name="_BuildWidgets" Condition="'@(Widgets)' != ''" Outputs="%(Widgets.ArchivePath)">
-    <PropertyGroup>
-      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
-      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
-    </PropertyGroup>
-    <Exec
-      Command="xcrun xcodebuild archive -project '%(Widgets.FullPath)' -scheme '%(Widgets.Scheme)' -configuration '%(Widgets.Configuration)' -archivePath '%(Widgets.ArchivePath)' $(XCodeCommonParams) %(Widgets.XcodeParams)"
-      Outputs="%(Widgets.ArchivePath)" />
-    <!-- 
-      This built in task adds parameters to the xcodebuild that cannot be controlled,
-      and might lead to compiler issues. Thus it is not feasable to use.
-    <CreateXcArchive
-      ProjectPath="%(Widgets.FullPath)"
-      SchemeName="%(Widgets.Scheme)"
-      Configuration="%(Widgets.Configuration)"
-      ArchivePlatform="generic/platform=$(_XcodeDestination)"
-      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
-      PackageCachePath="$(XcodeOutputPathRoot)Cache"
-      OutputPath="%(Widgets.ArchivePath)"
-      WorkingDirectory="%(Widgets.RootDir)%(Widgets.Directory)" />
-    -->
-  </Target>
+  <Target Name="ProcessWidgets" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'@(Widgets)' != ''">
+    <ItemGroup>
+      <Widgets Remove="@(Widgets)" />
+      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsWidgets)' == 'true'" />
+    </ItemGroup>
 
-
-  <Target Name="ProcessWidgets" BeforeTargets="MaciOSPrepareForBuild" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(Widgets)' != ''">
     <ItemGroup>
       <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" />
       <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" />
     </ItemGroup>
 
     <!-- Make sure each .appex is actually a widget -->
-    <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep com.apple.widgetkit-extension &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
+    <Delete Condition="Exists('%(_AppexBundles.FullPath).widget')" Files="%(_AppexBundles.FullPath).widget" />
+
+    <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep -q '_com.apple.widgetkit-extension' &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
 
     <ItemGroup>
       <AdditionalAppExtensions Include="%(_AppexBundles.FullPath)/.." Condition="Exists('%(_AppexBundles.FullPath).widget')">
@@ -76,23 +73,16 @@
   </Target>
 
 
-  <!--
-  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
-    <ItemGroup>
-      <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
-    </ItemGroup>
-
-    <Exec
-      Condition="'@(_AppClipsMobileProvisioning)' != ''"
-      Command="security cms -D -i '@(_AppClipsMobileProvisioning)' | sed -n '/&lt;key&gt;com.apple.developer.parent-application-identifiers&lt;\/key&gt;/,/&lt;\/array&gt;/p' | grep '$(ApplicationId)&lt;'"
-      IgnoreExitCode="true">
-      <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
-    </Exec>
-
-    <Error Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'" Code="1013" Text="AppClips application identifier does not mathc this 'ApplicationId': $(ApplicationId)" />
+  <Target Name="VerifyWidgets" Condition="'@(Widgets)' != ''">
+    <!-- TODO: Find a way to verify that Widgets was correctly included -->
   </Target>
-  -->
 
-  <Target Name="BuildWidgets" DependsOnTargets="ProcessWidgets" />
+
+  <Target Name="BuildWidgets">
+    <PropertyGroup>
+      <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
+    </PropertyGroup>
+    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded" />
+  </Target>
 
 </Project>

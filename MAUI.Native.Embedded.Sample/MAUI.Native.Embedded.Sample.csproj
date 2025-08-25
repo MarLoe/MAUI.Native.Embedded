@@ -43,7 +43,7 @@
 
   <!-- If your Xcode project uses a custom way of storing versions,   -->
   <!-- you can make an custom update here. This is optional!          -->
-  <Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+  <Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectsVersion">
     <!-- Do your custom version update here -->
   </Target>
 

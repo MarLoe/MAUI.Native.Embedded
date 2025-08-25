@@ -100,7 +100,7 @@ If your Xcode project uses a custom way of storing versions, you can make an cus
 
 All you need to do is to add this target to your project (`.csproj`)
 ```
-<Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+<Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectsVersion">
   <!-- Do your custom version update here -->
 </Target>
 ```

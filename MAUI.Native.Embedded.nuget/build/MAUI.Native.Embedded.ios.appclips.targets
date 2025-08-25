@@ -1,65 +1,60 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <ProcessAppClipsDependsOn>
-      _InitXcodeProjects;
-      _ResolveAppClips;
-      _UpdateXcodeProjectVersion;
-      _BuildAppClips;
-    </ProcessAppClipsDependsOn>
+    <BuildNativeEmbedded>$(BuildNativeEmbedded);AppClips</BuildNativeEmbedded>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn);
+      _InitAppClips;
+    </_InitNativeEmbeddedDependsOn>
   </PropertyGroup>
 
 
-  <Target Name="_ResolveAppClips" Condition="'@(AppClips)' != ''">
+  <Target Name="_InitAppClips" Condition="'@(AppClips)' != ''">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('AppClips'))">
+      <_ResolveNativeEmbeddedDependsOn>
+        $(_ResolveNativeEmbeddedDependsOn);
+        _ResolveAppClips;
+      </_ResolveNativeEmbeddedDependsOn>
+
+      <_ProcessNativeEmbeddedDependsOn>
+        $(_ProcessNativeEmbeddedDependsOn);
+        ProcessAppClips;
+      </_ProcessNativeEmbeddedDependsOn>
+
+      <ProcessAppClipsDependsOn>
+        $(ProcessAppClipsDependsOn);
+      </ProcessAppClipsDependsOn>
+
+      <VerifyNativeEmbeddedDependsOn>
+        $(VerifyNativeEmbeddedDependsOn);
+        VerifyAppClips;
+      </VerifyNativeEmbeddedDependsOn>
+    </PropertyGroup>
+  </Target>
+
+
+  <Target Name="_ResolveAppClips">
     <Error Condition="Exists('%(AppClips.FullPath)') == 'false'" Code="404" Text="AppClips project not found: '%(AppClips.Identity)'" />
 
     <ItemGroup>
       <AppClips>
-        <Scheme Condition="'%(AppClips.Scheme)' == ''">%(AppClips.Filename)</Scheme>
-        <Configuration Condition="'%(AppClips.Configuration)' == ''">$(Configuration)</Configuration>
-        <UnsignedName></UnsignedName>
-      </AppClips>
-      <AppClips Condition="'%(AppClips.NoSigning)' == 'true'">
-        <UnsignedName>-unsigned</UnsignedName>
-        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
-      </AppClips>
-      <!-- We cannot add the ArchivePath in one go, so we have to do it separately once we have Scheme and Configuration metadata -->
-      <AppClips>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(AppClips.Scheme)-%(AppClips.Configuration)%(AppClips.UnsignedName).xcarchive</ArchivePath>
+        <!-- Mark this as an AppClips project so we can -->
+        <!-- identify it from XcodeProjects later on.   -->
+        <IsAppClips>true</IsAppClips>
       </AppClips>
 
-      <!-- Consolidate all included Xcode projects -->
-      <XcodeProjects Include="%(AppClips.FullPath)" />
+      <!-- Consolidate all included Xcode projects      -->
+      <XcodeProjects Include="@(AppClips)" />
     </ItemGroup>
   </Target>
 
 
-  <Target Name="_BuildAppClips" Condition="'@(AppClips)' != ''" Outputs="%(AppClips.ArchivePath)">
-    <PropertyGroup>
-      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
-      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
-    </PropertyGroup>
-    <Exec
-      Command="xcrun xcodebuild archive -project '%(AppClips.FullPath)' -scheme '%(AppClips.Scheme)' -configuration '%(AppClips.Configuration)' -archivePath '%(AppClips.ArchivePath)' $(XCodeCommonParams) %(AppClips.XcodeParams)"
-      Outputs="%(AppClips.ArchivePath)" />
-    <!-- 
-      This built in task adds parameters to the xcodebuild that cannot be controlled,
-      and might lead to compiler issues. Thus it is not feasable to use.
-    <CreateXcArchive
-      ProjectPath="%(AppClips.FullPath)"
-      SchemeName="%(AppClips.Scheme)"
-      Configuration="%(AppClips.Configuration)"
-      ArchivePlatform="generic/platform=$(_XcodeDestination)"
-      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
-      PackageCachePath="$(XcodeOutputPathRoot)Cache"
-      OutputPath="%(AppClips.ArchivePath)"
-      WorkingDirectory="%(AppClips.RootDir)%(AppClips.Directory)" />
-    -->
-  </Target>
+  <Target Name="ProcessAppClips" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'@(AppClips)' != ''">
+    <ItemGroup>
+      <AppClips Remove="@(AppClips)" />
+      <AppClips Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsAppClips)' == 'true'" />
+    </ItemGroup>
 
-
-  <Target Name="ProcessAppClips" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsFiles Include="%(AppClips.ArchivePath)/**/*.app/AppClips/**" />
 
@@ -75,14 +70,14 @@
   </Target>
 
 
-  <Target Name="VerifyAppClips" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'ios' AND '@(AppClips)' != ''">
+  <Target Name="VerifyAppClips" Condition="'@(AppClips)' != ''">
     <ItemGroup>
       <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
     </ItemGroup>
 
     <Exec
       Condition="'@(_AppClipsMobileProvisioning)' != ''"
-      Command="security cms -D -i '@(_AppClipsMobileProvisioning)' | sed -n '/&lt;key&gt;com.apple.developer.parent-application-identifiers&lt;\/key&gt;/,/&lt;\/array&gt;/p' | grep '$(ApplicationId)&lt;'"
+      Command="security cms -D -i '@(_AppClipsMobileProvisioning)' | sed -n '/&lt;key&gt;com.apple.developer.parent-application-identifiers&lt;\/key&gt;/,/&lt;\/array&gt;/p' | grep -q '$(ApplicationId)&lt;'"
       IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
     </Exec>
@@ -90,6 +85,12 @@
     <Error Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'" Code="1013" Text="AppClips application identifier does not mathc this 'ApplicationId': $(ApplicationId)" />
   </Target>
 
-  <Target Name="BuildAppClips" DependsOnTargets="ProcessAppClips" />
+
+  <Target Name="BuildAppClips">
+    <PropertyGroup>
+      <BuildNativeEmbedded>AppClips</BuildNativeEmbedded>
+    </PropertyGroup>
+    <CallTarget Targets="_InitAppClips;_ProcessNativeEmbedded" />
+  </Target>
 
 </Project>
