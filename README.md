@@ -2,13 +2,13 @@
 
 [![NuGet version (MarLoe.MAUI.Native.Embedded)](https://img.shields.io/nuget/v/MarLoe.MAUI.Native.Embedded.svg?style=flat-square)](https://www.nuget.org/packages/MarLoe.MAUI.Native.Embedded/)
 
-Embed native iOS AppClips and Widgets into you MAUI app
+Embed native iOS AppClips and iOS Widgets into you MAUI app
 
-MAUI currently does not support AppClips for iOS. This NuGet will allow you to embed a natively build AppClips into you MAUI app.
+MAUI currently does not support AppClips or Widgets for iOS. This NuGet will allow you to embed natively build AppClips & Widgets into you MAUI app.
 
-This NuGet will build you native added projects for you. You do not need to do anything but adding it.
+Your native added projects will be build for you. You do not need to do anything but adding it.
 
-## iOS AppClips & Widgets
+## iOS AppClips & iOS Widgets
 In you main MAUI project (`.csproj`) file you can add one or more of the following line(s);
 ```
 <ItemGroup>
