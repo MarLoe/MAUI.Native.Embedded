@@ -26,22 +26,28 @@
   <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
     <ItemGroup>
       <XcodeProjects>
+        <!-- If unset, we need to set NoSigning to false          -->
+        <!-- so that msbuild  to itterates correctly.             -->
+        <NoSigning Condition="'%(XcodeProjects.NoSigning)' == ''">false</NoSigning>
+      </XcodeProjects>
+
+      <!-- This is important! In order for UniqueId to work,      -->
+      <!-- We must make sure to refereence all metadata that has  -->
+      <!-- an influence on how the Xcode project is build.        -->
+      <!-- The idea is that every unique combination of Scheme,   -->
+      <!-- Configuration etc. creates an individual Xcode archive.-->
+      <XcodeProjects>
         <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
         <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
-        <NoSigning Condition="'%(XcodeProjects.NoSigning)' == ''">false</NoSigning>
-        <UnsignedName></UnsignedName>
+        <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <UniqueId Condition="'%(XcodeProjects.UniqueId)' == ''">$([System.Guid]::NewGuid())</UniqueId>
       </XcodeProjects>
 
-      <XcodeProjects Condition="'%(XcodeProjects.NoSigning)' == 'true'">
-        <UnsignedName>-unsigned</UnsignedName>
-        <XcodeParams>$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
-      </XcodeProjects>
-
-      <!-- We cannot add the ArchivePath in one go,         -->
-      <!-- so we have to do it separately once we have      -->
-      <!-- all the metadata like Scheme, Configuration etc. -->
+      <!-- We cannot add the ArchivePath in one go,               -->
+      <!-- so we have to do it separately once we have            -->
+      <!-- all the metadata like Scheme, Configuration etc.       -->
       <XcodeProjects>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)%(XcodeProjects.UnsignedName).xcarchive</ArchivePath>
+        <ArchivePath>$(XcodeOutputPathRoot)/%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)-%(XcodeProjects.UniqueId).xcarchive</ArchivePath>
       </XcodeProjects>
     </ItemGroup>
   </Target>
@@ -104,5 +110,10 @@
   <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
 
   <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
+
+  <!-- This target is for debug purposes. See README.md for information -->
+  <Target Name="BuildNativeEmbedded">
+    <CallTarget Name="ProcessNativeEmbedded" />
+  </Target>
 
 </Project>

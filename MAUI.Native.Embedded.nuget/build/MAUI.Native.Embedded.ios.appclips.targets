@@ -86,6 +86,7 @@
   </Target>
 
 
+  <!-- This target is for debug purposes. See README.md for information -->
   <Target Name="BuildAppClips">
     <PropertyGroup>
       <BuildNativeEmbedded>AppClips</BuildNativeEmbedded>
