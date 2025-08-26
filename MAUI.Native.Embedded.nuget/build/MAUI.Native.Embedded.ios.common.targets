@@ -2,35 +2,118 @@
 
   <Target Name="_InitXcodeProjects">
     <PropertyGroup>
-      <XcodeArchiveBase Condition="'$(XcodeArchiveBase)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)</XcodeArchiveBase>
-      <XcodeArchiveDir Condition="'$(XcodeArchiveDir)' == ''">xcode/</XcodeArchiveDir>
-      <!-- We will always overwrite _XcodeArchivePath to avoid mismatch with XcodeArchiveBase and XcodeArchiveDir -->
-      <_XcodeArchivePath>$(XcodeArchiveBase)$(XcodeArchiveDir)</_XcodeArchivePath>
+      <!-- Use the build system default output root, if it is available -->
+      <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
+      <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
+      <XCodeCommonParams Condition="'$(XCodeCommonParams)' == ''">-derivedDataPath '$(XcodeOutputPathRoot)DerivedData' -packageCachePath '$(XcodeOutputPathRoot)Cache'</XCodeCommonParams>
     </PropertyGroup>
   </Target>
 
-  <Target
-    Name="_UpdateXcodeProjectVersion"
-    Inputs="%(XcodeProjects.Identity)"
-    Outputs="%(XcodeProjects.Identity)"
-    Condition="'@(XcodeProjects)' != ''">
-    <!-- The Xcode projects must have the same version as our app - so we must update it -->
+
+  <Target Name="_UpdateXcodeProjectsVersion" Condition="'@(XcodeProjects)' != ''">
+    <!-- The Xcode projects must have the same version as our app - so we must update it. -->
+    <!-- Do not use agvtool as it cannot work on indicidual projects. Roll our own :)     -->
     <Exec
       Condition="'$(ApplicationVersion)' != ''"
-      Command="xcrun agvtool new-version -all '$(ApplicationVersion)'"
-      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+      Command="sed -i '' 's/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $(ApplicationVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
 
     <Exec
       Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="xcrun agvtool new-marketing-version '$(ApplicationDisplayVersion)'"
-      WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
+  </Target>
 
-    <!-- The agvtool new-marketing-version might not work if plist is auto generated -->
-    <!-- So we will manually make sure it is updated -->
+
+  <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
+    <ItemGroup>
+      <XcodeProjects>
+        <!-- If unset, we need to set NoSigning to false          -->
+        <!-- so that msbuild  to itterates correctly.             -->
+        <NoSigning Condition="'%(XcodeProjects.NoSigning)' == ''">false</NoSigning>
+      </XcodeProjects>
+
+      <!-- This is important! In order for UniqueId to work,      -->
+      <!-- We must make sure to refereence all metadata that has  -->
+      <!-- an influence on how the Xcode project is build.        -->
+      <!-- The idea is that every unique combination of Scheme,   -->
+      <!-- Configuration etc. creates an individual Xcode archive.-->
+      <XcodeProjects>
+        <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
+        <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
+        <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <UniqueId Condition="'%(XcodeProjects.UniqueId)' == ''">$([System.Guid]::NewGuid())</UniqueId>
+      </XcodeProjects>
+
+      <!-- We cannot add the ArchivePath in one go,               -->
+      <!-- so we have to do it separately once we have            -->
+      <!-- all the metadata like Scheme, Configuration etc.       -->
+      <XcodeProjects>
+        <ArchivePath>$(XcodeOutputPathRoot)/%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)-%(XcodeProjects.UniqueId).xcarchive</ArchivePath>
+      </XcodeProjects>
+    </ItemGroup>
+  </Target>
+
+
+  <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
+    <PropertyGroup>
+      <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
+    </PropertyGroup>
+
     <Exec
-      Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'"
+      Command="xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)"
+      Outputs="%(XcodeProjects.ArchivePath)" />
+    <!-- 
+      This built in task adds parameters to the xcodebuild that cannot be controlled,
+      and might lead to compiler issues. Thus it is not feasable to use.
+    <CreateXcArchive
+      ProjectPath="%(XcodeProjects.FullPath)"
+      SchemeName="%(XcodeProjects.Scheme)"
+      Configuration="%(XcodeProjects.Configuration)"
+      ArchivePlatform="generic/platform=$(_XcodeDestination)"
+      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
+      PackageCachePath="$(XcodeOutputPathRoot)Cache"
+      OutputPath="%(XcodeProjects.ArchivePath)"
       WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
+    -->
+  </Target>
+
+
+  <PropertyGroup>
+    <_InitNativeEmbeddedDependsOn />
+
+    <_ResolveNativeEmbeddedDependsOn />
+
+    <_ProcessNativeEmbeddedDependsOn>
+      _InitXcodeProjects;
+      _ResolveNativeEmbedded;
+      _UpdateXcodeProjectsVersion;
+      _ResolveXcodeProjects;
+      _BuildXcodeProjectsArchive;
+    </_ProcessNativeEmbeddedDependsOn>
+
+    <ProcessNativeEmbeddedDependsOn>
+      _InitNativeEmbedded;
+      _ProcessNativeEmbedded;
+    </ProcessNativeEmbeddedDependsOn>
+
+    <VerifyNativeEmbeddedDependsOn />
+  </PropertyGroup>
+
+
+  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
+
+  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
+
+  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
+
+  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
+
+  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
+
+  <!-- This target is for debug purposes. See README.md for information -->
+  <Target Name="BuildNativeEmbedded">
+    <CallTarget Name="ProcessNativeEmbedded" />
   </Target>
 
 </Project>

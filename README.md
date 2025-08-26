@@ -1,14 +1,14 @@
-# MAUI.Native.Embedded
+# ![Logo](Assets/icon-100.png) MAUI.Native.Embedded
 
 [![NuGet version (MarLoe.MAUI.Native.Embedded)](https://img.shields.io/nuget/v/MarLoe.MAUI.Native.Embedded.svg?style=flat-square)](https://www.nuget.org/packages/MarLoe.MAUI.Native.Embedded/)
 
-Embed native iOS AppClips and Widgets into you MAUI app
+Embed native iOS AppClips and iOS Widgets into you MAUI app
 
-MAUI currently does not support AppClips for iOS. This NuGet will allow you to embed a natively build AppClips into you MAUI app.
+MAUI currently does not support AppClips or Widgets for iOS. This NuGet will allow you to embed natively build AppClips & Widgets into you MAUI app.
 
-This NuGet will build you native added projects for you. You do not need to do anything but adding it.
+Your native added projects will be build for you. You do not need to do anything but adding it.
 
-## iOS AppClips & Widgets
+## iOS AppClips & iOS Widgets
 In you main MAUI project (`.csproj`) file you can add one or more of the following line(s);
 ```
 <ItemGroup>
@@ -98,9 +98,9 @@ When e.g. adding AppClips, you might want to only build and embed the native pro
 ### Hint: Custom Xcode project version
 If your Xcode project uses a custom way of storing versions, you can make an custom update here.
 
-All you need to do is to add this target to your project (.csproj)
+All you need to do is to add this target to your project (`.csproj`)
 ```
-<Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectVersion">
+<Target Name="CustomXcodeUpdateVersion" AfterTargets="_UpdateXcodeProjectsVersion">
   <!-- Do your custom version update here -->
 </Target>
 ```
@@ -110,6 +110,14 @@ If you need to parse extra command line parameters to the `xcrun xcodebuild arch
 ```
   <AppClips Include="./Platforms/iOS/Native/Native.xcodeproj" XcodeParams="ENABLE_BITCODE=NO SKIP_INSTALL=NO"/>
 ```
+
+### Hint: Testing the Xcodebuild
+If you need to test and verify that the Xcode build part works, you can build these targets: `BuildAppClips`, `BuildWidgets` or `BuildNativeEmbedded` (to build all).
+This targets only the Xcode build step and avoids waiting for the entire MAUI project to build.
+```
+dotnet build -f:net9.0-ios -t:BuildAppClips,BuildWidgets MAUI.Native.Embedded.Sample/MAUI.Native.Embedded.Sample.csproj
+```
+
 
 ## TLDR;
 Support AppClip or Widget for iOS in your MAUI project by adding this to your project (.csproj) file:
