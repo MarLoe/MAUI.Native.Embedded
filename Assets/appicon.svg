@@ -5,7 +5,7 @@
     <defs>
         <linearGradient id="appicon-gradient-rectangle2" x1="34.39" y1="-16.82" x2="477.61" y2="426.39" gradientUnits="userSpaceOnUse" >
             <stop offset="0" stop-color="rgb(193, 177, 240)" stop-opacity="1" />
-            <stop offset="1" stop-color="rgb(111, 20, 232)" stop-opacity="1" />
+            <stop offset="1" stop-color="rgb(81, 43, 212)" stop-opacity="1" />
         </linearGradient>
     </defs>
     <g id="appicon-group2">
