@@ -1,4 +1,4 @@
-# MAUI.Native.Embedded
+# ![Logo](Assets/Icon-100.png) MAUI.Native.Embedded
 
 [![NuGet version (MarLoe.MAUI.Native.Embedded)](https://img.shields.io/nuget/v/MarLoe.MAUI.Native.Embedded.svg?style=flat-square)](https://www.nuget.org/packages/MarLoe.MAUI.Native.Embedded/)
 

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Title>MAUI Native Embedded</Title>
     <PackageId>MarLoe.MAUI.Native.Embedded</PackageId>
     <Version>0.2.2</Version>
     <Authors>Martin Løbger</Authors>
@@ -17,7 +18,9 @@
     <Description>Embed native iOS AppClips and Widgets into you MAUI app</Description>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
     <Copyright>Copyright 2025 - Martin Løbger</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <License>MIT License</License>
+    <PackageIcon>Icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,6 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../Assets/Icon.png" Pack="true" PackagePath="/" />
     <None Include="../README.md" Pack="true" PackagePath="/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
