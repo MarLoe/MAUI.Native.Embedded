@@ -10,7 +10,7 @@
 		27AEEC222E32DE3C00C8888B /* MAUI.Native.Embedded.ios.clip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = 27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		27E1AA1D2E3BEB200088A649 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E1AA1C2E3BEB200088A649 /* WidgetKit.framework */; };
 		27E1AA1F2E3BEB200088A649 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E1AA1E2E3BEB200088A649 /* SwiftUI.framework */; };
-		27E1AA302E3BEB240088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		27E1AA302E3BEB240088A649 /* MAUI.Native.Embedded.ios.widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				27E1AA302E3BEB240088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex in Embed Foundation Extensions */,
+				27E1AA302E3BEB240088A649 /* MAUI.Native.Embedded.ios.widget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,7 +58,7 @@
 /* Begin PBXFileReference section */
 		27AEEBD42E32D63500C8888B /* MAUI.Native.Embedded.ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.Embedded.ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAUI.Native.Embedded.ios.clip.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MAUI.Native.Embedded.ios.WidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MAUI.Native.Embedded.ios.widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E1AA1C2E3BEB200088A649 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		27E1AA1E2E3BEB200088A649 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -71,12 +71,12 @@
 			);
 			target = 27AEEC152E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */;
 		};
-		27C049D82E3BED5500313AFA /* Exceptions for "MAUI.Native.Embedded.ios.widget" folder in "MAUI.Native.Embedded.ios.WidgetExtension" target */ = {
+		27C049D82E3BED5500313AFA /* Exceptions for "MAUI.Native.Embedded.ios.widget" folder in "MAUI.Native.Embedded.ios.widget" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension */;
+			target = 27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -97,7 +97,7 @@
 		27E1AA202E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				27C049D82E3BED5500313AFA /* Exceptions for "MAUI.Native.Embedded.ios.widget" folder in "MAUI.Native.Embedded.ios.WidgetExtension" target */,
+				27C049D82E3BED5500313AFA /* Exceptions for "MAUI.Native.Embedded.ios.widget" folder in "MAUI.Native.Embedded.ios.widget" target */,
 			);
 			path = MAUI.Native.Embedded.ios.widget;
 			sourceTree = "<group>";
@@ -147,7 +147,7 @@
 			children = (
 				27AEEBD42E32D63500C8888B /* MAUI.Native.Embedded.ios.app */,
 				27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */,
-				27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex */,
+				27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,9 +212,9 @@
 			productReference = 27AEEC162E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
-		27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension */ = {
+		27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 27E1AA352E3BEB240088A649 /* Build configuration list for PBXNativeTarget "MAUI.Native.Embedded.ios.WidgetExtension" */;
+			buildConfigurationList = 27E1AA352E3BEB240088A649 /* Build configuration list for PBXNativeTarget "MAUI.Native.Embedded.ios.widget" */;
 			buildPhases = (
 				27E1AA162E3BEB200088A649 /* Sources */,
 				27E1AA172E3BEB200088A649 /* Frameworks */,
@@ -227,11 +227,11 @@
 			fileSystemSynchronizedGroups = (
 				27E1AA202E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */,
 			);
-			name = MAUI.Native.Embedded.ios.WidgetExtension;
+			name = MAUI.Native.Embedded.ios.widget;
 			packageProductDependencies = (
 			);
 			productName = MAUI.Native.Embedded.ios.WidgetExtension;
-			productReference = 27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension.appex */;
+			productReference = 27E1AA1A2E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -271,7 +271,7 @@
 			targets = (
 				27AEEBD32E32D63500C8888B /* MAUI.Native.Embedded.ios */,
 				27AEEC152E32DE3800C8888B /* MAUI.Native.Embedded.ios.clip */,
-				27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension */,
+				27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */,
 			);
 		};
 /* End PBXProject section */
@@ -332,7 +332,7 @@
 		};
 		27E1AA2F2E3BEB240088A649 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.WidgetExtension */;
+			target = 27E1AA192E3BEB200088A649 /* MAUI.Native.Embedded.ios.widget */;
 			targetProxy = 27E1AA2E2E3BEB240088A649 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -661,7 +661,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		27E1AA352E3BEB240088A649 /* Build configuration list for PBXNativeTarget "MAUI.Native.Embedded.ios.WidgetExtension" */ = {
+		27E1AA352E3BEB240088A649 /* Build configuration list for PBXNativeTarget "MAUI.Native.Embedded.ios.widget" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				27E1AA322E3BEB240088A649 /* Debug */,
