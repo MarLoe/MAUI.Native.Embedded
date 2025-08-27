@@ -33,7 +33,7 @@ You can override scheme like this:
 ```
 
 ### Configuration (optional)
-Normally in Xcode projects, the configurations are called `Debug` and `Release`. This usually corrosponds to the configurations used in .NET and MAUI projects.
+Normally in Xcode projects, the configurations are called `Debug` and `Release`. This usually corresponds to the configurations used in .NET and MAUI projects.
 
 When building your embedded Xcode project the configuration names from your MAUI project will be used.
 
@@ -74,7 +74,7 @@ You can skip validation like this:
 ```
 
 ### NoSigning (optional)
-Especially for CI builds, it can be difficult to get provisionings working. In order to mitigate this, you can skip signing of the xcode project. I also am skipping signing in the sample app in order for it to build straight out of the box.
+Especially for CI builds, it can be difficult to get provisionings working. In order to mitigate this, you can skip signing of the Xcode project. I also am skipping signing in the sample app in order for it to build straight out of the box.
 
 You can skip signing like this:
 ```
@@ -131,4 +131,4 @@ Support AppClip or Widget for iOS in your MAUI project by adding this to your pr
 ## Disclaimer
 Embedding native elements into MAUI might look easy with this nuget.
 But please note that this nuget only puts the native part in the MAUI app.
-Making C# talk to SwiftUI or Objective-C is not that easy. 
+Making C# talk to Swift/SwiftUI/Objective-C is not that easy. 
