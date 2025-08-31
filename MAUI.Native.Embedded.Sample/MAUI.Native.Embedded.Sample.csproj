@@ -55,7 +55,7 @@
     <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
 
     <!-- App Icon -->
-    <MauiIcon Include="../Assets/appicon.svg" />
+    <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" />
 
     <!-- Splash Screen -->
     <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" BaseSize="256,256" />

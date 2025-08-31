@@ -38,19 +38,26 @@
 
     <ItemGroup>
       <AppClips>
-        <!-- Mark this as an AppClips project so we can -->
-        <!-- identify it from XcodeProjects later on.   -->
+        <!-- Mark this as an AppClips project so we can identyfy it later on  -->
         <IsAppClips>true</IsAppClips>
       </AppClips>
 
-      <!-- Consolidate all included Xcode projects      -->
+      <!-- Consolidate all included Xcode projects                            -->
       <XcodeProjects Include="@(AppClips)" />
     </ItemGroup>
   </Target>
 
 
   <Target Name="ProcessAppClips" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'@(AppClips)' != ''">
+    <PropertyGroup>
+      <!-- We want the actual string $(AppIdentifierPrefix) in this property. -->
+      <!-- But MSBuild will evaluate if no matter what, even if I escape it.  -->
+      <!-- The best way I found was to do this "hacky" Replace operation.     -->
+      <AppIdentifierPrefix>$([System.String]::Copy('$***(AppIdentifierPrefix)').Replace('***', ''))$(AppClipsIdentifiers)</AppIdentifierPrefix>
+    </PropertyGroup>
+
     <ItemGroup>
+      <!-- Transferthe AppClips items back from XcodeProjects                 -->
       <AppClips Remove="@(AppClips)" />
       <AppClips Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsAppClips)' == 'true'" />
     </ItemGroup>
@@ -61,12 +68,30 @@
       <_AppClipsFiles>
         <TargetPath>$([System.Text.RegularExpressions.Regex]::Replace('%(_AppClipsFiles.FullPath)', '^.*[\\/]AppClips[\\/]', ''))</TargetPath>
       </_AppClipsFiles>
-
-      <!-- Include the found AppClips in the MAUI app -->
-      <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)" />
     </ItemGroup>
 
     <Error Condition="'@(_AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
+
+    <!-- Extract the bundle identifier from the AppClips found                -->
+    <Exec
+      Condition="'%(_AppClipsFiles.Filename)%(_AppClipsFiles.Extension)' == 'Info.plist'"
+      Command="xcrun plutil -extract CFBundleIdentifier raw '%(_AppClipsFiles.FullPath)'"
+      ConsoleToMsBuild="true"
+      StandardOutputImportance="Low">
+      <Output TaskParameter="ConsoleOutput" ItemName="_AppClipsIdentifiers" />
+    </Exec>
+
+    <ItemGroup>
+      <!-- Add the bundle identifiers to the entitlements of the app          -->
+      <CustomEntitlements
+        Include="com.apple.developer.associated-appclip-app-identifiers"
+        Type="StringArray"
+        Value="@(_AppClipsIdentifiers -> '$(AppIdentifierPrefix)%(Identity)', ';')" />
+
+      <!-- Include the found AppClips in the MAUI app                         -->
+      <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)" />
+    </ItemGroup>
+
   </Target>
 
 
