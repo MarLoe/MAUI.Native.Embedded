@@ -4,6 +4,11 @@
     <!-- We need to set this here, despite it should be a part of the build -->
     <!-- system. See https://github.com/dotnet/macios/issues/22238          -->
     <TargetPlatformIdentifier Condition="'$(TargetPlatformIdentifier)' == ''">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+
+    <!-- We want the actual string $(AppIdentifierPrefix) in this property. -->
+    <!-- But MSBuild will evaluate it no matter what, even if I escape it.  -->
+    <!-- The best way I found was to do this "hacky" Concat operation.      -->
+    <_AppIdentifierPrefix>$([System.String]::Concat('$', '(AppIdentifierPrefix)'))</_AppIdentifierPrefix>
   </PropertyGroup>
 
 </Project>
