@@ -5,7 +5,8 @@
       <!-- Use the build system default output root, if it is available -->
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
-      <XCodeCommonParams Condition="'$(XCodeCommonParams)' == ''">-derivedDataPath '$(XcodeOutputPathRoot)DerivedData' -packageCachePath '$(XcodeOutputPathRoot)Cache'</XCodeCommonParams>
+      <_XcodeCachePath Condition="'$(_XcodeCachePath)' == ''">$(XcodeOutputPathRoot)Cache</_XcodeCachePath>
+      <_XcodeDerivedDataPath Condition="'$(_XcodeDerivedDataPath)' == ''">$(XcodeOutputPathRoot)DerivedData</_XcodeDerivedDataPath>
     </PropertyGroup>
   </Target>
 
@@ -47,7 +48,7 @@
       <!-- so we have to do it separately once we have            -->
       <!-- all the metadata like Scheme, Configuration etc.       -->
       <XcodeProjects>
-        <ArchivePath>$(XcodeOutputPathRoot)/%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)-%(XcodeProjects.UniqueId).xcarchive</ArchivePath>
+        <ArchivePath>$(XcodeOutputPathRoot)%(XcodeProjects.Scheme)-%(XcodeProjects.Configuration)-%(XcodeProjects.UniqueId).xcarchive</ArchivePath>
       </XcodeProjects>
     </ItemGroup>
   </Target>
@@ -57,11 +58,19 @@
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
       <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
-      <XCodeCommonParams>-destination 'generic/platform=$(_XcodeDestination)' $(XCodeCommonParams)</XCodeCommonParams>
+      <XCodeCommonParams>$(XCodeCommonParams) -destination 'generic/platform=$(_XcodeDestination)'</XCodeCommonParams>
     </PropertyGroup>
 
+    <ItemGroup>
+      <XcodeProjects>
+        <DerivedData>$(_XcodeDerivedDataPath)/%(XcodeProjects.UniqueId)</DerivedData>
+        <PackageCache>$(_XcodeCachePath)/%(XcodeProjects.UniqueId)</PackageCache>
+      </XcodeProjects>
+    </ItemGroup>
+
     <Exec
-      Command="xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)"
+      Condition="'$(SkipXcodeProjects)' != 'true'"
+      Command="xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' -derivedDataPath '%(XcodeProjects.DerivedData)' -packageCachePath '%(XcodeProjects.PackageCache)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)"
       Outputs="%(XcodeProjects.ArchivePath)" />
     <!-- 
       This built in task adds parameters to the xcodebuild that cannot be controlled,
@@ -71,8 +80,8 @@
       SchemeName="%(XcodeProjects.Scheme)"
       Configuration="%(XcodeProjects.Configuration)"
       ArchivePlatform="generic/platform=$(_XcodeDestination)"
-      DerivedDataPath="$(XcodeOutputPathRoot)DerivedData"
-      PackageCachePath="$(XcodeOutputPathRoot)Cache"
+      DerivedDataPath="$(_XcodeDerivedDataPath)/%(XcodeProjects.UniqueId)"
+      PackageCachePath="$(_XcodeCachePath)/%(XcodeProjects.UniqueId)"
       OutputPath="%(XcodeProjects.ArchivePath)"
       WorkingDirectory="%(XcodeProjects.RootDir)%(XcodeProjects.Directory)" />
     -->
