@@ -20,7 +20,7 @@
     <Copyright>Copyright 2025 - Martin Løbger</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <License>MIT License</License>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIcon>assets/icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -30,8 +30,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../Assets/icon.png" Pack="true" PackagePath="/" />
-    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../Assets/icon.png" Pack="true" PackagePath="assets" />
+    <None Include="assets/icon-100.png" Pack="true" PackagePath="assets" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />
