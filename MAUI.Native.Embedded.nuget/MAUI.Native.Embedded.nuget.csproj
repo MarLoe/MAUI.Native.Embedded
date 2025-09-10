@@ -5,8 +5,12 @@
     <AssemblyName>MAUI.Native.Embedded</AssemblyName>
     <OutputType>Library</OutputType>
     <Nullable>enable</Nullable>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Do not include .dll in the nuget package.  -->
+    <!-- This mus be changed if a C# Task is added. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,7 +30,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MarLoe/MAUI.Native.Embedded</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>MSBuild dotnet maui native embedded ios appclip widget</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
