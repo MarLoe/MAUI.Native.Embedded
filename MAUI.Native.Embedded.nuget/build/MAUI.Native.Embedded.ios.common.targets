@@ -11,19 +11,6 @@
   </Target>
 
 
-  <Target Name="_UpdateXcodeProjectsVersion" Condition="'@(XcodeProjects)' != ''">
-    <!-- The Xcode projects must have the same version as our app - so we must update it. -->
-    <!-- Do not use agvtool as it cannot work on indicidual projects. Roll our own :)     -->
-    <Exec
-      Condition="'$(ApplicationVersion)' != ''"
-      Command="sed -i '' 's/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $(ApplicationVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
-
-    <Exec
-      Condition="'$(ApplicationDisplayVersion)' != ''"
-      Command="sed -i '' 's/MARKETING_VERSION = .*/MARKETING_VERSION = $(ApplicationDisplayVersion);/g' '%(XcodeProjects.FullPath)/project.pbxproj'" />
-  </Target>
-
-
   <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
     <ItemGroup>
       <XcodeProjects>
@@ -54,6 +41,18 @@
   </Target>
 
 
+  <Target Name="_UpdateXcodeProjectsVersion" Condition="'@(XcodeProjects)' != ''">
+    <!-- The Xcode projects must have the same version as our app.  -->
+    <!-- So we will add the app version via the command line.       -->
+    <ItemGroup>
+      <XcodeProjects>
+        <Version Condition="'%(XcodeProjects.UniqueId)' != ''">$(ApplicationVersion)</Version>
+        <DisplayVersion Condition="'%(XcodeProjects.UniqueId)' != ''">$(ApplicationDisplayVersion)</DisplayVersion>
+      </XcodeProjects>
+    </ItemGroup>
+  </Target>
+
+
   <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
@@ -63,15 +62,28 @@
 
     <ItemGroup>
       <XcodeProjects>
-        <DerivedData>$(_XcodeDerivedDataPath)/%(XcodeProjects.UniqueId)</DerivedData>
-        <PackageCache>$(_XcodeCachePath)/%(XcodeProjects.UniqueId)</PackageCache>
+        <_DerivedData>$(_XcodeDerivedDataPath)/%(XcodeProjects.UniqueId)</_DerivedData>
+        <_PackageCache>$(_XcodeCachePath)/%(XcodeProjects.UniqueId)</_PackageCache>
+        <_XcodeProjectVersion Condition="'%(XcodeProjects.Version)' != ''">CURRENT_PROJECT_VERSION=%(XcodeProjects.Version)</_XcodeProjectVersion>
+        <_XcodeMarketingVersion Condition="'%(XcodeProjects.DisplayVersion)' != ''">MARKETING_VERSION=%(XcodeProjects.DisplayVersion)</_XcodeMarketingVersion>
       </XcodeProjects>
     </ItemGroup>
 
     <Exec
       Condition="'$(SkipXcodeProjects)' != 'true'"
-      Command="xcrun xcodebuild archive -project '%(XcodeProjects.FullPath)' -scheme '%(XcodeProjects.Scheme)' -configuration '%(XcodeProjects.Configuration)' -archivePath '%(XcodeProjects.ArchivePath)' -derivedDataPath '%(XcodeProjects.DerivedData)' -packageCachePath '%(XcodeProjects.PackageCache)' $(XCodeCommonParams) %(XcodeProjects.XcodeParams)"
-      Outputs="%(XcodeProjects.ArchivePath)" />
+      Outputs="%(XcodeProjects.ArchivePath)"
+      Command="xcrun xcodebuild archive \
+        -project '%(XcodeProjects.FullPath)' \
+        -scheme '%(XcodeProjects.Scheme)' \
+        -configuration '%(XcodeProjects.Configuration)' \
+        -archivePath '%(XcodeProjects.ArchivePath)' \
+        -derivedDataPath '%(XcodeProjects._DerivedData)' \
+        -packageCachePath '%(XcodeProjects._PackageCache)' \
+        %(XcodeProjects._XcodeProjectVersion) \
+        %(XcodeProjects._XcodeMarketingVersion) \
+        $(XCodeCommonParams) \
+        %(XcodeProjects.XcodeParams)" />
+
     <!-- 
       This built in task adds parameters to the xcodebuild that cannot be controlled,
       and might lead to compiler issues. Thus it is not feasable to use.
@@ -96,8 +108,8 @@
     <_ProcessNativeEmbeddedDependsOn>
       _InitXcodeProjects;
       _ResolveNativeEmbedded;
-      _UpdateXcodeProjectsVersion;
       _ResolveXcodeProjects;
+      _UpdateXcodeProjectsVersion;
       _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 
