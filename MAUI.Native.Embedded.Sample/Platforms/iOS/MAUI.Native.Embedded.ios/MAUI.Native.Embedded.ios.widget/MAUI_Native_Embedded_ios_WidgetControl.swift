@@ -10,7 +10,7 @@ import SwiftUI
 import WidgetKit
 
 struct MAUI_Native_Embedded_ios_WidgetControl: ControlWidget {
-    static let kind: String = "com.lobger.MAUI-Native-Embedded.MAUI.Native.Embedded.ios.Widget"
+    static let kind: String = "com.lobger.MAUI-Native-Embedded.MAUI.Native.Embedded.ios.widget"
 
     var body: some ControlWidgetConfiguration {
         AppIntentControlConfiguration(
