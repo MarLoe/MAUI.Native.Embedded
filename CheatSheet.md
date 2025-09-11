@@ -6,3 +6,8 @@ Make a build and write the full log to `publish.log`. Good for debugging MSBuild
 ```
 dotnet publish -f:net9.0-ios --verbosity diagnostic --tl:off MAUI.Native.Embedded.Sample/MAUI.Native.Embedded.Sample.csproj > publish.log
 ```
+
+## See Xcode project settings
+```
+xcodebuild -showBuildSettings -scheme MAUI.Native.Embedded.ios -project MAUI.Native.Embedded.Sample/Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj
+```
