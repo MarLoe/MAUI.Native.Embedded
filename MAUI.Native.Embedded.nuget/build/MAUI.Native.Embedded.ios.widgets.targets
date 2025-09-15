@@ -83,7 +83,7 @@
     <!-- Extract mobileprovision to get entitlements we need for codesigning  -->
     <Exec 
       Condition="Exists('%(_WidgetsAppexMobileProvision.FullPath)')"
-      Command="security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
+      Command="xcrun security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | xcrun plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
 
     <ItemGroup>
       <AdditionalAppExtensions Include="%(_WidgetsAppexBundles.FullPath)/..">
