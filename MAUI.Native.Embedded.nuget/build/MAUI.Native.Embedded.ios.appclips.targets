@@ -80,23 +80,28 @@
       <!-- Include the found AppClips in the MAUI app                         -->
       <MauiAsset Include="@(_AppClipsFiles)" LogicalName="AppClips/%(_AppClipsFiles.TargetPath)" />
     </ItemGroup>
-
   </Target>
 
 
   <Target Name="VerifyAppClips" Condition="'@(AppClips)' != ''">
     <ItemGroup>
-      <_AppClipsMobileProvisioning Condition="'%(AppClips.SkipValidation)' != 'true'" Include="%(AppClips.ArchivePath)/**/AppClips/**/embedded.mobileprovision" />
+      <AppClipsTarget Condition="'%(AppClips.SkipValidation)' != 'true'" Include="$(AppBundleDir)" />
+      <AppClipsTarget Condition="'%(AppClips.SkipValidation)' != 'true' AND '@(AppClipsTarget)' == ''" Include="%(AppClips.ArchivePath)" />
+      <_AppClipsMobileProvisioning Condition="'@(AppClipsTarget)' != ''" Include="%(AppClipsTarget.FullPath)/**/AppClips/**/embedded.mobileprovision" />
     </ItemGroup>
 
     <Exec
       Condition="'@(_AppClipsMobileProvisioning)' != ''"
-      Command="security cms -D -i '@(_AppClipsMobileProvisioning)' | sed -n '/&lt;key&gt;com.apple.developer.parent-application-identifiers&lt;\/key&gt;/,/&lt;\/array&gt;/p' | grep -q '$(ApplicationId)&lt;'"
-      IgnoreExitCode="true">
+      Command="xcrun security cms -D -i '%(_AppClipsMobileProvisioning.FullPath)' | xcrun plutil -extract 'Entitlements.com\.apple\.developer\.parent-application-identifiers' xml1 -o - - | grep -q '$(ApplicationId)&lt;'"
+      IgnoreExitCode="true"
+      StandardOutputImportance="Low">
       <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
     </Exec>
 
-    <Error Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'" Code="1013" Text="AppClips application identifier does not mathc this 'ApplicationId': $(ApplicationId)" />
+    <Error
+      Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'"
+      Code="1013"
+      Text="AppClips 'com.apple.developer.parent-application-identifiers' does not match this 'ApplicationId': $(ApplicationId)" />
   </Target>
 
 
