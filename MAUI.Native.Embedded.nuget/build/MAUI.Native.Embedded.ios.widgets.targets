@@ -104,7 +104,7 @@
     <PropertyGroup>
       <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
     </PropertyGroup>
-    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded" />
+    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded;VerifyWidgets" />
   </Target>
 
 </Project>

@@ -105,7 +105,7 @@
     <PropertyGroup>
       <BuildNativeEmbedded>AppClips</BuildNativeEmbedded>
     </PropertyGroup>
-    <CallTarget Targets="_InitAppClips;_ProcessNativeEmbedded" />
+    <CallTarget Targets="_InitAppClips;_ProcessNativeEmbedded;VerifyNativeEmbedded" />
   </Target>
 
 </Project>
