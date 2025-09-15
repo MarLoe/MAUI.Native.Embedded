@@ -27,7 +27,7 @@
       <XcodeProjects>
         <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
         <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
-        <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
+        <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
         <UniqueId Condition="'%(XcodeProjects.UniqueId)' == ''">$([System.Guid]::NewGuid())</UniqueId>
       </XcodeProjects>
 
@@ -70,7 +70,7 @@
     </ItemGroup>
 
     <Exec
-      Condition="'$(SkipXcodeProjects)' != 'true'"
+      Condition="'$(SkipXcodeBuild)' != 'true'"
       Outputs="%(XcodeProjects.ArchivePath)"
       Command="xcrun xcodebuild archive \
         -project '%(XcodeProjects.FullPath)' \
