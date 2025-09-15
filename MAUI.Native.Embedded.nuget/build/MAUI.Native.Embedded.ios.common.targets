@@ -81,8 +81,8 @@
         -packageCachePath '%(XcodeProjects._PackageCache)' \
         %(XcodeProjects._XcodeProjectVersion) \
         %(XcodeProjects._XcodeMarketingVersion) \
-        $(XCodeCommonParams) \
-        %(XcodeProjects.XcodeParams)" />
+        %(XcodeProjects.XcodeParams) \
+        $(XCodeCommonParams)" />
 
     <!-- 
       This built in task adds parameters to the xcodebuild that cannot be controlled,
