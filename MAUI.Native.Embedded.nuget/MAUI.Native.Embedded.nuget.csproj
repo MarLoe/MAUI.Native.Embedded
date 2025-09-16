@@ -5,14 +5,18 @@
     <AssemblyName>MAUI.Native.Embedded</AssemblyName>
     <OutputType>Library</OutputType>
     <Nullable>enable</Nullable>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Do not include .dll in the nuget package.  -->
+    <!-- This mus be changed if a C# Task is added. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <PropertyGroup>
     <Title>MAUI Native Embedded</Title>
     <PackageId>MarLoe.MAUI.Native.Embedded</PackageId>
-    <Version>0.3.2</Version>
+    <Version>0.5.1</Version>
     <Authors>Martin Løbger</Authors>
     <Owner>Martin Løbger</Owner>
     <Description>Embed native iOS AppClips and Widgets into you MAUI app</Description>
@@ -20,18 +24,20 @@
     <Copyright>Copyright 2025 - Martin Løbger</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <License>MIT License</License>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIcon>assets/icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MarLoe/MAUI.Native.Embedded</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>MSBuild dotnet maui native embedded ios appclip widget</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../Assets/icon.png" Pack="true" PackagePath="/" />
-    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../Assets/icon.png" Pack="true" PackagePath="assets" />
+    <None Include="assets/icon-100.png" Pack="true" PackagePath="assets" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />

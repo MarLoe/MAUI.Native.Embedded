@@ -38,12 +38,12 @@
 
     <ItemGroup>
       <Widgets>
-        <!-- Mark this as a Widgets project so we can   -->
-        <!-- identify it from XcodeProjects later on.   -->
+        <!-- Mark this as a Widgets project so we can                         -->
+        <!-- identify it from XcodeProjects later on.                         -->
         <IsWidgets>true</IsWidgets>
       </Widgets>
 
-      <!-- Consolidate all included Xcode projects      -->
+      <!-- Consolidate all included Xcode projects                            -->
       <XcodeProjects Include="@(Widgets)" />
     </ItemGroup>
   </Target>
@@ -51,39 +51,60 @@
 
   <Target Name="ProcessWidgets" DependsOnTargets="$(ProcessWidgetsDependsOn)" Condition="'@(Widgets)' != ''">
     <ItemGroup>
+      <!-- Transfer Widgets items back from XcodeProjects                     -->
       <Widgets Remove="@(Widgets)" />
       <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsWidgets)' == 'true'" />
     </ItemGroup>
 
     <ItemGroup>
-      <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" />
-      <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" />
+      <_AppexFiles Include="%(Widgets.ArchivePath)/**/*.app/PlugIns/**/*.appex/**" UniqueId="%(Widgets.UniqueId)" DerivedData="%(Widgets.DerivedData)" />
+      <_AppexBundles Include="$([System.Text.RegularExpressions.Regex]::Replace('%(_AppexFiles.FullPath)', '(^.*\.appex)[\\/].*', '$1'))" DerivedData="%(_AppexFiles.DerivedData)" UniqueId="%(_AppexFiles.UniqueId)" />
     </ItemGroup>
 
-    <!-- Make sure each .appex is actually a widget -->
-    <Delete Condition="Exists('%(_AppexBundles.FullPath).widget')" Files="%(_AppexBundles.FullPath).widget" />
+    <!-- Make sure each .appex is actually a widget                           -->
+    <Exec
+      Command="[ &quot;`xcrun plutil -extract NSExtension.NSExtensionPointIdentifier raw -o - '%(_AppexBundles.FullPath)/Info.plist'`&quot; = &quot;com.apple.widgetkit-extension&quot; ] &amp;&amp; echo &quot;%(_AppexBundles.FullPath)&quot;"
+      IgnoreExitCode="true"
+      ConsoleToMsBuild="true"
+      StandardOutputImportance="Low">
+      <Output TaskParameter="ConsoleOutput" ItemName="_ValidAppexBundles" />
+    </Exec>
 
-    <Exec Command="plutil -extract NSExtension xml1 -o - '%(_AppexBundles.FullPath)/Info.plist' | grep -q 'com.apple.widgetkit-extension' &amp;&amp; echo 'true' > '%(_AppexBundles.FullPath).widget'" IgnoreExitCode="true" />
+    <PropertyGroup>
+      <!-- Convert item list to proeperty so we can filter using "Contains()" -->
+      <_ValidAppexBundlesList>@(_ValidAppexBundles)</_ValidAppexBundlesList>
+    </PropertyGroup>
 
     <ItemGroup>
-      <AdditionalAppExtensions Include="%(_AppexBundles.FullPath)/.." Condition="Exists('%(_AppexBundles.FullPath).widget')">
-        <Name>%(_AppexBundles.Filename)</Name>
+      <_WidgetsAppexBundles Include="@(_AppexBundles)" Condition="$(_ValidAppexBundlesList.Contains('%(_AppexBundles.FullPath)')) == true" />
+      <_WidgetsAppexMobileProvision Include="%(_WidgetsAppexBundles.FullPath)/**/embedded.mobileprovision" EntitlementPath="%(_WidgetsAppexBundles.FullPath).entitlements" />
+    </ItemGroup>
+
+    <!-- Extract mobileprovision to get entitlements we need for codesigning  -->
+    <Exec 
+      Condition="Exists('%(_WidgetsAppexMobileProvision.FullPath)')"
+      Command="xcrun security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | xcrun plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
+
+    <ItemGroup>
+      <AdditionalAppExtensions Include="%(_WidgetsAppexBundles.FullPath)/..">
+        <Name>%(_WidgetsAppexBundles.Filename)</Name>
+        <CodesignEntitlements Condition="Exists('%(_WidgetsAppexBundles.FullPath).entitlements')">%(_WidgetsAppexBundles.FullPath).entitlements</CodesignEntitlements>
       </AdditionalAppExtensions>
     </ItemGroup>
   </Target>
 
 
   <Target Name="VerifyWidgets" Condition="'@(Widgets)' != ''">
-    <!-- TODO: Find a way to verify that Widgets was correctly included -->
+    <!-- TODO: Find a way to verify that Widgets was correctly included       -->
   </Target>
 
 
-  <!-- This target is for debug purposes. See README.md for information -->
+  <!-- This target is for debug purposes. See README.md for information       -->
   <Target Name="BuildWidgets">
     <PropertyGroup>
       <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
     </PropertyGroup>
-    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded" />
+    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded;VerifyWidgets" />
   </Target>
 
 </Project>
