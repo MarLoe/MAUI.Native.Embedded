@@ -34,7 +34,7 @@
 
 
   <Target Name="_ResolveWidgets">
-    <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="404" Text="Widgets project not found: '%(Widgets.Identity)'" />
+    <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="NE0404" Text="Widgets project not found: '%(Widgets.Identity)'" />
 
     <ItemGroup>
       <Widgets>

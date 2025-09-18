@@ -34,7 +34,7 @@
 
 
   <Target Name="_ResolveAppClips">
-    <Error Condition="Exists('%(AppClips.FullPath)') == 'false'" Code="404" Text="AppClips project not found: '%(AppClips.Identity)'" />
+    <Error Condition="Exists('%(AppClips.FullPath)') == 'false'" Code="NE0404" Text="AppClips project not found: '%(AppClips.Identity)'" />
 
     <ItemGroup>
       <AppClips>
@@ -63,7 +63,7 @@
       <_AppClipsInfoPList Include="%(_AppClipsFiles.FullPath)" Condition="'%(_AppClipsFiles.Filename)%(_AppClipsFiles.Extension)' == 'Info.plist'" />
     </ItemGroup>
 
-    <Error Condition="'@(_AppClipsFiles)' == ''" Code="404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
+    <Error Condition="'@(_AppClipsFiles)' == ''" Code="NE0404" Text="No AppClips found in Xcode project: '%(AppClips.Identity)'" />
 
     <!-- Extract the bundle identifier from the AppClips found                -->
     <ReadAppManifest AppManifest="@(_AppClipsInfoPList)" TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)">
@@ -100,7 +100,7 @@
 
     <Error
       Condition="'$(ExitCode)' != '' AND '$(ExitCode)' != '0'"
-      Code="1013"
+      Code="NE1013"
       Text="AppClips 'com.apple.developer.parent-application-identifiers' does not match this 'ApplicationId': $(ApplicationId)" />
   </Target>
 
