@@ -34,13 +34,13 @@
 
 
   <Target Name="_ResolveWidgets">
-    <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="404" Text="Widgets project not found: '%(Widgets.Identity)'" />
+    <Error Condition="Exists('%(Widgets.FullPath)') == 'false'" Code="NE0404" Text="Widgets project not found: '%(Widgets.Identity)'" />
 
     <ItemGroup>
       <Widgets>
         <!-- Mark this as a Widgets project so we can                         -->
         <!-- identify it from XcodeProjects later on.                         -->
-        <IsWidgets>true</IsWidgets>
+        <_IsWidgets>true</_IsWidgets>
       </Widgets>
 
       <!-- Consolidate all included Xcode projects                            -->
@@ -53,7 +53,7 @@
     <ItemGroup>
       <!-- Transfer Widgets items back from XcodeProjects                     -->
       <Widgets Remove="@(Widgets)" />
-      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsWidgets)' == 'true'" />
+      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects._IsWidgets)' == 'true'" />
     </ItemGroup>
 
     <ItemGroup>
@@ -83,7 +83,7 @@
     <!-- Extract mobileprovision to get entitlements we need for codesigning  -->
     <Exec 
       Condition="Exists('%(_WidgetsAppexMobileProvision.FullPath)')"
-      Command="security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
+      Command="xcrun security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | xcrun plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
 
     <ItemGroup>
       <AdditionalAppExtensions Include="%(_WidgetsAppexBundles.FullPath)/..">
@@ -104,7 +104,7 @@
     <PropertyGroup>
       <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
     </PropertyGroup>
-    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded" />
+    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded;VerifyWidgets" />
   </Target>
 
 </Project>

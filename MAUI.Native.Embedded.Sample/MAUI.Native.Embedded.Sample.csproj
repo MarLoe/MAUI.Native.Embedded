@@ -53,7 +53,9 @@
     <!--     Scheme, Configuration, SkipValidation, NoSigning         -->
     <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
     <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
+  </ItemGroup>
 
+  <ItemGroup>
     <!-- App Icon -->
     <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" />
 
