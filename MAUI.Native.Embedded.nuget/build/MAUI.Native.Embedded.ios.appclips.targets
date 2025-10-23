@@ -39,7 +39,7 @@
     <ItemGroup>
       <AppClips>
         <!-- Mark this as an AppClips project so we can identyfy it later on  -->
-        <IsAppClips>true</IsAppClips>
+        <_IsAppClips>true</_IsAppClips>
       </AppClips>
 
       <!-- Consolidate all included Xcode projects                            -->
@@ -50,9 +50,9 @@
 
   <Target Name="ProcessAppClips" DependsOnTargets="$(ProcessAppClipsDependsOn)" Condition="'@(AppClips)' != ''">
     <ItemGroup>
-      <!-- Transferthe AppClips items back from XcodeProjects                 -->
+      <!-- Transfer AppClips items back from XcodeProjects                    -->
       <AppClips Remove="@(AppClips)" />
-      <AppClips Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsAppClips)' == 'true'" />
+      <AppClips Include="@(XcodeProjects)" Condition="'%(XcodeProjects._IsAppClips)' == 'true'" />
     </ItemGroup>
 
     <ItemGroup>
