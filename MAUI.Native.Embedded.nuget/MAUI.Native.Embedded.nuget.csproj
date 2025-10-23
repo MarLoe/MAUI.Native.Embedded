@@ -16,7 +16,7 @@
   <PropertyGroup>
     <Title>MAUI Native Embedded</Title>
     <PackageId>MarLoe.MAUI.Native.Embedded</PackageId>
-    <Version>0.5.1</Version>
+    <Version>0.6.0</Version>
     <Authors>Martin Løbger</Authors>
     <Owner>Martin Løbger</Owner>
     <Description>Embed native iOS AppClips and Widgets into you MAUI app</Description>
