@@ -40,7 +40,7 @@
       <Widgets>
         <!-- Mark this as a Widgets project so we can                         -->
         <!-- identify it from XcodeProjects later on.                         -->
-        <IsWidgets>true</IsWidgets>
+        <_IsWidgets>true</_IsWidgets>
       </Widgets>
 
       <!-- Consolidate all included Xcode projects                            -->
@@ -53,7 +53,7 @@
     <ItemGroup>
       <!-- Transfer Widgets items back from XcodeProjects                     -->
       <Widgets Remove="@(Widgets)" />
-      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects.IsWidgets)' == 'true'" />
+      <Widgets Include="@(XcodeProjects)" Condition="'%(XcodeProjects._IsWidgets)' == 'true'" />
     </ItemGroup>
 
     <ItemGroup>

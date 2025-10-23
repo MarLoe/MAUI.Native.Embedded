@@ -28,8 +28,16 @@
         <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
         <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
         <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
-        <UniqueId Condition="'%(XcodeProjects.UniqueId)' == ''">$([System.Guid]::NewGuid())</UniqueId>
       </XcodeProjects>
+    </ItemGroup>
+
+    <GenerateUniqueId Items="@(XcodeProjects)" Exclude="NoSigning">
+      <Output TaskParameter="OutputItems" ItemName="XcodeProjectsWithUniqueId" />
+    </GenerateUniqueId>
+    
+    <ItemGroup>
+      <XcodeProjects Remove="@(XcodeProjects)" />
+      <XcodeProjects Include="@(XcodeProjectsWithUniqueId)" />
 
       <!-- We cannot add the ArchivePath in one go,               -->
       <!-- so we have to do it separately once we have            -->
@@ -56,7 +64,7 @@
   <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('simulator')) == true">$(_XcodeDestination) Simulator</_XcodeDestination>
       <XCodeCommonParams>$(XCodeCommonParams) -destination 'generic/platform=$(_XcodeDestination)'</XCodeCommonParams>
     </PropertyGroup>
 

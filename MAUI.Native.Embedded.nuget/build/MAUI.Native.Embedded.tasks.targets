@@ -1,0 +1,54 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask
+    TaskName="GenerateUniqueId"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+
+    <ParameterGroup>
+      <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <Exclude ParameterType="System.String[]" Required="false" />
+      <OutputItems ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Security.Cryptography" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Using Namespace="Microsoft.Build.Utilities" />
+
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        foreach (var item in Items)
+        {
+            // It UniqueId already exists, we skip it
+            if (!string.IsNullOrEmpty(item.GetMetadata("UniqueId")))
+            {
+                continue;
+            }
+
+            var seed = String.Join(";", 
+              item.CloneCustomMetadata().Keys
+                .OfType<string>()
+                .Where(k => !k.StartsWith("_"))
+                .Where(k => !Exclude?.Contains(k) is false)
+                .Distinct()
+                .OrderBy(k => k)
+                .Select(k => $@"{k}={item.GetMetadata(k)}"));
+
+            using (var md5 = MD5.Create())
+            {
+                var digest = md5.ComputeHash(Encoding.UTF8.GetBytes(seed));
+                item.SetMetadata("UniqueId", BitConverter.ToString(digest).Replace("-", "").ToLowerInvariant());
+            }
+        }
+
+        OutputItems = Items;
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+</Project>
