@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
     <AssemblyName>MAUI.Native.Embedded</AssemblyName>
     <OutputType>Library</OutputType>
     <Nullable>enable</Nullable>
@@ -25,13 +25,13 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <License>MIT License</License>
     <PackageIcon>assets/icon.png</PackageIcon>
+    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
     <PackageProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MarLoe/MAUI.Native.Embedded</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
