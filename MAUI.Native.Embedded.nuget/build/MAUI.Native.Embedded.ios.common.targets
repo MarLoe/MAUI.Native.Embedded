@@ -5,6 +5,9 @@
       <!-- Use the build system default output root, if it is available -->
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
+      <!-- Normalize to an absolute path -->
+      <XcodeOutputPathRoot>$([System.IO.Path]::GetFullPath('$(XcodeOutputPathRoot)'))</XcodeOutputPathRoot>
+
       <_XcodeCachePath Condition="'$(_XcodeCachePath)' == ''">$(XcodeOutputPathRoot)Cache</_XcodeCachePath>
       <_XcodeDerivedDataPath Condition="'$(_XcodeDerivedDataPath)' == ''">$(XcodeOutputPathRoot)DerivedData</_XcodeDerivedDataPath>
     </PropertyGroup>
