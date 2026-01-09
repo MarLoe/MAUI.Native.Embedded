@@ -33,6 +33,11 @@
     <MtouchLink>SDKOnly</MtouchLink>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetPlatformIdentifier) == 'ios' AND '$(Configuration)' == 'Release'">
+    <CodesignKey>Apple Distribution: Martin Lobger (38G5P3YVC2)</CodesignKey>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- <ProjectReference Include="../MAUI.Native.Embedded.nuget/MAUI.Native.Embedded.nuget.csproj" /> -->
   </ItemGroup>
@@ -51,20 +56,28 @@
     <!-- AppClips, Widgets embedding                                  -->
     <!--   See README.md for information on optional attributes:      -->
     <!--     Scheme, Configuration, SkipValidation, NoSigning         -->
-    <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
-    <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
+    <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" UniqueId="" NoSigning="false" />
+    <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" UniqueId="" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <!-- <AppIcon>AppIcon</AppIcon> -->
+    <_XSAppIconAssets>Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios/AppIcon.icon</_XSAppIconAssets>
+  </PropertyGroup>
 
   <ItemGroup>
     <!-- App Icon -->
-    <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" />
+    <!-- <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" /> -->
+    <!-- <MauiIcon Include="Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios/AppIcon.icon" /> -->
+    <!-- <ImageAssets Include="Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios/AppIcon.icon" /> -->
+    <!-- PartialAppManifests -->
 
     <!-- Splash Screen -->
     <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" TintColor="White" DarkColor="#321D6E" DarkTintColor="Black" BaseSize="256,256" />
 
     <!-- Images -->
-    <MauiImage Include="../Assets/splash.svg" />
-    <MauiImage Include="../Assets/icon.png" Resize="true" BaseSize="200,200" />
+    <!-- <MauiImage Include="../Assets/splash.svg" /> -->
+    <!-- <MauiImage Include="../Assets/icon.png" Resize="true" BaseSize="200,200" /> -->
     <MauiImage Include="Resources/Images/*" />
 
     <!-- Custom Fonts -->
