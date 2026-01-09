@@ -5,7 +5,7 @@
     <defs>
         <linearGradient id="splash-gradient-rectangle2" x1="30" y1="-30" x2="482" y2="422" gradientUnits="userSpaceOnUse" >
             <stop offset="0" stop-color="rgb(193, 177, 240)" stop-opacity="1" />
-            <stop offset="1" stop-color="rgb(81, 43, 212)" stop-opacity="1" />
+            <stop offset="1" stop-color="rgb(0, 255, 0)" stop-opacity="1" />
         </linearGradient>
     </defs>
     <g id="splash-group2" transform="scale(0.5, 0.5)" >
