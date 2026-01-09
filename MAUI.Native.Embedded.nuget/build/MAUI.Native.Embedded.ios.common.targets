@@ -37,7 +37,7 @@
     <GenerateUniqueId Items="@(XcodeProjects)" Exclude="NoSigning">
       <Output TaskParameter="OutputItems" ItemName="XcodeProjectsWithUniqueId" />
     </GenerateUniqueId>
-    
+
     <ItemGroup>
       <XcodeProjects Remove="@(XcodeProjects)" />
       <XcodeProjects Include="@(XcodeProjectsWithUniqueId)" />
