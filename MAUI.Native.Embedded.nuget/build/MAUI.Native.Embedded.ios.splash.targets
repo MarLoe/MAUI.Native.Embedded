@@ -1,0 +1,70 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildNativeEmbedded>$(BuildNativeEmbedded);Splash</BuildNativeEmbedded>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn);
+      _InitSplash;
+    </_InitNativeEmbeddedDependsOn>
+  </PropertyGroup>
+
+
+  <Target Name="_InitSplash">
+    <PropertyGroup Condition="$(BuildNativeEmbedded.Contains('Splash'))">
+      <ProcessNativeSplashDependsOn>
+        $(ProcessNativeSplashDependsOn);
+        _ProcessNativeSplash;
+      </ProcessNativeSplashDependsOn>
+
+      <ResizetizeDependsOnTargets>
+        $(ResizetizeDependsOnTargets);
+        ProcessNativeSplash;
+      </ResizetizeDependsOnTargets>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_MauiSplashScreenNative Include="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+      <_MauiNativeSplashAssets
+        Condition="'@(_MauiSplashScreenNative)' != ''"
+        Include="$(MSBuildThisFileDirectory)\..\platform\ios\Splash.xcassets\**\*" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(_MauiNativeSplashAssets)"
+      DestinationFolder="$(MauiNativeAssetsPathRoot)\Splash.xcassets\%(RecursiveDir)"
+      SkipUnchangedFiles="false">
+    </Copy>
+
+    <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
+      <_CopiedMauiNativeSplashAssets Include="$(MauiNativeAssetsPathRoot)\Splash.xcassets\**\*" />
+    </ItemGroup>
+
+    <UpdateXCAssetsColorset
+      Items="@(_CopiedMauiNativeSplashAssets)"
+      Color="%(MauiSplashScreen.Color)" />
+
+    <ItemGroup>
+      <ImageAsset
+        Include="@(_CopiedMauiNativeSplashAssets)"
+        LogicalName="Splash.xcassets\%(RecursiveDir)%(Filename)%(Extension)" />
+
+      <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
+        <Color>#00000000</Color>
+      </MauiSplashScreen>
+    </ItemGroup>
+  </Target>
+
+
+  <Target Name="_ProcessNativeSplash">
+    <ReplaceColorInlineTask
+      Items="@(_MauiSplashStoryboard)"
+      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
+      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
+  </Target>
+
+  <Target Name="ProcessNativeSplash" DependsOnTargets="$(ProcessNativeSplashDependsOn)" />
+
+</Project>

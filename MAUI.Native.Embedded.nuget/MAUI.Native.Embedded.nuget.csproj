@@ -41,9 +41,11 @@
     <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
     <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.tasks.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/MAUI.Native.Embedded.ios.splash.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
     <None Include="build/MAUI.Native.Embedded.ios.widgets.targets" Pack="true" PackagePath="build/" />
+    <None Include="platform/**/*" Pack="true" PackagePath="platform" />
   </ItemGroup>
 
   <Target Name="_DeleteLocalCache" BeforeTargets="Restore;Pack">
