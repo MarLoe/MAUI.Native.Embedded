@@ -86,6 +86,7 @@
     <ParameterGroup>
       <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
       <Color ParameterType="System.String" Required="true" />
+      <DarkColor ParameterType="System.String" Required="true" />
     </ParameterGroup>
 
     <Task>
@@ -128,6 +129,7 @@
         try
         {
           ParseColor(Color, out var lcr, out var lcg, out var lcb, out var lca);
+          ParseColor(DarkColor, out var dcr, out var dcg, out var dcb, out var dca);
 
           foreach (var item in Items)
           {
@@ -147,7 +149,11 @@
                 .Replace("{lcr}", lcr)
                 .Replace("{lcg}", lcg)
                 .Replace("{lcb}", lcb)
-                .Replace("{lca}", lca);
+                .Replace("{lca}", lca)
+                .Replace("{dcr}", dcr)
+                .Replace("{dcg}", dcg)
+                .Replace("{dcb}", dcb)
+                .Replace("{dca}", dca);
 
             File.WriteAllText(path, json);
           }

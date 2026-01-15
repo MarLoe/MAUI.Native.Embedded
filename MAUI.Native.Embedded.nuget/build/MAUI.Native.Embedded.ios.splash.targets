@@ -44,7 +44,8 @@
 
     <UpdateXCAssetsColorset
       Items="@(_CopiedMauiNativeSplashAssets)"
-      Color="%(MauiSplashScreen.Color)" />
+      Color="%(MauiSplashScreen.Color)"
+      DarkColor="%(MauiSplashScreen.DarkColor)" />
 
     <ItemGroup>
       <ImageAsset
