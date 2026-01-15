@@ -13,6 +13,11 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="_InitNativeAssetsPaths">
+    <PropertyGroup>
+      <MauiNativeAssetsPathRoot Condition="'$(MauiNativeAssetsPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)MauiNativeAssets/</MauiNativeAssetsPathRoot>
+    </PropertyGroup>
+  </Target>
 
   <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
     <ItemGroup>
@@ -112,12 +117,19 @@
 
 
   <PropertyGroup>
-    <_InitNativeEmbeddedDependsOn />
+    <CollectBundleResourcesDependsOn>
+      $(CollectBundleResourcesDependsOn);
+      _InitNativeEmbedded;
+    </CollectBundleResourcesDependsOn>
+
+    <_InitNativeEmbeddedDependsOn>
+      _InitXcodeProjects;
+      _InitNativeAssetsPaths;
+    </_InitNativeEmbeddedDependsOn>
 
     <_ResolveNativeEmbeddedDependsOn />
 
     <_ProcessNativeEmbeddedDependsOn>
-      _InitXcodeProjects;
       _ResolveNativeEmbedded;
       _ResolveXcodeProjects;
       _UpdateXcodeProjectsVersion;
@@ -125,7 +137,6 @@
     </_ProcessNativeEmbeddedDependsOn>
 
     <ProcessNativeEmbeddedDependsOn>
-      _InitNativeEmbedded;
       _ProcessNativeEmbedded;
     </ProcessNativeEmbeddedDependsOn>
 
