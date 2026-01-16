@@ -1,8 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Import Project="MAUI.Native.Embedded.tasks.targets" />
-
   
+  <Import Project="MAUI.Native.Embedded.common.targets" />
+
   <Import Project="MAUI.Native.Embedded.ios.common.targets" />
   <Import Project="MAUI.Native.Embedded.ios.widgets.targets" />
   <Import Project="MAUI.Native.Embedded.ios.appclips.targets" />
