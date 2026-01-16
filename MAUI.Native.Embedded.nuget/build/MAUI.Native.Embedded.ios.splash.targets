@@ -29,18 +29,15 @@
     <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
       <_MauiNativeSplashAssets
         Condition="'@(_MauiSplashScreenNative)' != ''"
-        Include="$(MSBuildThisFileDirectory)\..\platform\ios\Splash.xcassets\**\*" />
+        Include="$(MSBuildThisFileDirectory)/../platform/ios/Splash.*/**/*" />
     </ItemGroup>
 
     <Copy
       SourceFiles="@(_MauiNativeSplashAssets)"
-      DestinationFolder="$(MauiNativeAssetsPathRoot)\Splash.xcassets\%(RecursiveDir)"
+      DestinationFolder="$(MauiNativeAssetsPathRoot)/%(RecursiveDir)"
       SkipUnchangedFiles="false">
+      <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeSplashAssets" />
     </Copy>
-
-    <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
-      <_CopiedMauiNativeSplashAssets Include="$(MauiNativeAssetsPathRoot)\Splash.xcassets\**\*" />
-    </ItemGroup>
 
     <UpdateXCAssetsColorset
       Items="@(_CopiedMauiNativeSplashAssets)"
@@ -48,9 +45,8 @@
       DarkColor="%(MauiSplashScreen.DarkColor)" />
 
     <ItemGroup>
-      <ImageAsset
-        Include="@(_CopiedMauiNativeSplashAssets)"
-        LogicalName="Splash.xcassets\%(RecursiveDir)%(Filename)%(Extension)" />
+      <!-- Use ImageAsset to ensure that it goes into Assets.car -->
+      <ImageAsset Include="@(_CopiedMauiNativeSplashAssets)" />
 
       <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
         <Color>#00000000</Color>

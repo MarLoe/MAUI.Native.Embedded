@@ -23,6 +23,7 @@ public sealed class UpdateXCAssetsColorset : Task
         var colorsets = Items.Where(i => i.ItemSpec.Contains(".colorset", StringComparison.CurrentCultureIgnoreCase)).ToArray();
         if (colorsets.Length == 0)
         {
+            Log.LogError($@"No .colorset found to update. {nameof(Items)} = '{string.Join(";", Items.Select(i => i.ItemSpec))}'");
             return false;
         }
 
@@ -59,7 +60,6 @@ public sealed class UpdateXCAssetsColorset : Task
         catch (Exception ex)
         {
             Log.LogError(ex.Message);
-            return false;
         }
 
         return !Log.HasLoggedErrors;
