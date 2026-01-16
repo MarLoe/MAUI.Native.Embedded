@@ -60,7 +60,7 @@
 
 
   <Target Name="_ProcessNativeSplash">
-    <ReplaceInFileTask
+    <ReplaceInFile
       Items="@(_MauiSplashStoryboard)"
       Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
       Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
