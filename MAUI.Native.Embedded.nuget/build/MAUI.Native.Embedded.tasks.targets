@@ -1,5 +1,11 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup>
+    <TargetFrameworkFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">$(MSBuildRuntimeType)</TargetFrameworkFolder>
+    <TargetFrameworkFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">net8.0</TargetFrameworkFolder>
+    <ToolsRootPath>$(MSBuildThisFileDirectory)../tools/$(TargetFrameworkFolder)/</ToolsRootPath>
+  </PropertyGroup>
+
   <UsingTask
     TaskName="GenerateUniqueId"
     TaskFactory="RoslynCodeTaskFactory"
@@ -79,93 +85,7 @@
   </UsingTask>
 
   <UsingTask
-    TaskName="UpdateXCAssetsColorset"
-    TaskFactory="RoslynCodeTaskFactory"
-    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-
-    <ParameterGroup>
-      <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
-      <Color ParameterType="System.String" Required="true" />
-      <DarkColor ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Using Namespace="System.Text.RegularExpressions" />
-      <Using Namespace="System.Globalization" />
-
-      <Code Type="Fragment" Language="cs">
-<![CDATA[
-        void ParseColor(string color, out string r, out string g, out string b, out string a)
-        {
-          if (string.IsNullOrWhiteSpace(color) || !color.StartsWith("#"))
-          {
-            throw new Exception($"Color must be #RRGGBB or #RRGGBBAA, got '{color}'.");
-          }
-
-          var hex = color.TrimStart('#');
-          if (hex.Length != 6 && hex.Length != 8)
-          {
-            throw new Exception($"Color must be #RRGGBB or #RRGGBBAA, got '{color}'.");
-          }
-
-          byte rr = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-          byte gg = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-          byte bb = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-          byte aa = hex.Length == 8 ? byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber) : (byte)255;
-
-          r = (rr / 255.0).ToString("0.000", CultureInfo.InvariantCulture);
-          g = (gg / 255.0).ToString("0.000", CultureInfo.InvariantCulture);
-          b = (bb / 255.0).ToString("0.000", CultureInfo.InvariantCulture);
-          a = (aa / 255.0).ToString("0.000", CultureInfo.InvariantCulture);
-        }
-
-        if (Items?.Length == 0)
-        {
-          return false;
-        }
-
-        try
-        {
-          ParseColor(Color, out var lcr, out var lcg, out var lcb, out var lca);
-          ParseColor(DarkColor, out var dcr, out var dcg, out var dcb, out var dca);
-
-          foreach (var item in Items)
-          {
-            var path = item.ItemSpec;
-
-            if (!path.ToLower().Contains(".colorset"))
-            {
-              continue;
-            }
-
-            if (!File.Exists(path))
-            {
-              continue;
-            }
-
-            var json = File.ReadAllText(path)
-                .Replace("{lcr}", lcr)
-                .Replace("{lcg}", lcg)
-                .Replace("{lcb}", lcb)
-                .Replace("{lca}", lca)
-                .Replace("{dcr}", dcr)
-                .Replace("{dcg}", dcg)
-                .Replace("{dcb}", dcb)
-                .Replace("{dca}", dca);
-
-            File.WriteAllText(path, json);
-          }
-        }
-        catch (Exception ex)
-        {
-            Log.LogError(ex.Message);
-            return false;
-        }
-]]>
-      </Code>
-    </Task>
-  </UsingTask>
+    TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsColorset"
+    AssemblyFile="$(ToolsRootPath)MAUI.Native.Embedded.dll" />
 
 </Project>
