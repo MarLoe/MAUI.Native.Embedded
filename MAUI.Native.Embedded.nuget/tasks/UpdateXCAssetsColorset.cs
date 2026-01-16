@@ -1,6 +1,8 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -12,13 +14,14 @@ public sealed class UpdateXCAssetsColorset : Task
     public ITaskItem[] Items { get; set; } = [];
 
     [Required]
-    public string Color { get; set; } = string.Empty;
+    public string Color { get; set; } = "#FFFFFF";
 
     public string DarkColor { get; set; } = "#000000";
 
     public override bool Execute()
     {
-        if (Items.Length == 0)
+        var colorsets = Items.Where(i => i.ItemSpec.Contains(".colorset", StringComparison.CurrentCultureIgnoreCase)).ToArray();
+        if (colorsets.Length == 0)
         {
             return false;
         }
@@ -28,21 +31,16 @@ public sealed class UpdateXCAssetsColorset : Task
             ParseColor(Color, out var lcr, out var lcg, out var lcb, out var lca);
             ParseColor(DarkColor, out var dcr, out var dcg, out var dcb, out var dca);
 
-            foreach (var item in Items)
+            foreach (var item in colorsets)
             {
                 var path = item.ItemSpec;
-
-                if (!path.Contains(".colorset", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    continue;
-                }
-
                 if (!File.Exists(path))
                 {
                     continue;
                 }
 
-                var json = File.ReadAllText(path)
+                var original = File.ReadAllText(path);
+                var updated = original
                     .Replace("{lcr}", lcr)
                     .Replace("{lcg}", lcg)
                     .Replace("{lcb}", lcb)
@@ -52,7 +50,10 @@ public sealed class UpdateXCAssetsColorset : Task
                     .Replace("{dcb}", dcb)
                     .Replace("{dca}", dca);
 
-                File.WriteAllText(path, json);
+                if (original != updated)
+                {
+                    File.WriteAllText(path, updated);
+                }
             }
         }
         catch (Exception ex)
@@ -66,28 +67,13 @@ public sealed class UpdateXCAssetsColorset : Task
 
     private static void ParseColor(string color, out string r, out string g, out string b, out string a)
     {
-        if (string.IsNullOrWhiteSpace(color) || !color.StartsWith("#"))
-        {
-            throw new Exception($"Color must be #RRGGBB or #RRGGBBAA, got '{color}'.");
-        }
-
-        var hex = color.TrimStart('#');
-        if (hex.Length != 6 && hex.Length != 8)
-        {
-            throw new Exception($"Color must be #RRGGBB or #RRGGBBAA, got '{color}'.");
-        }
-
-        byte rr = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-        byte gg = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-        byte bb = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-        byte aa = hex.Length == 8 ? byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber) : (byte)255;
-
-        r = ToFloat(rr);
-        g = ToFloat(gg);
-        b = ToFloat(bb);
-        a = ToFloat(aa);
+        var colorValue = ColorTranslator.FromHtml(color);
+        r = ToFloatString(colorValue.R);
+        g = ToFloatString(colorValue.G);
+        b = ToFloatString(colorValue.B);
+        a = ToFloatString(colorValue.A);
     }
 
-    private static string ToFloat(byte v) =>
+    private static string ToFloatString(byte v) =>
         (v / 255.0).ToString("0.000", CultureInfo.InvariantCulture);
 }
