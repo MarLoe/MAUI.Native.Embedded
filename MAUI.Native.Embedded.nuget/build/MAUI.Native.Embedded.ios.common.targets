@@ -120,7 +120,7 @@
       $(_ProcessNativeEmbeddedDependsOn);
       _ResolveNativeEmbedded;
       _ResolveXcodeProjects;
-      _UpdateXcodeProjectsVersion;
+      UpdateXcodeProjectsVersion;
       _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 
@@ -129,5 +129,7 @@
       _ProcessNativeEmbedded;
     </ProcessNativeEmbeddedDependsOn>
   </PropertyGroup>
+
+  <Target Name="UpdateXcodeProjectsVersion" />
 
 </Project>

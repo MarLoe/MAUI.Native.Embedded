@@ -40,6 +40,7 @@
     </Copy>
 
     <UpdateXCAssetsColorset
+      Condition="@(_CopiedMauiNativeSplashAssets) != ''"
       Items="@(_CopiedMauiNativeSplashAssets)"
       Color="%(MauiSplashScreen.Color)"
       DarkColor="%(MauiSplashScreen.DarkColor)" />
@@ -57,6 +58,7 @@
 
   <Target Name="_ProcessNativeSplash">
     <ReplaceInFile
+      Condition="'$(TargetPlatformIdentifier)' == 'ios'"
       Items="@(_MauiSplashStoryboard)"
       Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
       Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />

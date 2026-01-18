@@ -7,11 +7,6 @@
   </Target>
 
   <PropertyGroup>
-    <CollectBundleResourcesDependsOn>
-      $(CollectBundleResourcesDependsOn);
-      _InitNativeEmbedded;
-    </CollectBundleResourcesDependsOn>
-
     <_InitNativeEmbeddedDependsOn>
       $(_InitNativeEmbeddedDependsOn)
       _InitNativeAssetsPaths;
@@ -35,7 +30,7 @@
   </PropertyGroup>
 
 
-  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
+  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" AfterTargets="AfterResolveReferences" />
 
   <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
 
