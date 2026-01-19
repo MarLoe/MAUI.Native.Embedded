@@ -67,8 +67,8 @@
     <UpdateXCAssetsColorset
       Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
       Items="@(_CopiedMauiNativeSplashAssets)"
-      Color="%(MauiSplashScreen.Color)"
-      DarkColor="%(MauiSplashScreen.DarkColor)" />
+      Color="%(_MauiSplashScreenNative.Color)"
+      DarkColor="%(_MauiSplashScreenNative.DarkColor)" />
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- Use ImageAsset to ensure that it goes into Assets.car -->
