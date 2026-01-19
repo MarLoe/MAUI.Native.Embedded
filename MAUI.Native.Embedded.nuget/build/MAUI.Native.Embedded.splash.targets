@@ -24,6 +24,9 @@
 
     <ItemGroup>
       <_MauiSplashScreenNative Include="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''" />
+      <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
+        <Color>#00000000</Color>
+      </MauiSplashScreen>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
@@ -48,10 +51,6 @@
     <ItemGroup>
       <!-- Use ImageAsset to ensure that it goes into Assets.car -->
       <ImageAsset Include="@(_CopiedMauiNativeSplashAssets)" />
-
-      <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
-        <Color>#00000000</Color>
-      </MauiSplashScreen>
     </ItemGroup>
   </Target>
 
