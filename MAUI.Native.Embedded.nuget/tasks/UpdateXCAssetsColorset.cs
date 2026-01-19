@@ -20,6 +20,12 @@ public sealed class UpdateXCAssetsColorset : Task
 
     public override bool Execute()
     {
+        if (Items.Length == 0)
+        {
+            Log.LogMessage(MessageImportance.Low, $@"No Items to update.");
+            return true;
+        }
+
         var colorsets = Items.Where(i => i.ItemSpec.Contains(".colorset", StringComparison.CurrentCultureIgnoreCase)).ToArray();
         if (colorsets.Length == 0)
         {
