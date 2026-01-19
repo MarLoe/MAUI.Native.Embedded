@@ -29,9 +29,9 @@
       </MauiSplashScreen>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+    <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
       <_MauiNativeSplashAssets
-        Condition="'@(_MauiSplashScreenNative)' != ''"
+        Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
         Include="$(MSBuildThisFileDirectory)/../platform/ios/Splash.*/**/*" />
     </ItemGroup>
 
@@ -43,12 +43,12 @@
     </Copy>
 
     <UpdateXCAssetsColorset
-      Condition="@(_CopiedMauiNativeSplashAssets) != ''"
+      Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
       Items="@(_CopiedMauiNativeSplashAssets)"
       Color="%(MauiSplashScreen.Color)"
       DarkColor="%(MauiSplashScreen.DarkColor)" />
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- Use ImageAsset to ensure that it goes into Assets.car -->
       <ImageAsset Include="@(_CopiedMauiNativeSplashAssets)" />
     </ItemGroup>
@@ -57,11 +57,11 @@
 
   <Target Name="_ProcessNativeSplash">
     <ReplaceInFile
-      Condition="'$(TargetPlatformIdentifier)' == 'ios'"
       Items="@(_MauiSplashStoryboard)"
       Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
       Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
   </Target>
+
 
   <Target Name="ProcessNativeSplash" DependsOnTargets="$(ProcessNativeSplashDependsOn)" />
 
