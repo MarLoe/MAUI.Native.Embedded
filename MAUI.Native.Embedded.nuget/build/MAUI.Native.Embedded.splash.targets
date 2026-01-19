@@ -31,7 +31,7 @@
 
     <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
       <_MauiNativeSplashAssets
-        Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+        Condition="'$(_ResizetizerIsiOSApp)' == 'True' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
         Include="$(MSBuildThisFileDirectory)/../platform/ios/Splash.*/**/*" />
 
       <_MauiNativeSplashAssets
@@ -49,7 +49,7 @@
     </Copy>
 
     <XmlPoke
-      Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
+      Condition="'$(_ResizetizerIsAndroidApp)' == 'true' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
       XmlInputPath="@(_CopiedMauiNativeSplashAssets)"
       Query="//color[@name='maui_splash_color']"
       Value="%(_MauiSplashScreenNative.DarkColor)" />
@@ -57,7 +57,7 @@
 
     <!-- iOS, but not Catalyst -->
     <Copy
-      Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+      Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
       SourceFiles="@(_MauiNativeSplashAssets)"
       DestinationFolder="$(MauiNativeAssetsPathRoot)/%(RecursiveDir)"
       SkipUnchangedFiles="false">
@@ -65,12 +65,12 @@
     </Copy>
 
     <UpdateXCAssetsColorset
-      Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+      Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
       Items="@(_CopiedMauiNativeSplashAssets)"
       Color="%(_MauiSplashScreenNative.Color)"
       DarkColor="%(_MauiSplashScreenNative.DarkColor)" />
 
-    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
+    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- Use ImageAsset to ensure that it goes into Assets.car -->
       <ImageAsset Include="@(_CopiedMauiNativeSplashAssets)" />
     </ItemGroup>
