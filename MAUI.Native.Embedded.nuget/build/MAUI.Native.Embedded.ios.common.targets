@@ -13,7 +13,6 @@
     </PropertyGroup>
   </Target>
 
-
   <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
     <ItemGroup>
       <XcodeProjects>
@@ -112,40 +111,25 @@
 
 
   <PropertyGroup>
-    <_InitNativeEmbeddedDependsOn />
-
-    <_ResolveNativeEmbeddedDependsOn />
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn)
+      _InitXcodeProjects;
+    </_InitNativeEmbeddedDependsOn>
 
     <_ProcessNativeEmbeddedDependsOn>
-      _InitXcodeProjects;
+      $(_ProcessNativeEmbeddedDependsOn);
       _ResolveNativeEmbedded;
       _ResolveXcodeProjects;
-      _UpdateXcodeProjectsVersion;
+      UpdateXcodeProjectsVersion;
       _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 
     <ProcessNativeEmbeddedDependsOn>
-      _InitNativeEmbedded;
+      $(ProcessNativeEmbeddedDependsOn);
       _ProcessNativeEmbedded;
     </ProcessNativeEmbeddedDependsOn>
-
-    <VerifyNativeEmbeddedDependsOn />
   </PropertyGroup>
 
-
-  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
-
-  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
-
-  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
-
-  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
-
-  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
-
-  <!-- This target is for debug purposes. See README.md for information -->
-  <Target Name="BuildNativeEmbedded">
-    <CallTarget Name="ProcessNativeEmbedded" />
-  </Target>
+  <Target Name="UpdateXcodeProjectsVersion" />
 
 </Project>

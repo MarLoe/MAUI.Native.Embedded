@@ -1,0 +1,48 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="_InitNativeAssetsPaths">
+    <PropertyGroup>
+      <MauiNativeAssetsPathRoot Condition="'$(MauiNativeAssetsPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)MauiNativeAssets/</MauiNativeAssetsPathRoot>
+    </PropertyGroup>
+  </Target>
+
+  <PropertyGroup>
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn)
+      _InitNativeAssetsPaths;
+    </_InitNativeEmbeddedDependsOn>
+
+    <_ResolveNativeEmbeddedDependsOn>
+      $(_ResolveNativeEmbeddedDependsOn)
+    </_ResolveNativeEmbeddedDependsOn>
+
+    <_ProcessNativeEmbeddedDependsOn>
+      $(_ProcessNativeEmbeddedDependsOn);
+    </_ProcessNativeEmbeddedDependsOn>
+
+    <ProcessNativeEmbeddedDependsOn>
+      $(ProcessNativeEmbeddedDependsOn);
+    </ProcessNativeEmbeddedDependsOn>
+
+    <VerifyNativeEmbeddedDependsOn>
+      $(VerifyNativeEmbeddedDependsOn);
+    </VerifyNativeEmbeddedDependsOn>
+  </PropertyGroup>
+
+
+  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" AfterTargets="AfterResolveReferences" />
+
+  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
+
+  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
+
+  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
+
+  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
+
+  <!-- This target is for debug purposes. See README.md for information -->
+  <Target Name="BuildNativeEmbedded">
+    <CallTarget Name="ProcessNativeEmbedded" />
+  </Target>
+
+</Project>

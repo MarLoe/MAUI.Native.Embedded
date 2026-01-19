@@ -2,8 +2,11 @@
 
   <Import Project="MAUI.Native.Embedded.tasks.targets" />
 
-  <Import Project="MAUI.Native.Embedded.ios.common.targets" />
-  <Import Project="MAUI.Native.Embedded.ios.widgets.targets" />
-  <Import Project="MAUI.Native.Embedded.ios.appclips.targets" />
+  <Import Project="MAUI.Native.Embedded.common.targets" />
 
+  <Import Project="MAUI.Native.Embedded.splash.targets" />
+
+  <Import Condition="'$(TargetPlatformIdentifier)' == 'ios'" Project="MAUI.Native.Embedded.ios.common.targets" />
+  <Import Condition="'$(TargetPlatformIdentifier)' == 'ios'" Project="MAUI.Native.Embedded.ios.widgets.targets" />
+  <Import Condition="'$(TargetPlatformIdentifier)' == 'ios'" Project="MAUI.Native.Embedded.ios.appclips.targets" />
 </Project>
