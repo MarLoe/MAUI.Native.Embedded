@@ -9,8 +9,8 @@
   </PropertyGroup>
 
 
-  <Target Name="_InitWidgets" Condition="'@(Widgets)' != ''">
-    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('Widgets'))">
+  <Target Name="_InitWidgets" Condition="'@(Widgets)' != '' AND $(BuildNativeEmbedded.Contains('Widgets'))">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
       <_ResolveNativeEmbeddedDependsOn>
         $(_ResolveNativeEmbeddedDependsOn);
         _ResolveWidgets;
@@ -81,7 +81,7 @@
     </ItemGroup>
 
     <!-- Extract mobileprovision to get entitlements we need for codesigning  -->
-    <Exec 
+    <Exec
       Condition="Exists('%(_WidgetsAppexMobileProvision.FullPath)')"
       Command="xcrun security cms -D -i '%(_WidgetsAppexMobileProvision.FullPath)' | xcrun plutil -extract Entitlements xml1 -o - - &gt; '%(_WidgetsAppexMobileProvision.EntitlementPath)'" />
 

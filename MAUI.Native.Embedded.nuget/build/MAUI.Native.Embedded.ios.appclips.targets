@@ -9,8 +9,8 @@
   </PropertyGroup>
 
 
-  <Target Name="_InitAppClips" Condition="'@(AppClips)' != ''">
-    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' AND $(BuildNativeEmbedded.Contains('AppClips'))">
+  <Target Name="_InitAppClips" Condition="'@(AppClips)' != '' AND $(BuildNativeEmbedded.Contains('AppClips'))">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
       <_ResolveNativeEmbeddedDependsOn>
         $(_ResolveNativeEmbeddedDependsOn);
         _ResolveAppClips;

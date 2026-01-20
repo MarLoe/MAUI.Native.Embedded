@@ -9,8 +9,8 @@
   </PropertyGroup>
 
 
-  <Target Name="_InitSplash">
-    <PropertyGroup Condition="$(BuildNativeEmbedded.Contains('Splash'))">
+  <Target Name="_InitSplash" Condition="$(BuildNativeEmbedded.Contains('Splash'))">
+    <PropertyGroup>
       <ProcessNativeSplashDependsOn>
         $(ProcessNativeSplashDependsOn);
         _ProcessNativeSplash;
@@ -77,7 +77,7 @@
   </Target>
 
 
-  <Target Name="_ProcessNativeSplash">
+  <Target Name="_ProcessNativeSplash" Condition="'@(_MauiSplashScreenNative)' != ''">
     <ReplaceInFile
       Items="@(_MauiSplashStoryboard)"
       Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
