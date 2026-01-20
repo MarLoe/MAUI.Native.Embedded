@@ -1,0 +1,43 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildMauiNativeEmbedded>$(BuildMauiNativeEmbedded);Icon</BuildMauiNativeEmbedded>
+    <_InitMauiNativeEmbeddedDependsOn>
+      $(_InitMauiNativeEmbeddedDependsOn);
+      _InitIcon;
+    </_InitMauiNativeEmbeddedDependsOn>
+  </PropertyGroup>
+
+
+  <Target Name="_InitIcon" Condition="$(BuildMauiNativeEmbedded.Contains('Icon'))">
+    <PropertyGroup>
+      <ProcessMauiNativeIconDependsOn>
+        $(ProcessMauiNativeIconDependsOn);
+        _ProcessMauiNativeIcon;
+      </ProcessMauiNativeIconDependsOn>
+
+      <ResizetizeDependsOnTargets>
+        $(ResizetizeDependsOnTargets);
+        ProcessMauiNativeIcon;
+      </ResizetizeDependsOnTargets>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_MauiNativeIcon Include="@(MauiIcon)" Condition="'%(MauiIcon.DarkColor)' != ''" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'@(_MauiNativeIcon)' != ''">
+      <_MauiNativeIconAssets
+        Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
+        Include="$(MSBuildThisFileDirectory)/../platform/Android/Resources/**/icon*" />
+    </ItemGroup>
+  </Target>
+
+
+  <Target Name="_ProcessMauiNativeIcon" Condition="'@(_MauiNativeIcon)' != ''">
+  </Target>
+
+
+  <Target Name="ProcessMauiNativeIcon" DependsOnTargets="$(ProcessMauiNativeIconDependsOn)" AfterTargets="ResizetizeImages" />
+
+</Project>

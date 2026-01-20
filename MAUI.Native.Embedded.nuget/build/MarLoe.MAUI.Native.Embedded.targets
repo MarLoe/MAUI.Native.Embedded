@@ -4,6 +4,7 @@
 
   <Import Project="MAUI.Native.Embedded.common.targets" />
 
+  <Import Project="MAUI.Native.Embedded.icon.targets" />
   <Import Project="MAUI.Native.Embedded.splash.targets" />
 
   <Import Condition="'$(TargetPlatformIdentifier)' == 'ios'" Project="MAUI.Native.Embedded.ios.common.targets" />
