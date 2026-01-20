@@ -60,7 +60,7 @@
     <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" />
 
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" BaseSize="256,256" />
+    <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" DarkColor="#321D6E" BaseSize="256,256" />
 
     <!-- Images -->
     <MauiImage Include="../Assets/splash.svg" />
