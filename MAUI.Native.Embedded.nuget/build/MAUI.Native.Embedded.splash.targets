@@ -6,6 +6,7 @@
       $(_InitNativeEmbeddedDependsOn);
       _InitSplash;
     </_InitNativeEmbeddedDependsOn>
+    <_SplashAssetsiOS>Splash.xcassets</_SplashAssetsiOS>
   </PropertyGroup>
 
 
@@ -23,14 +24,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <_MauiSplashScreenNative Include="@(MauiSplashScreen)" Condition="'@(MauiSplashScreen -> '%(DarkColor)%(DarkTintColor)')' != ''" />
-      <_MauiSplashScreenNative>
-        <DarkColor Condition="'%(_MauiSplashScreenNative.DarkColor)' == ''">%(_MauiSplashScreenNative.Color)</DarkColor>
-        <DarkTintColor Condition="'%(_MauiSplashScreenNative.DarkTintColor)' == ''">%(_MauiSplashScreenNative.TintColor)</DarkTintColor>
-      </_MauiSplashScreenNative>
+      <_MauiNativeSplashScreen Include="@(MauiSplashScreen)" Condition="'@(MauiSplashScreen -> '%(DarkColor)%(DarkTintColor)')' != ''" />
+      <_MauiNativeSplashScreen>
+        <DarkColor Condition="'%(_MauiNativeSplashScreen.DarkColor)' == ''">%(_MauiNativeSplashScreen.Color)</DarkColor>
+        <DarkTintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' == ''">%(_MauiNativeSplashScreen.TintColor)</DarkTintColor>
+      </_MauiNativeSplashScreen>
     </ItemGroup>
 
-    <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
+    <ItemGroup Condition="'@(_MauiNativeSplashScreen)' != ''">
       <MauiSplashScreen>
         <!-- We want transparent background on splash screeen images -->
         <Color>#00000000</Color>
@@ -52,46 +53,86 @@
       <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeSplashAssets" />
     </Copy>
 
-    <!-- Android -->
 
-    <!-- TODO: Check if _CopiedMauiNativeSplashAssets condition is needed -->
+    <!-- Android -->
     <XmlPoke
       Condition="'$(_ResizetizerIsAndroidApp)' == 'true' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
       XmlInputPath="%(_CopiedMauiNativeSplashAssets.Identity)"
       Query="//color[@name='maui_splash_color']"
-      Value="%(_MauiSplashScreenNative.DarkColor)" />
+      Value="%(_MauiNativeSplashScreen.DarkColor)" />
 
 
     <!-- iOS, but not Catalyst -->
-
     <UpdateXCAssetsColorset
       Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
       Items="@(_CopiedMauiNativeSplashAssets)"
-      Color="%(_MauiSplashScreenNative.Color)"
-      DarkColor="%(_MauiSplashScreenNative.DarkColor)" />
+      Color="%(_MauiNativeSplashScreen.Color)"
+      DarkColor="%(_MauiNativeSplashScreen.DarkColor)" />
 
-    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
-      <!-- Use ImageAsset to ensure that it goes into Assets.car -->
-      <ImageAsset Include="$(MauiNativeAssetsPathRoot)/$(_SplashAssetsiOS)/Contents.json" />
-    </ItemGroup>
   </Target>
 
+  <Target Name="_ProcessNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
 
-  <Target Name="_ProcessNativeSplash" Condition="'@(_MauiSplashScreenNative)' != ''">
-    <ReplaceInFile
-      Items="@(_MauiSplashStoryboard)"
-      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
-      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
+    <ItemGroup>
+      <_MauiNativeSplashScreenDarkTint Include="@(_MauiNativeSplashScreen)">
+        <Color>#00000000</Color>
+        <TintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' != ''">%(_MauiNativeSplashScreen.DarkTintColor)</TintColor>
+        <InputsFileHash>dark</InputsFileHash>
+        <Link>splash_dark%(Extension)</Link>
+      </_MauiNativeSplashScreenDarkTint>
+    </ItemGroup>
 
+    <!-- Android -->
     <ItemGroup>
       <_MauiSplashStyleColors Include="$(_MauiIntermediateSplashScreen)/**/maui_colors.xml" />
     </ItemGroup>
 
     <XmlPoke
       Condition="'@(_MauiSplashStyleColors)' != ''"
-      XmlInputPath="@(_MauiSplashStyleColors)"
+      XmlInputPath="%(_MauiSplashStyleColors.Identity)"
       Query="//color[@name='maui_splash_color']"
-      Value="%(_MauiSplashScreenNative.Color)" />
+      Value="%(_MauiNativeSplashScreen.Color)" />
+
+    <!-- iOS, but not Catalyst -->
+    <GenerateSplashStoryboard
+      Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+      IntermediateOutputPath="$(_MauiIntermediateSplashScreen)"
+      MauiSplashScreen="@(_MauiNativeSplashScreenDarkTint)" />
+
+    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
+      <!-- First we include the darkmode images -->
+      <_MauiNativeSplashImages Include="$(_MauiIntermediateSplashScreen)/**/*_dark*.png" />
+      <_MauiNativeSplashImages TargetName="%(Filename)%(Extension)" />
+      <!-- Now we include "normal" generated images -->
+      <_MauiNativeSplashImages Include="$(_MauiIntermediateSplashScreen)/**/*$(_MauiSplashInputsFileHash)*.png" />
+      <_MauiNativeSplashImages Condition="'%(_MauiNativeSplashImages.TargetName)' == ''" TargetName="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)','^[^@]+','splash'))%(Extension)" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(_MauiNativeSplashImages)"
+      DestinationFiles="$(MauiNativeAssetsPathRoot)/$(_SplashAssetsiOS)/Splash.imageset/%(TargetName)" />
+
+    <ReplaceInFile
+      Items="@(_MauiSplashStoryboard)"
+      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
+      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
+
+    <XmlPoke
+      Condition="'@(_MauiSplashStoryboard)' != ''"
+      XmlInputPath="%(_MauiSplashStoryboard.Identity)"
+      Query="//imageView[@image='splash_dark.png']/@image"
+      Value="Splash" />
+
+    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
+      <_MauiNativeSplashCollectedAssets Include="$(MauiNativeAssetsPathRoot)/$(_SplashAssetsiOS)/**/*" />
+      <_MauiNativeSplashCollectedAssets>
+        <LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+        <LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+      </_MauiNativeSplashCollectedAssets>
+
+      <!-- Use ImageAsset to ensure that it goes into Assets.car -->
+      <ImageAsset Include="@(_MauiNativeSplashCollectedAssets)" />
+    </ItemGroup>
   </Target>
 
 
