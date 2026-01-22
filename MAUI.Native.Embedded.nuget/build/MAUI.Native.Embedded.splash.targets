@@ -23,13 +23,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <_MauiSplashScreenNative Include="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''" />
-      <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
-        <Color>#00000000</Color>
-      </MauiSplashScreen>
+      <_MauiSplashScreenNative Include="@(MauiSplashScreen)" Condition="'@(MauiSplashScreen -> '%(DarkColor)%(DarkTintColor)')' != ''" />
+      <_MauiSplashScreenNative>
+        <DarkColor Condition="'%(_MauiSplashScreenNative.DarkColor)' == ''">%(_MauiSplashScreenNative.Color)</DarkColor>
+        <DarkTintColor Condition="'%(_MauiSplashScreenNative.DarkTintColor)' == ''">%(_MauiSplashScreenNative.TintColor)</DarkTintColor>
+      </_MauiSplashScreenNative>
     </ItemGroup>
 
     <ItemGroup Condition="'@(_MauiSplashScreenNative)' != ''">
+      <MauiSplashScreen>
+        <!-- We want transparent background on splash screeen images -->
+        <Color>#00000000</Color>
+      </MauiSplashScreen>
+
       <_MauiNativeSplashAssets
         Condition="'$(_ResizetizerIsiOSApp)' == 'True' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
         Include="$(MSBuildThisFileDirectory)/../platform/ios/Splash.*/**/*" />
