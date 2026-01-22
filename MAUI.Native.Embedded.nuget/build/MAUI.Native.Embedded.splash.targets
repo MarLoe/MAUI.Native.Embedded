@@ -45,30 +45,24 @@
         Include="$(MSBuildThisFileDirectory)/../platform/Android/Resources/**/splash*" />
     </ItemGroup>
 
-    <!-- Android -->
     <Copy
-      Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
       SourceFiles="@(_MauiNativeSplashAssets)"
-      DestinationFolder="$(_MauiIntermediateSplashScreen)/%(RecursiveDir)"
+      DestinationFolder="$(MauiNativeAssetsPathRoot)/%(_MauiNativeSplashAssets.RecursiveDir)"
       SkipUnchangedFiles="false">
       <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeSplashAssets" />
     </Copy>
 
+    <!-- Android -->
+
+    <!-- TODO: Check if _CopiedMauiNativeSplashAssets condition is needed -->
     <XmlPoke
       Condition="'$(_ResizetizerIsAndroidApp)' == 'true' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
-      XmlInputPath="@(_CopiedMauiNativeSplashAssets)"
+      XmlInputPath="%(_CopiedMauiNativeSplashAssets.Identity)"
       Query="//color[@name='maui_splash_color']"
       Value="%(_MauiSplashScreenNative.DarkColor)" />
 
 
     <!-- iOS, but not Catalyst -->
-    <Copy
-      Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
-      SourceFiles="@(_MauiNativeSplashAssets)"
-      DestinationFolder="$(MauiNativeAssetsPathRoot)/%(RecursiveDir)"
-      SkipUnchangedFiles="false">
-      <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeSplashAssets" />
-    </Copy>
 
     <UpdateXCAssetsColorset
       Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst' AND '@(_CopiedMauiNativeSplashAssets)' != ''"
@@ -78,7 +72,7 @@
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- Use ImageAsset to ensure that it goes into Assets.car -->
-      <ImageAsset Include="@(_CopiedMauiNativeSplashAssets)" />
+      <ImageAsset Include="$(MauiNativeAssetsPathRoot)/$(_SplashAssetsiOS)/Contents.json" />
     </ItemGroup>
   </Target>
 
