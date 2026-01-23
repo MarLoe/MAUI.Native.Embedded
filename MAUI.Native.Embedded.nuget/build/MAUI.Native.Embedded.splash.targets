@@ -125,15 +125,16 @@
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- First we include the darkmode images -->
-      <_MauiNativeSplashImages Include="$(_MauiIntermediateSplashScreen)/**/*_dark*.png" />
-      <_MauiNativeSplashImages TargetName="%(Filename)%(Extension)" />
+      <_MauiNativeSplashImageAssets Include="$(_MauiIntermediateSplashScreen)/**/*_dark*.png" />
+      <_MauiNativeSplashImageAssets TargetName="%(Filename)%(Extension)" />
       <!-- Now we include "normal" generated images -->
-      <_MauiNativeSplashImages Include="$(_MauiIntermediateSplashScreen)/**/*$(_MauiSplashInputsFileHash)*.png" />
-      <_MauiNativeSplashImages Condition="'%(_MauiNativeSplashImages.TargetName)' == ''" TargetName="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)','^[^@]+','splash'))%(Extension)" />
+      <_MauiNativeSplashImageAssets Include="$(_MauiIntermediateSplashScreen)/**/*$(_MauiSplashInputsFileHash)*.png" />
+      <_MauiNativeSplashImageAssets Condition="'%(_MauiNativeSplashImageAssets.TargetName)' == ''" TargetName="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)','^[^@]+','splash'))%(Extension)" />
     </ItemGroup>
 
     <Copy
-      SourceFiles="@(_MauiNativeSplashImages)"
+      Condition="'@(_MauiNativeSplashImageAssets)' != ''"
+      SourceFiles="@(_MauiNativeSplashImageAssets)"
       DestinationFiles="$(MauiNativeAssetsPathRoot)/$(_SplashAssetsiOS)/Splash.imageset/%(TargetName)" />
 
     <ReplaceInFile
