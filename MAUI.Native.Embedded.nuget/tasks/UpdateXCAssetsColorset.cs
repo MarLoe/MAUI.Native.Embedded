@@ -44,7 +44,7 @@ public sealed class UpdateXCAssetsColorset : Task
                     var colorsetFile = Path.Combine(item.ItemSpec, Name, "Contents.json");
                     if (!File.Exists(colorsetFile))
                     {
-                        Log.LogError(null, ErrorCodes.ColorsetNotFound, null, null, 0, 0, 0, 0, $@"Colorset with name {Name} was not found in {item.ItemSpec}");
+                        Log.LogError(null, ErrorCodes.ColorsetNotFound, null, null, 0, 0, 0, 0, $@"Colorset with name {Name} was not found in {colorsetFile}");
                         continue;
                     }
 
