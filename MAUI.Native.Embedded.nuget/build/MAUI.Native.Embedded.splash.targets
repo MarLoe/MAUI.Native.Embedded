@@ -23,13 +23,9 @@
       </ResizetizeDependsOnTargets>
     </PropertyGroup>
 
-    <ItemGroup>
-      <_MauiNativeSplashScreen Include="@(MauiSplashScreen)" Condition="'@(MauiSplashScreen -> '%(DarkColor)%(DarkTintColor)')' != ''" />
-      <_MauiNativeSplashScreen>
-        <DarkColor Condition="'%(_MauiNativeSplashScreen.DarkColor)' == ''">%(_MauiNativeSplashScreen.Color)</DarkColor>
-        <DarkTintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' == ''">%(_MauiNativeSplashScreen.TintColor)</DarkTintColor>
-      </_MauiNativeSplashScreen>
-    </ItemGroup>
+    <PrepareMauiNativeSplashScreen MauiSplashScreen="@(MauiSplashScreen)">
+      <Output TaskParameter="MauiNativeSplashScreen" ItemName="_MauiNativeSplashScreen" />
+    </PrepareMauiNativeSplashScreen>
 
     <ItemGroup Condition="'@(_MauiNativeSplashScreen)' != ''">
       <MauiSplashScreen>
