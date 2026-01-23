@@ -33,9 +33,9 @@ public sealed class PrepareMauiNativeSplashScreen : Task
                 UpdateMetadata(item, "DarkTintColor", tintColor);
             }
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
-            Log.LogError(null, "NE1001", null, null, 0, 0, 0, 0, ex.Message);
+            Log.LogErrorFromException(ex);
         }
 
         return !Log.HasLoggedErrors;
@@ -74,8 +74,9 @@ public sealed class PrepareMauiNativeSplashScreen : Task
         catch (Exception ex)
         {
             hexColor = "";
-            throw new ArgumentException($@"Failed to parse color ({color}): {ex.Message}");
+            Log.LogError(null, ErrorCodes.CouldNotParseColor, null, null, 0, 0, 0, 0, $@"Failed to parse color ({color}): {ex.Message}");
         }
+        return false;
     }
 
     private static bool HasDarkMode(string metadataName) =>
