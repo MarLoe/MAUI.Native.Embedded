@@ -11,9 +11,9 @@ Your native added projects will be build for you. You do not need to do anything
 [For full comprehensive documentation please read here.](MAUI.Native.Embedded.nuget/README.md)
 
 ## TLDR;
-Support "Dark Mode" on both iOS and Android by adding `DarkColor` to `MauiSplashScreen` in your project (.csproj) file:
+To support an alternative/darker background color for you splash screen, you can add the `DarkColor` and `DarkTintColor` to `MauiSplashScreen` in your project (.csproj) file:
 ```
-<MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" DarkColor="#321D6E" BaseSize="256,256" />
+<MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" TintColor="White" DarkColor="#321D6E" DarkTintColor="Black" BaseSize="512,512" />
 ```
 
 
