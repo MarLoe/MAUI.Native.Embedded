@@ -5,9 +5,9 @@ Embed native iOS AppClips and iOS Widgets build with Xcode into you MAUI app.
 You must make sure that the Xcode projects have the correct provisioning profiles configured - that matches the ones used for building your MAUI app.
 
 ## Dark Mode Splash Screen
-To support an alternative/darker background color for you splash screen, you can add the `DarkColor` to `MauiSplashScreen` in your project (.csproj) file:
+To support an alternative/darker background color for you splash screen, you can add the `DarkColor` and `DarkTintColor` to `MauiSplashScreen` in your project (.csproj) file:
 ```
-<MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" DarkColor="#321D6E" BaseSize="256,256" />
+<MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" TintColor="White" DarkColor="#321D6E" DarkTintColor="Black" BaseSize="512,512" />
 ```
 This will work for both iOS and for Android.
 
