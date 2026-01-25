@@ -63,7 +63,6 @@
     <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" DarkColor="#321D6E" BaseSize="256,256" />
 
     <!-- Images -->
-    <MauiImage Include="../Assets/splash.svg" />
     <MauiImage Include="../Assets/icon.png" Resize="true" BaseSize="200,200" />
     <MauiImage Include="Resources/Images/*" />
 
