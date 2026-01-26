@@ -53,18 +53,23 @@
 
   <Target Name="_ProcessNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
 
+    <PropertyGroup>
+      <MauiNativeSplashScreenDarkFilename>splash</MauiNativeSplashScreenDarkFilename>
+      <MauiNativeSplashScreenDarkFilename Condition="'%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)' != ''">$(MauiNativeSplashScreenDarkFilename)_%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)</MauiNativeSplashScreenDarkFilename>
+      <MauiNativeSplashScreenDarkFilename Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">$(MauiNativeSplashScreenDarkFilename)_dark</MauiNativeSplashScreenDarkFilename>
+    </PropertyGroup>
+
     <ItemGroup>
       <_MauiNativeSplashScreenDarkTint Include="@(_MauiNativeSplashScreen)">
         <Color>#00000000</Color>
         <TintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' != ''">%(_MauiNativeSplashScreen.DarkTintColor)</TintColor>
-        <Link>splash</Link>
-        <Link Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">splash_dark</Link>
+        <Link>$(MauiNativeSplashScreenDarkFilename)%(Extension)</Link>
       </_MauiNativeSplashScreenDarkTint>
     </ItemGroup>
 
     <Copy
       SourceFiles="@(_MauiNativeSplashAssets)"
-      DestinationFolder="$(_MauiNativeIntermediateSplashScreen)/%(RecursiveDir)"
+      DestinationFolder="$(_MauiNativeIntermediateSplashScreen)/%(_MauiNativeSplashAssets.RecursiveDir)"
       SkipUnchangedFiles="true">
     </Copy>
 
@@ -76,16 +81,11 @@
 
     <ItemGroup Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">
       <_MauiNativeSplashImageAssets Include="$(MauiNativeAssetsPathRoot)/splash-night/**/*.png" />
-      <_MauiNativeSplashImageAssets>
-        <TargetPath>$([System.String]::Copy('%(RecursiveDir)').Replace('drawable-', 'drawable-night-'))%(Filename)%(Extension)</TargetPath>
-      </_MauiNativeSplashImageAssets>
+      <_MauiNativeSplashImageAssets TargetPath="$([System.String]::Copy('%(RecursiveDir)').Replace('drawable-', 'drawable-night-'))%(Filename)%(Extension)" />
 
       <_MauiNativeSplashStyleColors Include="$(_MauiNativeIntermediateSplashScreen)/**/maui_colors.xml" />
       <_MauiNativeSplashStyleColors Include="$(_MauiNativeIntermediateSplashScreen)/**/splash.xml" />
-      <_MauiNativeSplashStyleColors>
-        <Color>%(_MauiNativeSplashScreen.Color)</Color>
-        <DarkColor>%(_MauiNativeSplashScreen.DarkColor)</DarkColor>
-      </_MauiNativeSplashStyleColors>
+      <_MauiNativeSplashStyleColors Color="%(_MauiNativeSplashScreen.Color)" DarkColor="%(_MauiNativeSplashScreen.DarkColor)" />
     </ItemGroup>
 
     <!-- iOS, but not Catalyst -->
