@@ -23,7 +23,7 @@
         ProcessNativeSplash;
       </ResizetizeDependsOnTargets>
 
-      <_MauiNativeIntermediateSplashScreen Condition="'$(_ResizetizerIsiOSApp)' == 'true'">$(MauiNativeAssetsPathRoot)</_MauiNativeIntermediateSplashScreen>
+      <_MauiNativeIntermediateSplashScreen Condition="'$(_ResizetizerIsiOSApp)' == 'true'">$(_MauiNativeAssetsPathRoot)</_MauiNativeIntermediateSplashScreen>
       <_MauiNativeIntermediateSplashScreen Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">$(_MauiIntermediateSplashScreen)</_MauiNativeIntermediateSplashScreen>
     </PropertyGroup>
 
@@ -54,20 +54,16 @@
   <Target Name="_ProcessNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
 
     <PropertyGroup>
-      <MauiNativeSplashScreenDarkFilename>splash</MauiNativeSplashScreenDarkFilename>
-      <MauiNativeSplashScreenDarkFilename Condition="'%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)' != ''">$(MauiNativeSplashScreenDarkFilename)_%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)</MauiNativeSplashScreenDarkFilename>
-      <MauiNativeSplashScreenDarkFilename Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">$(MauiNativeSplashScreenDarkFilename)_dark</MauiNativeSplashScreenDarkFilename>
+      <_MauiNativeSplashScreenDarkFilename>$([System.IO.Path]::GetFileNameWithoutExtension('%(MauiSplashScreen.Link)'))</_MauiNativeSplashScreenDarkFilename>
+      <_MauiNativeSplashScreenDarkFilename Condition="'%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)' != ''">$(_MauiNativeSplashScreenDarkFilename)_%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)</_MauiNativeSplashScreenDarkFilename>
+      <_MauiNativeSplashScreenDarkFilename Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">$(_MauiNativeSplashScreenDarkFilename)_dark</_MauiNativeSplashScreenDarkFilename>
     </PropertyGroup>
 
     <ItemGroup>
-      <_MauiNativeSplashScreen Update="@(_MauiSplashScreenWithHashesInFilename)">
-        <InputsFileHash>%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)</InputsFileHash>
-      </_MauiNativeSplashScreen>
-
       <_MauiNativeSplashScreenDarkTint Include="@(_MauiNativeSplashScreen)">
         <Color>#00000000</Color>
         <TintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' != ''">%(_MauiNativeSplashScreen.DarkTintColor)</TintColor>
-        <Link>$(MauiNativeSplashScreenDarkFilename)%(Extension)</Link>
+        <Link>$(_MauiNativeSplashScreenDarkFilename)%(Extension)</Link>
       </_MauiNativeSplashScreenDarkTint>
     </ItemGroup>
 
@@ -81,10 +77,10 @@
     <GenerateSplashAndroidResources
       Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
       MauiSplashScreen="@(_MauiNativeSplashScreenDarkTint)"
-      IntermediateOutputPath="$(MauiNativeAssetsPathRoot)/splash-night" />
+      IntermediateOutputPath="$(_MauiNativeAssetsPathRoot)/splash-night" />
 
     <ItemGroup Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">
-      <_MauiNativeSplashImageAssets Include="$(MauiNativeAssetsPathRoot)/splash-night/**/*.png" />
+      <_MauiNativeSplashImageAssets Include="$(_MauiNativeAssetsPathRoot)/splash-night/**/*.png" />
       <_MauiNativeSplashImageAssets TargetPath="$([System.String]::Copy('%(RecursiveDir)').Replace('drawable-', 'drawable-night-'))%(Filename)%(Extension)" />
 
       <_MauiNativeSplashStyleColors Include="$(_MauiNativeIntermediateSplashScreen)/**/maui_colors.xml" />
@@ -96,13 +92,13 @@
     <GenerateSplashStoryboard
       Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'"
       MauiSplashScreen="@(_MauiNativeSplashScreenDarkTint)"
-      IntermediateOutputPath="$(MauiNativeAssetsPathRoot)/splash-dark" />
+      IntermediateOutputPath="$(_MauiNativeAssetsPathRoot)/splash-dark" />
 
     <CallTarget Targets="_UpdateMauiSplashStoryboard" Condition="'@(_MauiSplashStoryboard)' != ''" />
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- First we include the darkmode images -->
-      <_MauiNativeSplashImageAssets Include="$(MauiNativeAssetsPathRoot)/splash-dark/**/*_dark*.png" />
+      <_MauiNativeSplashImageAssets Include="$(_MauiNativeAssetsPathRoot)/splash-dark/**/*_dark*.png" />
       <!-- Now we include "normal" generated images -->
       <_MauiNativeSplashImageAssets Include="$(_MauiIntermediateSplashScreen)/**/*$(_MauiSplashInputsFileHash)*.png" />
       <!-- Ensure the target go into the correct place -->
