@@ -11,5 +11,6 @@
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.ReplaceInFile" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.PrepareMauiNativeSplashScreen" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsColorset" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsImageset" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
 
 </Project>

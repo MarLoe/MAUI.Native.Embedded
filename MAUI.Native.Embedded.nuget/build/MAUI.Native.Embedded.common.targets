@@ -2,7 +2,7 @@
 
   <Target Name="_InitNativeAssetsPaths">
     <PropertyGroup>
-      <MauiNativeAssetsPathRoot Condition="'$(MauiNativeAssetsPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)MauiNativeAssets/</MauiNativeAssetsPathRoot>
+      <_MauiNativeAssetsPathRoot Condition="'$(_MauiNativeAssetsPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)maui-native-assets/</_MauiNativeAssetsPathRoot>
     </PropertyGroup>
   </Target>
 
