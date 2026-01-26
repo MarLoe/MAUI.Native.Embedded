@@ -31,12 +31,24 @@
       <Output TaskParameter="MauiNativeSplashScreen" ItemName="_MauiNativeSplashScreen" />
     </PrepareMauiNativeSplashScreen>
 
+    <GetFileHash
+      Condition="'$(_ResizetizerIsAndroidApp)' == 'true' AND '@(_MauiNativeSplashScreen)' != ''"
+      Files="@(_MauiNativeSplashScreen)">
+      <Output TaskParameter="Items" ItemName="_MauiNativeSplashInputsFileHash" />
+    </GetFileHash>
+
+    <PropertyGroup>
+      <_MauiNativeSplaScreenLinkName>splash</_MauiNativeSplaScreenLinkName>
+      <_MauiNativeSplaScreenLinkName Condition="'@(_MauiNativeSplashInputsFileHash)' != ''">$(_MauiNativeSplaScreenLinkName)_%(_MauiNativeSplashInputsFileHash.FileHash)</_MauiNativeSplaScreenLinkName>
+      <_MauiNativeSplaScreenLinkName>$(_MauiNativeSplaScreenLinkName.ToLowerInvariant())</_MauiNativeSplaScreenLinkName>
+    </PropertyGroup>
+
     <ItemGroup Condition="'@(_MauiNativeSplashScreen)' != ''">
       <MauiSplashScreen>
         <!-- We want transparent background on splash screen images -->
         <Color>#00000000</Color>
         <!-- We want the name of the generated splash images to be "splash***" -->
-        <Link>splash%(Extension)</Link>
+        <Link>$(_MauiNativeSplaScreenLinkName)%(Extension)</Link>
       </MauiSplashScreen>
 
       <_MauiNativeSplashAssets
