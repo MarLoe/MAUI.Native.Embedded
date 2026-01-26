@@ -60,6 +60,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <_MauiNativeSplashScreen Update="@(_MauiSplashScreenWithHashesInFilename)">
+        <InputsFileHash>%(_MauiSplashScreenWithHashesInFilename.InputsFileHash)</InputsFileHash>
+      </_MauiNativeSplashScreen>
+
       <_MauiNativeSplashScreenDarkTint Include="@(_MauiNativeSplashScreen)">
         <Color>#00000000</Color>
         <TintColor Condition="'%(_MauiNativeSplashScreen.DarkTintColor)' != ''">%(_MauiNativeSplashScreen.DarkTintColor)</TintColor>
@@ -94,27 +98,16 @@
       MauiSplashScreen="@(_MauiNativeSplashScreenDarkTint)"
       IntermediateOutputPath="$(MauiNativeAssetsPathRoot)/splash-dark" />
 
+    <CallTarget Targets="_UpdateMauiSplashStoryboard" Condition="'@(_MauiSplashStoryboard)' != ''" />
+
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- First we include the darkmode images -->
       <_MauiNativeSplashImageAssets Include="$(MauiNativeAssetsPathRoot)/splash-dark/**/*_dark*.png" />
-      <_MauiNativeSplashImageAssets TargetPath="%(Filename)%(Extension)" />
       <!-- Now we include "normal" generated images -->
       <_MauiNativeSplashImageAssets Include="$(_MauiIntermediateSplashScreen)/**/*$(_MauiSplashInputsFileHash)*.png" />
-      <_MauiNativeSplashImageAssets Condition="'%(_MauiNativeSplashImageAssets.TargetPath)' == ''" TargetPath="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)','^[^@]+','splash'))%(Extension)" />
-      <!-- Ensure the target gor into the correct place -->
-      <_MauiNativeSplashImageAssets TargetPath="$(_SplashAssetsiOS)/Splash.imageset/%(TargetPath)" />
+      <!-- Ensure the target go into the correct place -->
+      <_MauiNativeSplashImageAssets TargetPath="$(_SplashAssetsiOS)/Splash.imageset/%(RecursiveDir)/%(Filename)%(Extension)" />
     </ItemGroup>
-
-    <ReplaceInFile
-      Items="@(_MauiSplashStoryboard)"
-      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
-      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
-
-    <XmlPoke
-      Condition="'@(_MauiSplashStoryboard)' != ''"
-      XmlInputPath="%(_MauiSplashStoryboard.Identity)"
-      Query="//imageView[starts-with(@image, 'splash_')]/@image"
-      Value="Splash" />
 
     <!-- Common -->
     <Copy
@@ -136,7 +129,7 @@
       Value="%(_MauiNativeSplashStyleColors.DarkColor)" />
 
     <!-- iOS, but not Catalyst -->
-    <CallTarget Targets="_UpdateXCAssetsColorset" Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'" />
+    <CallTarget Targets="_UpdateXCAssets" Condition="Exists('$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)')" />
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <_MauiNativeSplashCollectedAssets Include="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)/**/*" />
@@ -152,13 +145,42 @@
   </Target>
 
 
+  <Target Name="_UpdateMauiSplashStoryboard">
+    <ReplaceInFile
+      Items="@(_MauiSplashStoryboard)"
+      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
+      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" />
+
+    <XmlPoke
+      XmlInputPath="%(_MauiSplashStoryboard.Identity)"
+      Query="//imageView[starts-with(@image, 'splash_')]/@image"
+      Value="Splash_$(_MauiSplashInputsFileHash)" />
+  </Target>
+
+
   <!-- This has to be in it's own target in order to not have modified files reverted -->
-  <Target Name="_UpdateXCAssetsColorset" Outputs="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)">
+  <Target Name="_UpdateXCAssets" Outputs="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)">
     <UpdateXCAssetsColorset
       Items="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)"
       Name="SplashBackground"
       Color="%(_MauiNativeSplashScreen.Color)"
       DarkColor="%(_MauiNativeSplashScreen.DarkColor)" />
+
+    <UpdateXCAssetsImageset
+      Items="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)"
+      Name="Splash"
+      ImageName="splash_$(_MauiSplashInputsFileHash)" />
+
+    <ItemGroup>
+      <_MauiNativeSplashImagesetTemplate Include="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)/Splash.imageset/**/*" />
+    </ItemGroup>
+
+    <Move
+      SourceFiles="@(_MauiNativeSplashImagesetTemplate)"
+      DestinationFolder="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)/Splash_$(_MauiSplashInputsFileHash).imageset" />
+
+    <RemoveDir
+      Directories="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)/Splash.imageset" />
   </Target>
 
 
