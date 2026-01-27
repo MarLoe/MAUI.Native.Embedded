@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "process",
+            "command": "dotnet",
+            "args": ["build"],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "label": "Build: solution",
+            "detail": "Build the solution using dotnet build"
+        },
+        {
+            "type": "process",
+            "command": "dotnet",
+            "args": ["publish", "-f:net10.0-ios", "${workspaceFolder}/MAUI.Native.Embedded.Sample/MAUI.Native.Embedded.Sample.csproj"],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "label": "Publish: iOS",
+            "detail": "Publish the solution using dotnet publish"
+        }
+    ]
+}

@@ -1,22 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
     <AssemblyName>MAUI.Native.Embedded</AssemblyName>
     <OutputType>Library</OutputType>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Do not include .dll in the nuget package.  -->
     <!-- This mus be changed if a C# Task is added. -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- <IncludeBuildOutput>false</IncludeBuildOutput> -->
+    <!-- <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking> -->
+
+    <!-- Ensures MSBuild loads correct TFM -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <PropertyGroup>
     <Title>MAUI Native Embedded</Title>
     <PackageId>MarLoe.MAUI.Native.Embedded</PackageId>
-    <Version>0.5.1</Version>
+    <Version>0.7.5</Version>
     <Authors>Martin Løbger</Authors>
     <Owner>Martin Løbger</Owner>
     <Description>Embed native iOS AppClips and Widgets into you MAUI app</Description>
@@ -25,25 +34,29 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <License>MIT License</License>
     <PackageIcon>assets/icon.png</PackageIcon>
+    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
     <PackageProjectUrl>https://github.com/MarLoe/MAUI.Native.Embedded</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MarLoe/MAUI.Native.Embedded</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageTags>MSBuild dotnet maui xcode native embedded ios appclip widget</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="../Assets/icon.png" Pack="true" PackagePath="assets" />
     <None Include="assets/icon-100.png" Pack="true" PackagePath="assets" />
     <None Include="README.md" Pack="true" PackagePath="/" />
-    <None Include="build/MarLoe.MAUI.Native.Embedded.props" Pack="true" PackagePath="build/" />
-    <None Include="build/MarLoe.MAUI.Native.Embedded.targets" Pack="true" PackagePath="build/" />
-    <None Include="build/MAUI.Native.Embedded.ios.common.targets" Pack="true" PackagePath="build/" />
-    <None Include="build/MAUI.Native.Embedded.ios.appclips.targets" Pack="true" PackagePath="build/" />
-    <None Include="build/MAUI.Native.Embedded.ios.widgets.targets" Pack="true" PackagePath="build/" />
+    <None Include="build/**/*" Pack="true" PackagePath="build" />
+    <None Include="Platforms/**/*" Pack="true" PackagePath="Platforms" />
+    <None Include="$(TargetPath)" Pack="true" PackagePath="tools" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" PrivateAssets="all" ExcludeAssets="Runtime" Version="*" />
+    <PackageReference Include="Microsoft.Build.Framework" PrivateAssets="all" ExcludeAssets="Runtime" Version="*" />
+  </ItemGroup>
+
 
   <Target Name="_DeleteLocalCache" BeforeTargets="Restore;Pack">
     <!-- Remove previous build before restore and packing again -->

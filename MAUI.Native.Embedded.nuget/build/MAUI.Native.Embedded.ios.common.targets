@@ -5,11 +5,13 @@
       <!-- Use the build system default output root, if it is available -->
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(_XcodeProjectDefaultOutputPathRoot)</XcodeOutputPathRoot>
       <XcodeOutputPathRoot Condition="'$(XcodeOutputPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)xcode/</XcodeOutputPathRoot>
+      <!-- Normalize to an absolute path -->
+      <XcodeOutputPathRoot>$([System.IO.Path]::GetFullPath('$(XcodeOutputPathRoot)'))</XcodeOutputPathRoot>
+
       <_XcodeCachePath Condition="'$(_XcodeCachePath)' == ''">$(XcodeOutputPathRoot)Cache</_XcodeCachePath>
       <_XcodeDerivedDataPath Condition="'$(_XcodeDerivedDataPath)' == ''">$(XcodeOutputPathRoot)DerivedData</_XcodeDerivedDataPath>
     </PropertyGroup>
   </Target>
-
 
   <Target Name="_ResolveXcodeProjects" Condition="'@(XcodeProjects)' != ''">
     <ItemGroup>
@@ -28,8 +30,16 @@
         <Scheme Condition="'%(XcodeProjects.Scheme)' == ''">%(XcodeProjects.Filename)</Scheme>
         <Configuration Condition="'%(XcodeProjects.Configuration)' == ''">$(Configuration)</Configuration>
         <XcodeParams Condition="'%(XcodeProjects.NoSigning)' == 'true'">$(XcodeParams) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO</XcodeParams>
-        <UniqueId Condition="'%(XcodeProjects.UniqueId)' == ''">$([System.Guid]::NewGuid())</UniqueId>
       </XcodeProjects>
+    </ItemGroup>
+
+    <GenerateUniqueId Items="@(XcodeProjects)" Exclude="NoSigning">
+      <Output TaskParameter="OutputItems" ItemName="XcodeProjectsWithUniqueId" />
+    </GenerateUniqueId>
+
+    <ItemGroup>
+      <XcodeProjects Remove="@(XcodeProjects)" />
+      <XcodeProjects Include="@(XcodeProjectsWithUniqueId)" />
 
       <!-- We cannot add the ArchivePath in one go,               -->
       <!-- so we have to do it separately once we have            -->
@@ -56,7 +66,7 @@
   <Target Name="_BuildXcodeProjectsArchive" Condition="'@(XcodeProjects)' != ''">
     <PropertyGroup>
       <_XcodeDestination Condition="$(TargetPlatformIdentifier) == 'ios'">iOS</_XcodeDestination>
-      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('iossimulator')) == true">iOS Simulator</_XcodeDestination>
+      <_XcodeDestination Condition="$(RuntimeIdentifier.Contains('simulator')) == true">$(_XcodeDestination) Simulator</_XcodeDestination>
       <XCodeCommonParams>$(XCodeCommonParams) -destination 'generic/platform=$(_XcodeDestination)'</XCodeCommonParams>
     </PropertyGroup>
 
@@ -101,40 +111,30 @@
 
 
   <PropertyGroup>
-    <_InitNativeEmbeddedDependsOn />
-
-    <_ResolveNativeEmbeddedDependsOn />
+    <_InitNativeEmbeddedDependsOn>
+      $(_InitNativeEmbeddedDependsOn)
+      _InitXcodeProjects;
+    </_InitNativeEmbeddedDependsOn>
 
     <_ProcessNativeEmbeddedDependsOn>
-      _InitXcodeProjects;
+      $(_ProcessNativeEmbeddedDependsOn);
       _ResolveNativeEmbedded;
       _ResolveXcodeProjects;
-      _UpdateXcodeProjectsVersion;
+      UpdateXcodeProjectsVersion;
       _BuildXcodeProjectsArchive;
     </_ProcessNativeEmbeddedDependsOn>
 
+    <UpdateXcodeProjectsVersionDependsOn>
+      $(UpdateXcodeProjectsVersionDependsOn);
+      _UpdateXcodeProjectsVersion;
+    </UpdateXcodeProjectsVersionDependsOn>
+
     <ProcessNativeEmbeddedDependsOn>
-      _InitNativeEmbedded;
+      $(ProcessNativeEmbeddedDependsOn);
       _ProcessNativeEmbedded;
     </ProcessNativeEmbeddedDependsOn>
-
-    <VerifyNativeEmbeddedDependsOn />
   </PropertyGroup>
 
-
-  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" />
-
-  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
-
-  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
-
-  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
-
-  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
-
-  <!-- This target is for debug purposes. See README.md for information -->
-  <Target Name="BuildNativeEmbedded">
-    <CallTarget Name="ProcessNativeEmbedded" />
-  </Target>
+  <Target Name="UpdateXcodeProjectsVersion" DependsOnTargets="$(UpdateXcodeProjectsVersionDependsOn)" />
 
 </Project>

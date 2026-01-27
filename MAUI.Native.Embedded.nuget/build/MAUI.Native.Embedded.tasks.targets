@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <_MAUINativeTaskAssemblyFileName>MAUI.Native.Embedded.dll</_MAUINativeTaskAssemblyFileName>
+    <_MAUINativeTaskAssemblyRuntime Condition=" '$(MSBuildRuntimeType)' != 'Core' ">$(MSBuildRuntimeType)</_MAUINativeTaskAssemblyRuntime>
+    <_MAUINativeTaskAssemblyRuntime Condition=" '$(_MAUINativeTaskAssemblyRuntime)' == '' ">net8.0</_MAUINativeTaskAssemblyRuntime>
+    <_MAUINativeTaskAssemblyName>$(MSBuildThisFileDirectory)../tools/$(_MAUINativeTaskAssemblyRuntime)/$(_MAUINativeTaskAssemblyFileName)</_MAUINativeTaskAssemblyName>
+  </PropertyGroup>
+
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.GenerateUniqueId" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.ReplaceInFile" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.PrepareMauiNativeSplashScreen" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsColorset" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsImageset" AssemblyFile="$(_MAUINativeTaskAssemblyName)" />
+
+</Project>

@@ -1,4 +1,4 @@
-# ![Logo](MAUI.Native.Embedded.nuget/assets/icon-100.png) MAUI.Native.Embedded
+# ![Logo](MAUI.Native.Embedded.nuget/Assets/icon-100.png) MAUI.Native.Embedded
 
 [![NuGet version (MarLoe.MAUI.Native.Embedded)](https://img.shields.io/nuget/v/MarLoe.MAUI.Native.Embedded.svg?style=flat-square)](https://www.nuget.org/packages/MarLoe.MAUI.Native.Embedded/)
 
@@ -11,6 +11,12 @@ Your native added projects will be build for you. You do not need to do anything
 [For full comprehensive documentation please read here.](MAUI.Native.Embedded.nuget/README.md)
 
 ## TLDR;
+To support an alternative/darker background color for you splash screen, you can add the `DarkColor` and `DarkTintColor` to `MauiSplashScreen` in your project (.csproj) file:
+```
+<MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" TintColor="White" DarkColor="#321D6E" DarkTintColor="Black" BaseSize="512,512" />
+```
+
+
 Support AppClip or Widget for iOS in your MAUI project by adding this to your project (.csproj) file:
 ```
 <ItemGroup>
