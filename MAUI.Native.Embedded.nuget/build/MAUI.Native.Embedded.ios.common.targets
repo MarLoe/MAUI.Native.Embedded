@@ -111,28 +111,28 @@
 
 
   <PropertyGroup>
-    <_InitNativeEmbeddedDependsOn>
-      $(_InitNativeEmbeddedDependsOn)
+    <_InitMauiNativeEmbeddedDependsOn>
+      $(_InitMauiNativeEmbeddedDependsOn)
       _InitXcodeProjects;
-    </_InitNativeEmbeddedDependsOn>
+    </_InitMauiNativeEmbeddedDependsOn>
 
-    <_ProcessNativeEmbeddedDependsOn>
-      $(_ProcessNativeEmbeddedDependsOn);
-      _ResolveNativeEmbedded;
+    <_ProcessMauiNativeEmbeddedDependsOn>
+      $(_ProcessMauiNativeEmbeddedDependsOn);
+      _ResolveMauiNativeEmbedded;
       _ResolveXcodeProjects;
       UpdateXcodeProjectsVersion;
       _BuildXcodeProjectsArchive;
-    </_ProcessNativeEmbeddedDependsOn>
+    </_ProcessMauiNativeEmbeddedDependsOn>
 
     <UpdateXcodeProjectsVersionDependsOn>
       $(UpdateXcodeProjectsVersionDependsOn);
       _UpdateXcodeProjectsVersion;
     </UpdateXcodeProjectsVersionDependsOn>
 
-    <ProcessNativeEmbeddedDependsOn>
-      $(ProcessNativeEmbeddedDependsOn);
-      _ProcessNativeEmbedded;
-    </ProcessNativeEmbeddedDependsOn>
+    <ProcessMauiNativeEmbeddedDependsOn>
+      $(ProcessMauiNativeEmbeddedDependsOn);
+      _ProcessMauiNativeEmbedded;
+    </ProcessMauiNativeEmbeddedDependsOn>
   </PropertyGroup>
 
   <Target Name="UpdateXcodeProjectsVersion" DependsOnTargets="$(UpdateXcodeProjectsVersionDependsOn)" />

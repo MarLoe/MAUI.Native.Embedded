@@ -1,26 +1,26 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <BuildNativeEmbedded>$(BuildNativeEmbedded);Splash</BuildNativeEmbedded>
-    <_InitNativeEmbeddedDependsOn>
-      $(_InitNativeEmbeddedDependsOn);
+    <BuildMauiNativeEmbedded>$(BuildMauiNativeEmbedded);Splash</BuildMauiNativeEmbedded>
+    <_InitMauiNativeEmbeddedDependsOn>
+      $(_InitMauiNativeEmbeddedDependsOn);
       _InitSplash;
-    </_InitNativeEmbeddedDependsOn>
+    </_InitMauiNativeEmbeddedDependsOn>
     <_SplashAssetsiOS>Splash.xcassets</_SplashAssetsiOS>
   </PropertyGroup>
 
 
-  <Target Name="_InitSplash" Condition="$(BuildNativeEmbedded.Contains('Splash'))">
+  <Target Name="_InitSplash" Condition="$(BuildMauiNativeEmbedded.Contains('Splash'))">
 
     <PropertyGroup>
-      <ProcessNativeSplashDependsOn>
-        $(ProcessNativeSplashDependsOn);
-        _ProcessNativeSplash;
-      </ProcessNativeSplashDependsOn>
+      <ProcessMauiNativeSplashDependsOn>
+        $(ProcessMauiNativeSplashDependsOn);
+        _ProcessMauiNativeSplash;
+      </ProcessMauiNativeSplashDependsOn>
 
       <ResizetizeDependsOnTargets>
         $(ResizetizeDependsOnTargets);
-        ProcessNativeSplash;
+        ProcessMauiNativeSplash;
       </ResizetizeDependsOnTargets>
 
       <_MauiNativeIntermediateSplashScreen Condition="'$(_ResizetizerIsiOSApp)' == 'true'">$(_MauiNativeAssetsPathRoot)</_MauiNativeIntermediateSplashScreen>
@@ -63,7 +63,7 @@
   </Target>
 
 
-  <Target Name="_ProcessNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
+  <Target Name="_ProcessMauiNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
 
     <PropertyGroup>
       <_MauiNativeSplashScreenDarkFilename>$([System.IO.Path]::GetFileNameWithoutExtension('%(MauiSplashScreen.Link)'))</_MauiNativeSplashScreenDarkFilename>
@@ -192,6 +192,6 @@
   </Target>
 
 
-  <Target Name="ProcessNativeSplash" DependsOnTargets="$(ProcessNativeSplashDependsOn)" />
+  <Target Name="ProcessMauiNativeSplash" DependsOnTargets="$(ProcessMauiNativeSplashDependsOn)" />
 
 </Project>

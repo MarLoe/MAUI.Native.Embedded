@@ -1,48 +1,48 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="_InitNativeAssetsPaths">
+  <Target Name="_InitMauiNativeAssetsPaths">
     <PropertyGroup>
       <_MauiNativeAssetsPathRoot Condition="'$(_MauiNativeAssetsPathRoot)' == ''">$(MSBuildProjectDirectory)/$(IntermediateOutputPath)maui-native-assets/</_MauiNativeAssetsPathRoot>
     </PropertyGroup>
   </Target>
 
   <PropertyGroup>
-    <_InitNativeEmbeddedDependsOn>
-      $(_InitNativeEmbeddedDependsOn)
-      _InitNativeAssetsPaths;
-    </_InitNativeEmbeddedDependsOn>
+    <_InitMauiNativeEmbeddedDependsOn>
+      $(_InitMauiNativeEmbeddedDependsOn)
+      _InitMauiNativeAssetsPaths;
+    </_InitMauiNativeEmbeddedDependsOn>
 
-    <_ResolveNativeEmbeddedDependsOn>
-      $(_ResolveNativeEmbeddedDependsOn)
-    </_ResolveNativeEmbeddedDependsOn>
+    <_ResolveMauiNativeEmbeddedDependsOn>
+      $(_ResolveMauiNativeEmbeddedDependsOn)
+    </_ResolveMauiNativeEmbeddedDependsOn>
 
-    <_ProcessNativeEmbeddedDependsOn>
-      $(_ProcessNativeEmbeddedDependsOn);
-    </_ProcessNativeEmbeddedDependsOn>
+    <_ProcessMauiNativeEmbeddedDependsOn>
+      $(_ProcessMauiNativeEmbeddedDependsOn);
+    </_ProcessMauiNativeEmbeddedDependsOn>
 
-    <ProcessNativeEmbeddedDependsOn>
-      $(ProcessNativeEmbeddedDependsOn);
-    </ProcessNativeEmbeddedDependsOn>
+    <ProcessMauiNativeEmbeddedDependsOn>
+      $(ProcessMauiNativeEmbeddedDependsOn);
+    </ProcessMauiNativeEmbeddedDependsOn>
 
-    <VerifyNativeEmbeddedDependsOn>
-      $(VerifyNativeEmbeddedDependsOn);
-    </VerifyNativeEmbeddedDependsOn>
+    <VerifyMauiNativeEmbeddedDependsOn>
+      $(VerifyMauiNativeEmbeddedDependsOn);
+    </VerifyMauiNativeEmbeddedDependsOn>
   </PropertyGroup>
 
 
-  <Target Name="_InitNativeEmbedded" DependsOnTargets="$(_InitNativeEmbeddedDependsOn)" AfterTargets="AfterResolveReferences" />
+  <Target Name="_InitMauiNativeEmbedded" DependsOnTargets="$(_InitMauiNativeEmbeddedDependsOn)" AfterTargets="AfterResolveReferences" />
 
-  <Target Name="_ResolveNativeEmbedded" DependsOnTargets="$(_ResolveNativeEmbeddedDependsOn)" />
+  <Target Name="_ResolveMauiNativeEmbedded" DependsOnTargets="$(_ResolveMauiNativeEmbeddedDependsOn)" />
 
-  <Target Name="_ProcessNativeEmbedded" DependsOnTargets="$(_ProcessNativeEmbeddedDependsOn)" />
+  <Target Name="_ProcessMauiNativeEmbedded" DependsOnTargets="$(_ProcessMauiNativeEmbeddedDependsOn)" />
 
-  <Target Name="ProcessNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessNativeEmbeddedDependsOn)" />
+  <Target Name="ProcessMauiNativeEmbedded" BeforeTargets="ProcessMauiAssets" DependsOnTargets="$(ProcessMauiNativeEmbeddedDependsOn)" />
 
-  <Target Name="VerifyNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyNativeEmbeddedDependsOn)" />
+  <Target Name="VerifyMauiNativeEmbedded" AfterTargets="Build" DependsOnTargets="$(VerifyMauiNativeEmbeddedDependsOn)" />
 
   <!-- This target is for debug purposes. See README.md for information -->
   <Target Name="BuildNativeEmbedded">
-    <CallTarget Targets="ProcessNativeEmbedded" />
+    <CallTarget Targets="ProcessMauiNativeEmbedded" />
   </Target>
 
 </Project>

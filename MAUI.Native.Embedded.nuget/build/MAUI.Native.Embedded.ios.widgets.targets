@@ -1,34 +1,34 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <BuildNativeEmbedded>$(BuildNativeEmbedded);Widgets</BuildNativeEmbedded>
-    <_InitNativeEmbeddedDependsOn>
-      $(_InitNativeEmbeddedDependsOn);
+    <BuildMauiNativeEmbedded>$(BuildMauiNativeEmbedded);Widgets</BuildMauiNativeEmbedded>
+    <_InitMauiNativeEmbeddedDependsOn>
+      $(_InitMauiNativeEmbeddedDependsOn);
       _InitWidgets;
-    </_InitNativeEmbeddedDependsOn>
+    </_InitMauiNativeEmbeddedDependsOn>
   </PropertyGroup>
 
 
-  <Target Name="_InitWidgets" Condition="'@(Widgets)' != '' AND $(BuildNativeEmbedded.Contains('Widgets'))">
+  <Target Name="_InitWidgets" Condition="'@(Widgets)' != '' AND $(BuildMauiNativeEmbedded.Contains('Widgets'))">
     <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
-      <_ResolveNativeEmbeddedDependsOn>
-        $(_ResolveNativeEmbeddedDependsOn);
+      <_ResolveMauiNativeEmbeddedDependsOn>
+        $(_ResolveMauiNativeEmbeddedDependsOn);
         _ResolveWidgets;
-      </_ResolveNativeEmbeddedDependsOn>
+      </_ResolveMauiNativeEmbeddedDependsOn>
 
-      <_ProcessNativeEmbeddedDependsOn>
-        $(_ProcessNativeEmbeddedDependsOn);
+      <_ProcessMauiNativeEmbeddedDependsOn>
+        $(_ProcessMauiNativeEmbeddedDependsOn);
         ProcessWidgets;
-      </_ProcessNativeEmbeddedDependsOn>
+      </_ProcessMauiNativeEmbeddedDependsOn>
 
       <ProcessWidgetsDependsOn>
         $(ProcessWidgetsDependsOn);
       </ProcessWidgetsDependsOn>
 
-      <VerifyNativeEmbeddedDependsOn>
-        $(VerifyNativeEmbeddedDependsOn);
+      <VerifyMauiNativeEmbeddedDependsOn>
+        $(VerifyMauiNativeEmbeddedDependsOn);
         VerifyWidgets;
-      </VerifyNativeEmbeddedDependsOn>
+      </VerifyMauiNativeEmbeddedDependsOn>
     </PropertyGroup>
   </Target>
 
@@ -102,9 +102,9 @@
   <!-- This target is for debug purposes. See README.md for information       -->
   <Target Name="BuildWidgets">
     <PropertyGroup>
-      <BuildNativeEmbedded>Widgets</BuildNativeEmbedded>
+      <BuildMauiNativeEmbedded>Widgets</BuildMauiNativeEmbedded>
     </PropertyGroup>
-    <CallTarget Targets="_InitWidgets;_ProcessNativeEmbedded;VerifyWidgets" />
+    <CallTarget Targets="_InitWidgets;_ProcessMauiNativeEmbedded;VerifyWidgets" />
   </Target>
 
 </Project>
