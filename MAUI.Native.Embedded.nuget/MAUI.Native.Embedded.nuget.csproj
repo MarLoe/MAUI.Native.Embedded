@@ -48,7 +48,7 @@
     <None Include="assets/icon-100.png" Pack="true" PackagePath="assets" />
     <None Include="README.md" Pack="true" PackagePath="/" />
     <None Include="build/**/*" Pack="true" PackagePath="build" />
-    <None Include="platform/**/*" Pack="true" PackagePath="platform" />
+    <None Include="Platforms/**/*" Pack="true" PackagePath="Platforms" />
     <None Include="$(TargetPath)" Pack="true" PackagePath="tools" />
   </ItemGroup>
 

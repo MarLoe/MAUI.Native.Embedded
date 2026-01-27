@@ -53,11 +53,11 @@
 
       <_MauiNativeSplashAssets
         Condition="'$(_ResizetizerIsiOSApp)' == 'True' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
-        Include="$(MSBuildThisFileDirectory)/../platform/ios/$(_SplashAssetsiOS)*/**/*" />
+        Include="$(MSBuildThisFileDirectory)/../Platforms/iOS/$(_SplashAssetsiOS)*/**/*" />
 
       <_MauiNativeSplashAssets
         Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
-        Include="$(MSBuildThisFileDirectory)/../platform/Android/Resources/**/splash*" />
+        Include="$(MSBuildThisFileDirectory)/../Platforms/Android/Resources/**/splash*" />
     </ItemGroup>
 
   </Target>
