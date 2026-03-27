@@ -1,4 +1,4 @@
-# ![Logo](Assets/icon-100.png) MAUI.Native.Embedded
+# ![Logo](./assets/icon-100.png) MAUI.Native.Embedded
 
 Embed native iOS AppClips and iOS Widgets build with Xcode into you MAUI app.
 
