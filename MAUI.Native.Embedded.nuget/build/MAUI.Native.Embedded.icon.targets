@@ -11,6 +11,7 @@
 
   <Target Name="_InitIcon" Condition="$(BuildMauiNativeEmbedded.Contains('Icon'))">
     <PropertyGroup>
+      <!-- ResizetizeImages -->
       <ProcessMauiNativeIconDependsOn>
         $(ProcessMauiNativeIconDependsOn);
         _ProcessMauiNativeIcon;
@@ -20,24 +21,141 @@
         $(ResizetizeDependsOnTargets);
         ProcessMauiNativeIcon;
       </ResizetizeDependsOnTargets>
+      <!-- <ResizetizeAfterTargets>
+        $(ResizetizeAfterTargets);
+      </ResizetizeAfterTargets> -->
+
+      <_MauiNativeIntermediateIcon Condition="'$(_ResizetizerIsiOSApp)' == 'true'">$(_MauiNativeAssetsPathRoot)</_MauiNativeIntermediateIcon>
+      <_MauiNativeIntermediateIcon Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">$(_MauiIntermediateSplashScreen)</_MauiNativeIntermediateIcon>
+      <_MauiNativeIntermediateIcon>$(_MauiNativeAssetsPathRoot)</_MauiNativeIntermediateIcon>
     </PropertyGroup>
 
     <ItemGroup>
       <_MauiNativeIcon Include="@(MauiIcon)" Condition="'%(MauiIcon.DarkColor)' != ''" />
+      <!-- <MauiSplashScreen Update="@(MauiSplashScreen)" Condition="'%(MauiSplashScreen.DarkColor)' != ''">
+        <Color>#00000000</Color>
+      </MauiSplashScreen> -->
     </ItemGroup>
 
+    <!-- <Error Code="DEBUG" Text="_MauiNativeIcon: @(_MauiNativeIcon)" /> -->
+    <!-- <Error Code="DEBUG" Text="MonoAndroidResDirIntermediate: $(MonoAndroidResDirIntermediate)" /> -->
+
     <ItemGroup Condition="'@(_MauiNativeIcon)' != ''">
+      <!-- <_MauiNativeIconAssets
+        Condition="'$(_ResizetizerIsiOSApp)' == 'True' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+        Include="$(MSBuildThisFileDirectory)/../Platforms/iOS/Icon.*/**/*" /> -->
+
+      <!-- <_MauiNativeIconAssets
+        Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
+        Include="$(MSBuildThisFileDirectory)/../Platforms/Android/Resources/**/mipmap*/*icon*.*" />
+      <_MauiNativeIconAssets TargetPath="$(_MauiIntermediateImages)/%(RecursiveDir)%(Filename)%(Extension)" /> -->
       <_MauiNativeIconAssets
         Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
-        Include="$(MSBuildThisFileDirectory)/../platform/Android/Resources/**/icon*" />
+        Include="$(MSBuildThisFileDirectory)/../Platforms/Android/Resources/**/values*/*icon*.*" />
+      <!-- <_MauiNativeIconAssets Condition="'%(_MauiNativeIconAssets.TargetPath)' == ''" TargetPath="$(MonoAndroidResDirIntermediate)/%(RecursiveDir)%(Filename)%(Extension)" /> -->
+      <_MauiNativeIconAssets Condition="'%(_MauiNativeIconAssets.TargetPath)' == ''" TargetPath="$(_MauiNativeIntermediateIcon)/%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
+
+    <!-- <Error Code="DEBUG" Text="_ResizetizerIsAndroidApp: $(_ResizetizerIsAndroidApp)" /> -->
+    <!-- <Error Code="DEBUG" Text="_MauiNativeIconAssets:%0A@(_MauiNativeIconAssets -> '%(Filename) => %(TargetPath)', '%0A')" /> -->
+
   </Target>
 
 
-  <Target Name="_ProcessMauiNativeIcon" Condition="'@(_MauiNativeIcon)' != ''">
+  <Target Name="_ProcessMauiNativeIcon" Condition="'@(_MauiNativeIcon)' != ''" Outputs="$(_MauiNativeIntermediateIcon)">
+
+    <!-- Android -->
+    <Delete Files="%(_MauiNativeIconAssets.TargetPath)" />
+
+    <Copy
+      Condition="'$(_ResizetizerIsAndroidApp)' == 'true'"
+      SourceFiles="@(_MauiNativeIconAssets)"
+      DestinationFiles="%(TargetPath)"
+      SkipUnchangedFiles="false">
+      <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeIconAssets" />
+    </Copy>
+    <!-- DestinationFolder="$(_MauiIntermediateImages)/%(RecursiveDir)" -->
+
+    <ItemGroup Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">
+      <_MauiNativeAndroidAsset Include="$(_MauiNativeIntermediateIcon)/values*/*icon*.*" />
+      <!-- <_AndroidResolvedAssets Include="@(_MauiNativeAndroidAsset)" Link="%(RecursiveDir)%(Filename)%(Extension)" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" /> -->
+      <!-- <AndroidResource Include="@(_MauiNativeAndroidAsset)" /> -->
+      <!-- <MauiAsset Include="@(_MauiNativeAndroidAsset)" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" /> -->
+    </ItemGroup>
+
+    <!-- <Error Code="DEBUG" Text="_MauiNativeAndroidAsset:%0A@(_MauiNativeAndroidAsset -> '%(Filename)%(Extension)', '%0A')" /> -->
+
+    <AndroidComputeResPaths
+      ResourceFiles="@(AndroidAsset)"
+      IntermediateDir="$(MonoAndroidAssetsDirIntermediate)"
+      AssetPackIntermediateDir="$(MonoAndroidAssetPacksDirIntermediate)"
+      Prefixes="$(MonoAndroidAssetsPrefix)"
+      PrefixProperty="MonoAndroidAssetsPrefix"
+      ProjectDir="$(ProjectDir)"
+    >
+      <Output ItemName="_AndroidAssetsDest" TaskParameter="IntermediateFiles" />
+      <Output ItemName="_AndroidResolvedAssets" TaskParameter="ResolvedResourceFiles" />
+    </AndroidComputeResPaths>
+
+    <!-- <Error Code="DEBUG" Text="AndroidAsset:%0A@(AndroidAsset -> '%(Filename)%(Extension)', '%0A')" /> -->
+
+    <!-- <Error Code="DEBUG" Text="_CopiedMauiNativeIconAssets: @(_CopiedMauiNativeIconAssets)" /> -->
+
+    <!-- <XmlPoke
+      Condition="'$(_ResizetizerIsAndroidApp)' == 'true' AND '@(_CopiedMauiNativeIconAssets)' != ''"
+      XmlInputPath="@(_CopiedMauiNativeIconAssets)"
+      Query="//color[@name='maui_splash_color']"
+      Value="%(_MauiSplashScreenNative.DarkColor)" /> -->
+
+
+    <!-- iOS, but not Catalyst -->
+    <!-- <Copy
+      Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'"
+      SourceFiles="@(_MauiNativeSplashAssets)"
+      DestinationFolder="$(MauiNativeAssetsPathRoot)/%(RecursiveDir)"
+      SkipUnchangedFiles="false">
+      <Output TaskParameter="CopiedFiles" ItemName="_CopiedMauiNativeIconAssets" />
+    </Copy>
+
+    <UpdateXCAssetsColorset
+      Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst' AND '@(_CopiedMauiNativeIconAssets)' != ''"
+      Items="@(_CopiedMauiNativeIconAssets)"
+      Color="%(_MauiSplashScreenNative.Color)"
+      DarkColor="%(_MauiSplashScreenNative.DarkColor)" />
+
+    <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
+      <ImageAsset Include="@(_CopiedMauiNativeIconAssets)" />
+    </ItemGroup> -->
+
+
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
+    <!-- <ReplaceInFile
+      Items="@(_MauiSplashStoryboard)"
+      Pattern="&lt;color\s+key=&quot;backgroundColor&quot;\s+.*?/&gt;"
+      Replacement="&lt;color key=&quot;backgroundColor&quot; name=&quot;SplashBackground&quot;/&gt;" /> -->
+
+    <ItemGroup>
+      <_MauiIconStyleColors Include="$(_MauiIntermediateImages)/**/appicon*.xml" />
+    </ItemGroup>
+
+    <XmlPoke
+      Condition="'@(_MauiIconStyleColors)' != ''"
+      XmlInputPath="%(_MauiIconStyleColors.Identity)"
+      Namespaces="&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android' /&gt;"
+      Query="//background/@android:drawable"
+      Value="@color/appicon_background" />
+
+    <!-- <Error Text="DEBUG _MauiIconStyleColors: @(_MauiIconStyleColors)" /> -->
+
+    <!-- <XmlPoke
+      Condition="'@(_MauiIconStyleColors)' != ''"
+      XmlInputPath="@(_MauiIconStyleColors)"
+      Query="//color[@name='maui_splash_color']"
+      Value="%(_MauiSplashScreenNative.Color)" /> -->
   </Target>
 
 
   <Target Name="ProcessMauiNativeIcon" DependsOnTargets="$(ProcessMauiNativeIconDependsOn)" AfterTargets="ResizetizeImages" />
 
 </Project>
+<!-- _ReadResizetizeImagesOutputs -->

@@ -51,13 +51,13 @@
     <!-- AppClips, Widgets embedding                                  -->
     <!--   See README.md for information on optional attributes:      -->
     <!--     Scheme, Configuration, SkipValidation, NoSigning         -->
-    <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
-    <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" />
+    <!-- <AppClips Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" /> -->
+    <!-- <Widgets Include="./Platforms/iOS/MAUI.Native.Embedded.ios/MAUI.Native.Embedded.ios.xcodeproj" /> -->
   </ItemGroup>
 
   <ItemGroup>
     <!-- App Icon -->
-    <MauiIcon Include="../Assets/appicon.svg" Color="#FFFFFF" />
+    <MauiIcon Include="../Assets/appicon.svg" Color="#00FF00" DarkColor="Blue"/>
 
     <!-- Splash Screen -->
     <MauiSplashScreen Include="../Assets/splash.svg" Color="#512BD4" TintColor="White" DarkColor="#321D6E" DarkTintColor="Black" BaseSize="256,256" />

@@ -60,10 +60,18 @@
         Include="$(MSBuildThisFileDirectory)/../Platforms/Android/Resources/**/splash*" />
     </ItemGroup>
 
+    <!-- <Error Text="MauiSplashScreen: @(MauiSplashScreen -> '%(Filename) => %(Link)', '%0A')" /> -->
+
   </Target>
 
 
   <Target Name="_ProcessMauiNativeSplash" Condition="'@(_MauiNativeSplashScreen)' != ''">
+
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
+
+    <!-- <Error Text="DEBUG: $([System.IO.Path]::GetFileNameWithoutExtension('%(MauiSplashScreen.Link)'))" /> -->
+    <!-- <Error Text="DEBUG: $(_MauiSplashInputsFileHash)" /> -->
+    <!-- <Error Text="DEBUG: %(_MauiSplashScreenWithHashesInFilename.InputsFileHash)" /> -->
 
     <PropertyGroup>
       <_MauiNativeSplashScreenDarkFilename>$([System.IO.Path]::GetFileNameWithoutExtension('%(MauiSplashScreen.Link)'))</_MauiNativeSplashScreenDarkFilename>
@@ -79,11 +87,21 @@
       </_MauiNativeSplashScreenDarkTint>
     </ItemGroup>
 
+    <!-- <Error Text="@(_MauiNativeSplashScreenDarkTint -> '%(Filename) => %(Link)', '%0A')" /> -->
+    <!-- <Error Text="DEBUG _MauiNativeSplashScreen: @(_MauiNativeSplashScreen -> 'Link: %(Link), Color: %(Color), TintColor: %(TintColor), DarkColor: %(DarkColor), DarkTintColor: %(DarkTintColor)')" /> -->
+    <!-- <Message Importance="High" Text="_MauiNativeSplashAssets: @(_MauiNativeSplashAssets)" /> -->
+
     <Copy
       SourceFiles="@(_MauiNativeSplashAssets)"
       DestinationFolder="$(_MauiNativeIntermediateSplashScreen)/%(_MauiNativeSplashAssets.RecursiveDir)"
       SkipUnchangedFiles="true">
     </Copy>
+
+    <!-- <Error Text="DEBUG _MauiNativeSplashAssets: @(_MauiNativeSplashAssets)" /> -->
+    <!-- <Error Text="DEBUG: $(_MauiNativeIntermediateSplashScreen)" /> -->
+
+
+    <!-- <Error Text="DEBUG _MauiNativeSplashScreenDarkTint: @(_MauiNativeSplashScreenDarkTint -> 'Link: %(Link), Color: %(Color), TintColor: %(TintColor), DarkColor: %(DarkColor), DarkTintColor: %(DarkTintColor)')" /> -->
 
     <!-- Android -->
     <GenerateSplashAndroidResources
@@ -94,11 +112,16 @@
     <ItemGroup Condition="'$(_ResizetizerIsAndroidApp)' == 'true'">
       <_MauiNativeSplashImageAssets Include="$(_MauiNativeAssetsPathRoot)/splash-night/**/*.png" />
       <_MauiNativeSplashImageAssets TargetPath="$([System.String]::Copy('%(RecursiveDir)').Replace('drawable-', 'drawable-night-'))%(Filename)%(Extension)" />
+      <!-- <_MauiNativeSplashImageAssets Include="$(_MauiNativeAssetsPathRoot)/splash-night/**/drawable*/*.xml" /> -->
+      <!-- <_MauiNativeSplashImageAssets Condition="'%(_MauiNativeSplashImageAssets.TargetPath)' == ''" TargetPath="%(RecursiveDir)%(Filename)%(Extension)" /> -->
 
       <_MauiNativeSplashStyleColors Include="$(_MauiNativeIntermediateSplashScreen)/**/maui_colors.xml" />
       <_MauiNativeSplashStyleColors Include="$(_MauiNativeIntermediateSplashScreen)/**/splash.xml" />
       <_MauiNativeSplashStyleColors Color="%(_MauiNativeSplashScreen.Color)" DarkColor="%(_MauiNativeSplashScreen.DarkColor)" />
     </ItemGroup>
+
+    <!-- <Message Importance="High" Text="DEBUG _MauiNativeSplashImageAssets:%0A@(_MauiNativeSplashImageAssets -> '%(Identity) => %(TargetPath)', '%0A')" /> -->
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
 
     <!-- iOS, but not Catalyst -->
     <GenerateSplashStoryboard
@@ -107,6 +130,8 @@
       IntermediateOutputPath="$(_MauiNativeAssetsPathRoot)/splash-dark" />
 
     <CallTarget Targets="_UpdateMauiSplashStoryboard" Condition="'@(_MauiSplashStoryboard)' != ''" />
+
+    <!-- <Error Text="DEBUG _MauiNativeSplashScreenDarkTint: @(_MauiNativeSplashScreenDarkTint -> '%(Color), %(TintColor) %(FileHash)')" /> -->
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'True' and '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <!-- First we include the darkmode images -->
@@ -123,6 +148,10 @@
       SourceFiles="@(_MauiNativeSplashImageAssets)"
       DestinationFiles="$(_MauiNativeIntermediateSplashScreen)/%(TargetPath)" />
 
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
+
+    <!-- <Error Text="DEBUG _MauiNativeSplashImageAssets: @(_MauiNativeSplashImageAssets -> '%(Filename) => %(TargetPath)', '%0A')" /> -->
+
     <!-- Android -->
     <XmlPoke
       Condition="'%(_MauiNativeSplashStyleColors.Filename)' == 'maui_colors'"
@@ -136,8 +165,14 @@
       Query="//color[@name='maui_splash_color']"
       Value="%(_MauiNativeSplashStyleColors.DarkColor)" />
 
+    <!-- <Error Text="DEBUG _MauiNativeSplashStyleColors: @(_MauiNativeSplashStyleColors -> '%(Color), %(DarkColor)')" /> -->
+
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
+
     <!-- iOS, but not Catalyst -->
     <CallTarget Targets="_UpdateXCAssets" Condition="Exists('$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)')" />
+
+    <!-- <Error Text="BREAKPOINT!!!" /> -->
 
     <ItemGroup Condition="'$(_ResizetizerIsiOSApp)' == 'true' AND '$(TargetPlatformIdentifier)' != 'maccatalyst'">
       <_MauiNativeSplashCollectedAssets Include="$(_MauiNativeIntermediateSplashScreen)/$(_SplashAssetsiOS)/**/*" />

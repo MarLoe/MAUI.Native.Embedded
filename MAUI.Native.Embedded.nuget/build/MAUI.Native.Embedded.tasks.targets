@@ -12,5 +12,6 @@
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.PrepareMauiNativeSplashScreen" AssemblyFile="$(_MauiNativeTaskAssemblyName)" />
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsColorset" AssemblyFile="$(_MauiNativeTaskAssemblyName)" />
   <UsingTask TaskName="MAUI.Native.Embedded.Tasks.UpdateXCAssetsImageset" AssemblyFile="$(_MauiNativeTaskAssemblyName)" />
+  <UsingTask TaskName="MAUI.Native.Embedded.Tasks.Delay" AssemblyFile="$(_MauiNativeTaskAssemblyName)" />
 
 </Project>
